@@ -178,7 +178,7 @@ export default function Servicios() {
           ))}
         </div>
 
-        {/* Video — separado con border */}
+        {/* Video - separado con border */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

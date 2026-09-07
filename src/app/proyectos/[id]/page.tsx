@@ -57,15 +57,17 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   const item = await fetchPropiedad(params.id);
   if (item) {
     return {
-      title: `${item.titulo} — Altum Inmobiliaria`,
+      title: item.titulo,
       description: item.descripcion.slice(0, 160),
     };
   }
   return {
-    title: "Propiedad — Altum Inmobiliaria",
-    description: "Detalle de propiedad en Río Negro y la Patagonia.",
+    title: "Propiedad",
+    description: "Detalle de propiedad en Neuquén y la Patagonia.",
   };
 }
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 export default async function PropiedadDetailPage({
   params,
@@ -78,16 +80,57 @@ export default async function PropiedadDetailPage({
 
   const imagenes = propiedad.imagenes?.length
     ? propiedad.imagenes
-    : [
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=85",
-      ];
+    : ["/mari-menuco/bahia-playas-1.jpg"];
 
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `Hola Altum Inmobiliaria, quisiera consultar información detallada y coordinar una visita para la propiedad: ${propiedad.titulo} (${propiedad.ciudad} - USD ${propiedad.precio?.toLocaleString("es-AR") || "Consultar"})`,
   )}`;
 
+  const listingSchema = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    name: propiedad.titulo,
+    description: propiedad.descripcion,
+    url: `${siteUrl}/proyectos/${propiedad.id}`,
+    image: imagenes.map((img) =>
+      img.startsWith("http") ? img : `${siteUrl}${img}`,
+    ),
+    ...(propiedad.precio
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: propiedad.precio,
+            priceCurrency: propiedad.moneda || "USD",
+            availability:
+              propiedad.estado === "vendido"
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/InStock",
+          },
+        }
+      : {}),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: propiedad.barrio || propiedad.ciudad,
+      addressRegion: propiedad.ciudad,
+      addressCountry: "AR",
+    },
+    ...(propiedad.superficie_m2
+      ? {
+          floorSize: {
+            "@type": "QuantitativeValue",
+            value: propiedad.superficie_m2,
+            unitCode: "MTK",
+          },
+        }
+      : {}),
+  };
+
   return (
     <main className="bg-crema min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(listingSchema) }}
+      />
       {/* ── Hero Gallery ─────────────────────────────────────────────────── */}
       <section className="relative h-[65vh] md:h-[75vh] bg-navy-950 overflow-hidden">
         <Image

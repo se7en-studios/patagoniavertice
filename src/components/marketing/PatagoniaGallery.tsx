@@ -7,7 +7,7 @@ import { useRef } from "react";
 const IMAGES = [
   {
     url: "/casa.avif",
-    alt: "Casa junto al lago — Patagonia",
+    alt: "Casa junto al lago - Patagonia",
     caption: "Neuquén, Patagonia",
   },
   {
@@ -37,7 +37,7 @@ export default function PatagoniaGallery() {
       ref={ref}
       className="grid grid-cols-2 grid-rows-2 gap-2 h-[500px] md:h-[580px]"
     >
-      {/* Imagen 1 — ocupa las 2 filas izquierda */}
+      {/* Imagen 1 - ocupa las 2 filas izquierda */}
       <motion.div
         style={{ y: y1 }}
         className="relative row-span-2 overflow-hidden group"
@@ -55,7 +55,7 @@ export default function PatagoniaGallery() {
         </span>
       </motion.div>
 
-      {/* Imagen 2 — fila superior derecha */}
+      {/* Imagen 2 - fila superior derecha */}
       <motion.div style={{ y: y2 }} className="relative overflow-hidden group">
         <Image
           src={IMAGES[1].url}
@@ -70,7 +70,7 @@ export default function PatagoniaGallery() {
         </span>
       </motion.div>
 
-      {/* Imagen 3 — fila inferior derecha con badge */}
+      {/* Imagen 3 - fila inferior derecha con badge */}
       <motion.div style={{ y: y3 }} className="relative overflow-hidden group">
         <Image
           src={IMAGES[2].url}

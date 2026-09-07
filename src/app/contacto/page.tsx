@@ -4,10 +4,13 @@ import Image from "next/image";
 import FormularioContacto from "@/components/marketing/FormularioContacto";
 import { WHATSAPP_URL } from "@/lib/constants";
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
+
 export const metadata: Metadata = {
-  title: "Contacto — Altum Inmobiliaria",
+  title: "Contacto",
   description:
     "Contactate con Altum Inmobiliaria. Asesores inmobiliarios en Cipoletti, Catriel y toda la región de Río Negro.",
+  alternates: { canonical: `${siteUrl}/contacto` },
 };
 
 /* ── Datos de contacto ───────────────────────────────────────────────────── */
@@ -41,19 +44,19 @@ const contactInfo = [
 export default function ContactoPage() {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
-      {/* ── Panel izquierdo — sticky, imagen + info ─────────────────────── */}
+      {/* ── Panel izquierdo - sticky, imagen + info ─────────────────────── */}
       <div className="relative lg:w-1/2 lg:sticky lg:top-0 lg:h-screen overflow-hidden">
         {/* Background */}
         <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
-          alt="Patagonia — Altum Inmobiliaria"
+          alt="Patagonia - Altum Inmobiliaria"
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover"
         />
 
-        {/* Navy overlay — ALTUM brand */}
+        {/* Navy overlay - ALTUM brand */}
         <div
           className="absolute inset-0"
           style={{
@@ -164,7 +167,7 @@ export default function ContactoPage() {
         </div>
       </div>
 
-      {/* ── Panel derecho — formulario ───────────────────────────────────── */}
+      {/* ── Panel derecho - formulario ───────────────────────────────────── */}
       <div className="lg:w-1/2 bg-crema flex flex-col justify-center px-8 lg:px-16 py-28 lg:py-32 min-h-screen">
         <div className="max-w-lg w-full mx-auto">
           <div className="flex items-center gap-4 mb-8">
@@ -182,7 +185,13 @@ export default function ContactoPage() {
             ¿Tenés una{" "}
             <em className="not-italic italic text-dorado">consulta?</em>
           </h2>
-          <Suspense fallback={<div className="p-8 text-tierra/40 font-body text-xs">Cargando formulario...</div>}>
+          <Suspense
+            fallback={
+              <div className="p-8 text-tierra/40 font-body text-xs">
+                Cargando formulario...
+              </div>
+            }
+          >
             <FormularioContacto />
           </Suspense>
 

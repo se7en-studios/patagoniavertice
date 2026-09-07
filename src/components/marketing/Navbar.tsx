@@ -57,13 +57,13 @@ export default function Navbar() {
         style={{ transformOrigin: "left" }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20 md:h-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 md:h-20">
         {/* ── Logo ── */}
         <Link href="/" className="flex items-center shrink-0 group">
           <motion.img
             src="/logoo.png"
-            alt="Altum Inmobiliaria — Propiedades en Río Negro"
-            className="h-14 md:h-20 w-auto object-contain"
+            alt="Altum Inmobiliaria - Lotes en Neuquén"
+            className="h-12 md:h-16 w-auto object-contain"
             style={{ mixBlendMode: "screen", filter: "brightness(1.05)" }}
             whileHover={{ filter: "brightness(1.2)" }}
             transition={{ duration: 0.2 }}
@@ -71,7 +71,10 @@ export default function Navbar() {
         </Link>
 
         {/* ── Desktop nav ── */}
-        <nav className="hidden lg:flex items-center gap-8" aria-label="Navegación principal">
+        <nav
+          className="hidden lg:flex items-center gap-8"
+          aria-label="Navegación principal"
+        >
           {links.map((l) => {
             const active = pathname === l.href;
             return (
@@ -162,13 +165,20 @@ export default function Navbar() {
               borderBottom: "1px solid rgba(201,168,76,0.1)",
             }}
           >
-            <nav className="flex flex-col gap-0 px-6 py-4" aria-label="Menú móvil">
+            <nav
+              className="flex flex-col gap-0 px-6 py-4"
+              aria-label="Menú móvil"
+            >
               {links.map((l, i) => (
                 <motion.div
                   key={l.href}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    delay: i * 0.06,
+                    duration: 0.25,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className="border-b border-crema/[0.06] last:border-b-0"
                 >
                   <Link
@@ -186,7 +196,10 @@ export default function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: links.length * 0.06 + 0.05, duration: 0.25 }}
+                transition={{
+                  delay: links.length * 0.06 + 0.05,
+                  duration: 0.25,
+                }}
                 className="pt-4 pb-2"
               >
                 <Link

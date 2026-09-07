@@ -252,7 +252,7 @@ export default function FormularioContacto() {
           />
         </div>
 
-        {/* Tipo de consulta — pills */}
+        {/* Tipo de consulta - pills */}
         <div>
           <label className={labelBase}>
             Tipo de consulta <span className="text-dorado">*</span>

@@ -4,8 +4,7 @@ import Link from "next/link";
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 export const metadata: Metadata = {
-  title:
-    "Inmobiliaria en Catriel — Altum | Propiedades & Renta Petrolera en Río Negro",
+  title: "Inmobiliaria en Catriel: Propiedades & Renta Petrolera en Río Negro",
   description:
     "Altum Inmobiliaria en Catriel, Río Negro. Compra, venta y administración de propiedades y departamentos para renta corporativa petrolera en la Patagonia.",
   keywords: [
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${siteUrl}/inmobiliaria-catriel` },
   openGraph: {
-    title: "Inmobiliaria en Catriel — Altum Inmobiliaria",
+    title: "Inmobiliaria en Catriel - Altum Inmobiliaria",
     description:
       "Propiedades en Catriel, polo energético de Río Negro. Alta rentabilidad en alquiler corporativo y residencial.",
     url: `${siteUrl}/inmobiliaria-catriel`,

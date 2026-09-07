@@ -128,7 +128,7 @@ export default function CTAFinal() {
       ref={sectionRef}
       className="relative overflow-hidden flex flex-col lg:flex-row min-h-[600px]"
     >
-      {/* LEFT — content panel */}
+      {/* LEFT - content panel */}
       <div className="relative lg:w-[55%] bg-tierra py-28 lg:py-36 px-8 lg:px-20 flex flex-col justify-center overflow-hidden">
         {/* Grain */}
         <div className="absolute inset-0 grain-overlay opacity-[0.04] pointer-events-none" />
@@ -161,7 +161,7 @@ export default function CTAFinal() {
             <span className="eyebrow text-crema/30">Dando el primer paso</span>
           </motion.div>
 
-          {/* Title — split-line reveal: each line slides up from a mask */}
+          {/* Title - split-line reveal: each line slides up from a mask */}
           <h2
             className="font-display text-crema font-medium leading-[1.05] mb-8"
             style={{
@@ -277,7 +277,7 @@ export default function CTAFinal() {
             operaciones ya cerradas en la Patagonia
           </motion.p>
 
-          {/* Gold accent line — scaleX from center on viewport entry */}
+          {/* Gold accent line - scaleX from center on viewport entry */}
           <motion.div
             className="h-px bg-dorado/40 mt-8"
             style={{ transformOrigin: "center" }}
@@ -293,7 +293,7 @@ export default function CTAFinal() {
         </div>
       </div>
 
-      {/* RIGHT — image panel */}
+      {/* RIGHT - image panel */}
       <motion.div
         className="relative lg:w-[45%] min-h-[400px] lg:min-h-0 overflow-hidden"
         initial={{ opacity: 0 }}
@@ -307,7 +307,7 @@ export default function CTAFinal() {
         >
           <Image
             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
-            alt="Paisaje patagónico — Altum Inmobiliaria, propiedades en Río Negro"
+            alt="Paisaje patagónico - Altum Inmobiliaria, propiedades en Río Negro"
             fill
             sizes="(max-width: 1024px) 100vw, 45vw"
             className="object-cover"
@@ -346,7 +346,7 @@ export default function CTAFinal() {
             &ldquo;Donde el paisaje define el valor.&rdquo;
           </p>
           <p className="font-body text-crema/25 text-[10px] tracking-[0.25em] uppercase mt-2">
-            — Altum Inmobiliaria
+            - Altum Inmobiliaria
           </p>
         </motion.div>
       </motion.div>

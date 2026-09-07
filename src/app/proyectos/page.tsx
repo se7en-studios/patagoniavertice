@@ -6,7 +6,7 @@ import CatalogoInteractivo, {
 import GuiaInversion from "@/components/marketing/GuiaInversion";
 
 export const metadata = {
-  title: "Propiedades & Oportunidades de Inversión — Altum Inmobiliaria",
+  title: "Propiedades & Oportunidades de Inversión",
   description:
     "Catálogo exclusivo de residencias, loteos, departamentos y chacras en Río Negro y la Patagonia Argentina. Asesoría directa y matriculada.",
 };

@@ -60,7 +60,7 @@ export default async function ProyectosSlider() {
       }));
     }
   } catch {
-    // Supabase not configured yet — use fallback
+    // Supabase not configured yet - use fallback
   }
 
   const items = proyectos.length > 0 ? proyectos : fallback;

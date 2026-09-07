@@ -4,11 +4,11 @@
 
 /* ── CSS custom properties ─────────────────────────────
    Sistema de color Altum (Sprint 1)
-   navy   #1A2752 — base de marca
-   gold   #C9A84C — acento primario
-   smoke  #2A3A52 — backgrounds sutiles oscuros
-   oro-lt #E8D5B7 — hovers y highlights
-   white  #FFFFFF — reemplaza al warm gray #F5F3EF
+   navy   #1A2752 - base de marca
+   gold   #C9A84C - acento primario
+   smoke  #2A3A52 - backgrounds sutiles oscuros
+   oro-lt #E8D5B7 - hovers y highlights
+   white  #FFFFFF - reemplaza al warm gray #F5F3EF
 ─────────────────────────────────────────────────────── */
 :root {
   --background: #f5efe6;
@@ -33,7 +33,7 @@
   --white: #ffffff;
 
   /* type scale */
-  --text-h1: 4rem;    /* 64px — más impacto */
+  --text-h1: 4rem;    /* 64px - más impacto */
   --text-h2: 2.75rem; /* 44px */
   --text-h3: 2rem;    /* 32px */
   --text-body: 1rem;  /* 16px */
@@ -344,7 +344,7 @@
   * {
     box-sizing: border-box;
   }
-  /* scroll-behavior: smooth removido — Lenis maneja el smooth scroll */
+  /* scroll-behavior: smooth removido - Lenis maneja el smooth scroll */
   body {
     @apply bg-crema text-tierra;
     font-feature-settings: "ss01", "cv05";
@@ -357,7 +357,7 @@
   h4 {
     font-family: var(--font-cormorant), Georgia, serif;
     font-weight: 300;
-    letter-spacing: 0.015em; /* +1.5% headings — luxury feel */
+    letter-spacing: 0.015em; /* +1.5% headings - luxury feel */
     line-height: 1.08;
   }
   h1 {

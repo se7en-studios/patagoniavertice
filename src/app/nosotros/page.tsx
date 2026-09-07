@@ -3,10 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Eye, Handshake, Shield, Star, Lightbulb, Users } from "lucide-react";
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
+
 export const metadata: Metadata = {
   title: "Nosotros",
   description:
     "Conocé la historia y valores de Altum Inmobiliaria, consultora especializada en operaciones de alto nivel en Río Negro y la Patagonia.",
+  alternates: { canonical: `${siteUrl}/nosotros` },
 };
 
 const valores = [
@@ -146,7 +149,7 @@ export default function NosotrosPage() {
               <div className="aspect-[4/5] overflow-hidden relative">
                 <Image
                   src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80"
-                  alt="Altum Inmobiliaria — propiedades en la Patagonia"
+                  alt="Altum Inmobiliaria - propiedades en la Patagonia"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
@@ -158,13 +161,16 @@ export default function NosotrosPage() {
           </div>
 
           {/* Credencial Institucional */}
-          <div className="p-8 lg:p-12 bg-navy-950 text-crema border border-dorado/30 relative overflow-hidden" style={{ background: "#080E1A" }}>
+          <div
+            className="p-8 lg:p-12 bg-navy-950 text-crema border border-dorado/30 relative overflow-hidden"
+            style={{ background: "#080E1A" }}
+          >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-3 flex justify-center">
                 <div className="relative w-36 h-36 lg:w-44 lg:h-44 rounded-full overflow-hidden border-2 border-dorado shadow-xl">
                   <Image
                     src="/estela.jpg"
-                    alt="Estela Mari Rojas — Martillera y Corredora Pública"
+                    alt="Estela Mari Rojas - Martillera y Corredora Pública"
                     fill
                     sizes="(max-width: 768px) 150px, 200px"
                     className="object-cover"
@@ -180,8 +186,11 @@ export default function NosotrosPage() {
                   Estela Mari Rojas
                 </h3>
                 <p className="font-body text-crema/65 text-sm leading-relaxed">
-                  Martillera y Corredora Pública Colegiada · <strong>Matrícula 35 RP 2026</strong>.<br />
-                  Colegio de Martilleros y Corredores Públicos de Río Negro (IV Circunscripción). Seguridad jurídica, transparencia notarial y máxima ética en cada contrato.
+                  Martillera y Corredora Pública Colegiada ·{" "}
+                  <strong>Matrícula 35 RP 2026</strong>.<br />
+                  Colegio de Martilleros y Corredores Públicos de Río Negro (IV
+                  Circunscripción). Seguridad jurídica, transparencia notarial y
+                  máxima ética en cada contrato.
                 </p>
               </div>
               <div className="lg:col-span-3 flex flex-col gap-3 justify-center">

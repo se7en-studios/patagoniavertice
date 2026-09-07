@@ -29,29 +29,23 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia",
+    default: "Altum Inmobiliaria - Propiedades en Río Negro y la Patagonia",
     template: "%s | Altum Inmobiliaria",
   },
   description:
-    "Inmobiliaria en Río Negro con más de 5 años de experiencia. Compra, venta, alquiler y consultoría de propiedades en Cipoletti, Catriel, General Roca y toda la Patagonia Argentina.",
+    "Inmobiliaria y consultoría de propiedades en Neuquén y la Patagonia Argentina. Lotes frente al lago Mari Menuco, asesoría directa y matriculada.",
   keywords: [
-    "inmobiliaria Río Negro",
-    "propiedades Río Negro",
-    "inmobiliaria Cipoletti",
-    "inmobiliaria Catriel",
-    "inmobiliaria General Roca",
+    "inmobiliaria Neuquén",
+    "propiedades Neuquén",
+    "lotes Mari Menuco",
+    "terrenos Mari Menuco",
+    "Bahía de las Playas Neuquén",
     "inversión inmobiliaria Patagonia",
     "Altum Inmobiliaria",
-    "alquiler Río Negro",
-    "casas en venta Cipoletti",
-    "terrenos Río Negro",
+    "terrenos frente al lago Neuquén",
     "comprar propiedad Patagonia",
-    "vender casa Río Negro",
-    "administración de alquileres Río Negro",
-    "propiedades Bariloche",
-    "inmuebles Neuquén",
     "consultoría inmobiliaria Patagonia",
-    "agente inmobiliario Río Negro",
+    "agente inmobiliario Neuquén",
     "mercado inmobiliario Patagonia",
   ],
   authors: [{ name: "Altum Inmobiliaria", url: siteUrl }],
@@ -63,10 +57,10 @@ export const metadata: Metadata = {
   },
   // Geo tags para SEO local
   other: {
-    "geo.region": "AR-R",
-    "geo.placename": "Cipoletti, Río Negro, Argentina",
-    "geo.position": "-38.9333;-68.0667",
-    ICBM: "-38.9333, -68.0667",
+    "geo.region": "AR-Q",
+    "geo.placename": "Neuquén, Argentina",
+    "geo.position": "-38.9516;-68.0591",
+    ICBM: "-38.9516, -68.0591",
     "og:locale:alternate": "es_AR",
   },
   openGraph: {
@@ -74,24 +68,24 @@ export const metadata: Metadata = {
     locale: "es_AR",
     url: siteUrl,
     siteName: "Altum Inmobiliaria",
-    title: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia",
+    title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
     description:
-      "Inmobiliaria especializada en Río Negro. Compra, venta y alquiler de propiedades en Cipoletti, Catriel, General Roca y toda la Patagonia. Trato directo, transparencia total.",
+      "Terrenos frente al lago Mari Menuco, en el Barrio Privado Bahía de las Playas, Neuquén. Trato directo, transparencia total.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia Argentina",
+        alt: "Altum Inmobiliaria - Lotes frente al lago Mari Menuco, Neuquén",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Altum Inmobiliaria — Propiedades en Río Negro",
+    title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
     description:
-      "Compra, venta y alquiler de propiedades en Río Negro y la Patagonia. Más de 200 operaciones exitosas. Consultanos sin compromiso.",
+      "Terrenos frente al lago Mari Menuco, Neuquén. Consultanos sin compromiso.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -124,54 +118,35 @@ const localBusinessSchema = {
   name: "Altum Inmobiliaria",
   alternateName: "Altum SDI",
   description:
-    "Inmobiliaria con más de 5 años de experiencia en Río Negro y la Patagonia. Servicios de compra, venta, alquiler, administración y consultoría inmobiliaria.",
+    "Inmobiliaria especializada en terrenos frente al lago Mari Menuco, Neuquén. Servicios de compra, venta y consultoría inmobiliaria.",
   url: siteUrl,
   telephone: "+54-9-2996-09-5742",
   email: "altumsci@gmail.com",
-  foundingDate: "2019",
   priceRange: "$$",
   image: `${siteUrl}/og-image.jpg`,
   logo: `${siteUrl}/logoo.png`,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Cipoletti",
-    addressLocality: "Cipoletti",
-    addressRegion: "Río Negro",
-    postalCode: "8324",
+    addressLocality: "Neuquén",
+    addressRegion: "Neuquén",
     addressCountry: "AR",
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: -38.9333,
-    longitude: -68.0667,
+    latitude: -38.9516,
+    longitude: -68.0591,
   },
   areaServed: [
     {
       "@type": "City",
-      name: "Cipoletti",
-      containedInPlace: { "@type": "AdministrativeArea", name: "Río Negro" },
+      name: "Neuquén",
+      containedInPlace: { "@type": "AdministrativeArea", name: "Neuquén" },
     },
-    {
-      "@type": "City",
-      name: "Catriel",
-      containedInPlace: { "@type": "AdministrativeArea", name: "Río Negro" },
-    },
-    {
-      "@type": "City",
-      name: "General Roca",
-      containedInPlace: { "@type": "AdministrativeArea", name: "Río Negro" },
-    },
-    {
-      "@type": "City",
-      name: "Viedma",
-      containedInPlace: { "@type": "AdministrativeArea", name: "Río Negro" },
-    },
-    { "@type": "State", name: "Río Negro" },
+    { "@type": "State", name: "Neuquén" },
     { "@type": "State", name: "Patagonia Argentina" },
   ],
   serviceType: [
-    "Compra y venta de propiedades",
-    "Administración de alquileres",
+    "Compra y venta de terrenos",
     "Consultoría inmobiliaria",
     "Redacción de contratos inmobiliarios",
   ],
@@ -197,8 +172,7 @@ const websiteSchema = {
   "@id": `${siteUrl}/#website`,
   url: siteUrl,
   name: "Altum Inmobiliaria",
-  description:
-    "Inmobiliaria especializada en Río Negro y la Patagonia Argentina",
+  description: "Inmobiliaria especializada en Mari Menuco, Neuquén",
   publisher: { "@id": `${siteUrl}/#organization` },
   inLanguage: "es-AR",
 };
@@ -209,10 +183,10 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "¿Cuáles son las zonas donde opera Altum Inmobiliaria?",
+      name: "¿Dónde opera Altum Inmobiliaria?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Trabajamos principalmente en Río Negro: Cipoletti, Catriel, General Roca, Viedma y localidades intermedias. También asesoramos operaciones en Neuquén capital y zonas limítrofes de la Patagonia.",
+        text: "Actualmente operamos en Neuquén, con foco en el Barrio Privado Bahía de las Playas, sobre el lago Mari Menuco, a 65 km de Neuquén capital.",
       },
     },
     {
@@ -233,18 +207,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "¿Puedo comprar una propiedad en Río Negro si estoy en otro país o ciudad?",
+      name: "¿Puedo comprar un lote en Mari Menuco si estoy en otro país o ciudad?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "Sí, trabajamos con compradores no residentes. Coordinamos visitas virtuales, gestionamos poderes notariales y acompañamos en cada paso de manera remota.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "¿Cuánto tiempo tarda en promedio cerrar una venta en Río Negro?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "El tiempo promedio de cierre varía entre 45 y 90 días desde la firma de la seña. En propiedades con documentación en orden, hemos cerrado en menos de 30 días.",
       },
     },
   ],
@@ -254,10 +220,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="es"
-      className={`${outfit.variable} ${plusJakarta.variable}`}
-    >
+    <html lang="es" className={`${outfit.variable} ${plusJakarta.variable}`}>
       <head>
         {/* Preconnect a dominios externos para mejorar LCP */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -267,21 +230,20 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://wa.me" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-        {/* Schema.org — LocalBusiness */}
+        {/* Schema.org - LocalBusiness */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(localBusinessSchema),
           }}
         />
-        {/* Schema.org — WebSite */}
+        {/* Schema.org - WebSite */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-        {/* Schema.org — FAQPage (rich snippets) */}
+        {/* Schema.org - FAQPage (rich snippets) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

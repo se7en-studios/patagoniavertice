@@ -18,7 +18,7 @@ const MARQUEE_ITEMS = [
   "ALQUILER",
   "CONSULTORÍA",
   "CONTRATOS",
-  "RÍO NEGRO",
+  "NEUQUÉN",
   "PATAGONIA",
   "PROPIEDADES",
   "ALTUM INMOBILIARIA",
@@ -26,7 +26,7 @@ const MARQUEE_ITEMS = [
   "ALQUILER",
   "CONSULTORÍA",
   "CONTRATOS",
-  "RÍO NEGRO",
+  "NEUQUÉN",
   "PATAGONIA",
   "PROPIEDADES",
 ];
@@ -42,7 +42,7 @@ export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
 
-  // Buscador interactivo — conectado a /proyectos
+  // Buscador interactivo - conectado a /proyectos
   const [tipoInmueble, setTipoInmueble] = useState("todos");
   const [ubicacion, setUbicacion] = useState("todas");
   const [operacion, setOperacion] = useState("venta");
@@ -117,7 +117,7 @@ export default function Hero() {
       ref={ref}
       className="relative min-h-screen flex flex-col overflow-hidden"
     >
-      {/* ── Video background — parallax + subtle scale on load ── */}
+      {/* ── Video background - parallax + subtle scale on load ── */}
       <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.1 }}>
         <motion.video
           ref={videoRef}
@@ -138,7 +138,7 @@ export default function Hero() {
       </motion.div>
 
       {/* ── Overlays ─────────────────────────────────────────────────────── */}
-      {/* Navy brand tint — más ligero para ver el video */}
+      {/* Navy brand tint - más ligero para ver el video */}
       <div
         className="absolute inset-0"
         style={{
@@ -160,7 +160,7 @@ export default function Hero() {
       {/* Left gold accent line */}
       <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-dorado/20 to-transparent" />
 
-      {/* ── Brand badge — GSAP entrada 0.3s ─────────────────────────────── */}
+      {/* ── Brand badge - GSAP entrada 0.3s ─────────────────────────────── */}
       <div className="hero-badge absolute top-28 right-6 lg:right-12 opacity-0">
         <div
           className="flex flex-col gap-1 backdrop-blur-sm border border-dorado/20 px-4 py-3"
@@ -183,13 +183,13 @@ export default function Hero() {
         className="relative flex-1 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-12 w-full pb-20 pt-40"
         style={{ y: contentY, opacity: contentOpacity }}
       >
-        {/* Eyebrow — GSAP 0.3s */}
+        {/* Eyebrow - GSAP 0.3s */}
         <div className="hero-eyebrow flex items-center gap-4 mb-10 opacity-0">
           <div className="h-px w-10 bg-dorado" />
-          <span className="eyebrow">Río Negro · Patagonia Argentina</span>
+          <span className="eyebrow">Neuquén · Patagonia Argentina</span>
         </div>
 
-        {/* Headline — GSAP letter-reveal 0.6s, escala H1 56px */}
+        {/* Headline - GSAP letter-reveal 0.6s, escala H1 56px */}
         <h1
           className="font-display font-medium leading-[1.1] max-w-5xl mb-8"
           style={{
@@ -213,7 +213,7 @@ export default function Hero() {
           ))}
         </h1>
 
-        {/* Services chips — GSAP 0.9s */}
+        {/* Services chips - GSAP 0.9s */}
         <div className="hero-chips flex flex-wrap gap-2 mb-8 opacity-0">
           {SERVICES.map((service) => (
             <span
@@ -226,11 +226,11 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Subtitle — typewriter rotativo */}
+        {/* Subtitle - typewriter rotativo */}
         <div className="hero-sub font-body text-crema/45 text-[15px] lg:text-base leading-relaxed max-w-md mb-12 opacity-0 min-h-[3rem]">
           <TypewriterText
             texts={[
-              "Más de 200 operaciones exitosas en Río Negro.",
+              "Terrenos frente al lago Mari Menuco, Neuquén.",
               "Trato directo. Sin intermediarios.",
               "Tu inversión, en el corazón de Patagonia.",
               "Transparencia total en cada operación.",
@@ -244,9 +244,9 @@ export default function Hero() {
           />
         </div>
 
-        {/* CTAs — GSAP 1.2s, glow oro */}
+        {/* CTAs - GSAP 1.2s, glow oro */}
         <div className="flex flex-col sm:flex-row gap-4 mb-10">
-          {/* Primary — Ver Servicios */}
+          {/* Primary - Ver Servicios */}
           <Link
             href="/servicios"
             className="hero-cta opacity-0 group cta-glow inline-flex items-center justify-center gap-3 px-9 py-4 btn-shimmer text-tierra font-body text-[11px] font-semibold tracking-[0.15em] uppercase"
@@ -267,7 +267,7 @@ export default function Hero() {
             </svg>
           </Link>
 
-          {/* Secondary — WhatsApp */}
+          {/* Secondary - WhatsApp */}
           <a
             href={WA_HERO}
             target="_blank"
@@ -278,7 +278,7 @@ export default function Hero() {
             Consultar por WhatsApp
           </a>
 
-          {/* Terciario — Tasador Online */}
+          {/* Terciario - Tasador Online */}
           <a
             href="#tasador-express"
             className="hero-cta opacity-0 cta-glow inline-flex items-center justify-center gap-3 px-9 py-4 border border-dorado/40 text-dorado font-body text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-dorado hover:text-tierra transition-all duration-300"
@@ -333,17 +333,8 @@ export default function Hero() {
                 <option value="todas" className="bg-navy-950 text-crema">
                   Toda la Patagonia
                 </option>
-                <option value="Cipolletti" className="bg-navy-950 text-crema">
-                  Cipolletti (Río Negro)
-                </option>
-                <option value="Catriel" className="bg-navy-950 text-crema">
-                  Catriel (Río Negro)
-                </option>
-                <option value="General Roca" className="bg-navy-950 text-crema">
-                  General Roca (Río Negro)
-                </option>
-                <option value="Bariloche" className="bg-navy-950 text-crema">
-                  Bariloche (Río Negro)
+                <option value="Neuquén" className="bg-navy-950 text-crema">
+                  Mari Menuco (Neuquén)
                 </option>
               </select>
             </div>
@@ -451,8 +442,6 @@ export default function Hero() {
     </section>
   );
 }
-
-
 
 function WaIcon() {
   return (

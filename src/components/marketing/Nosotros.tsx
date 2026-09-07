@@ -201,7 +201,7 @@ export default function Nosotros() {
               <div className="relative w-44 h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden border-2 border-dorado shadow-2xl">
                 <Image
                   src="/estela.jpg"
-                  alt="Estela Mari Rojas — Martillera Colegiada"
+                  alt="Estela Mari Rojas - Martillera Colegiada"
                   fill
                   sizes="(max-width: 768px) 180px, 220px"
                   className="object-cover"
@@ -297,7 +297,7 @@ export default function Nosotros() {
                   Acompañamos decisiones patrimoniales.&rdquo;
                 </p>
                 <p className="font-body text-tierra/35 text-[10px] tracking-[0.25em] uppercase">
-                  — Estela Mari Rojas · Altum Inmobiliaria
+                  - Estela Mari Rojas · Altum Inmobiliaria
                 </p>
               </motion.blockquote>
             </SlideInRight>

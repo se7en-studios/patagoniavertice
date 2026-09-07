@@ -9,24 +9,24 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 // ── Metadata específica de la home ──────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia",
+  title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
   description:
-    "Inmobiliaria en Río Negro con más de 5 años de experiencia y +200 operaciones exitosas. Compra, venta, alquiler y consultoría de propiedades en Cipoletti, Catriel y toda la Patagonia.",
+    "Terrenos frente al lago Mari Menuco, en el Barrio Privado Bahía de las Playas, Neuquén. Asesoría directa y matriculada.",
   alternates: {
     canonical: siteUrl,
   },
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia",
+    title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
     description:
-      "Compra, venta y alquiler de propiedades en Río Negro. Trato directo, transparencia total. +200 operaciones exitosas en Cipoletti, Catriel y la Patagonia Argentina.",
+      "Terrenos frente al lago Mari Menuco, Neuquén. Trato directo, transparencia total en cada operación.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Altum Inmobiliaria — Propiedades en Río Negro y la Patagonia Argentina",
+        alt: "Altum Inmobiliaria - Lotes frente al lago Mari Menuco, Neuquén",
       },
     ],
   },
@@ -35,9 +35,6 @@ export const metadata: Metadata = {
 // ── Lazy loading de secciones below-fold ────────────────────────────────────
 const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
 const Servicios = dynamic(() => import("@/components/marketing/Servicios"));
-const Estadisticas = dynamic(
-  () => import("@/components/marketing/Estadisticas"),
-);
 const Proceso = dynamic(() => import("@/components/marketing/Proceso"));
 const PropiedadesDestacadasHome = dynamic(
   () => import("@/components/marketing/PropiedadesDestacadasHome"),
@@ -56,9 +53,6 @@ const CalculadoraRentabilidad = dynamic(
 );
 const PorQueElegirnos = dynamic(
   () => import("@/components/marketing/BentoDiferenciadores"),
-);
-const TestimoniosReales = dynamic(
-  () => import("@/components/marketing/TestimoniosReales"),
 );
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
 const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
@@ -107,7 +101,7 @@ export default async function HomePage() {
       {/* Exploración territorial y análisis de mercado por zona */}
       <ZonasInteractivas />
 
-      {/* Lead Magnet — Guía Estratégica de Inversión */}
+      {/* Lead Magnet - Guía Estratégica de Inversión */}
       <GuiaInversion />
 
       {/* Calculadora interactiva de rentabilidad & inversión */}
@@ -116,19 +110,13 @@ export default async function HomePage() {
       {/* Servicios + video institucional */}
       <Servicios />
 
-      {/* En números */}
-      <Estadisticas />
-
       {/* Proceso de trabajo */}
       <Proceso />
 
       {/* Diferenciadores "Por qué elegirnos" (Bento Grid) */}
       <PorQueElegirnos />
 
-      {/* Testimonios reales (Social Proof / Marquee) */}
-      <TestimoniosReales />
-
-      {/* FAQ — preguntas frecuentes (rich snippet) */}
+      {/* FAQ - preguntas frecuentes (rich snippet) */}
       <FAQ />
 
       {/* CTA final */}

@@ -190,7 +190,7 @@ export default function SumateContent() {
               </h2>
             </div>
             <p className="font-body text-tierra/40 text-sm leading-relaxed max-w-xs">
-              Más que un trabajo — una oportunidad de construir algo que dure.
+              Más que un trabajo - una oportunidad de construir algo que dure.
             </p>
           </div>
 

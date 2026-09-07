@@ -4,10 +4,9 @@ import Link from "next/link";
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 export const metadata: Metadata = {
-  title:
-    "Inmobiliaria en Cipolletti — Altum | Propiedades & Inversión en Río Negro",
+  title: "Inmobiliaria en Cipolletti: Propiedades & Inversión en Río Negro",
   description:
-    "Altum Inmobiliaria en Cipolletti, Río Negro. Casas en venta, alquileres, loteos residenciales y asesoramiento legal con martillera matriculada. Más de 5 años en el Alto Valle.",
+    "Altum Inmobiliaria en Cipolletti, Río Negro. Casas en venta, alquileres, loteos residenciales y asesoramiento legal con martillera matriculada.",
   keywords: [
     "inmobiliaria Cipolletti",
     "inmobiliaria Cipoletti",
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${siteUrl}/inmobiliaria-cipoletti` },
   openGraph: {
-    title: "Inmobiliaria en Cipolletti — Altum Inmobiliaria",
+    title: "Inmobiliaria en Cipolletti - Altum Inmobiliaria",
     description:
       "La inmobiliaria de referencia en Cipolletti. Propiedades residenciales, loteos y comerciales en el Alto Valle de Río Negro.",
     url: `${siteUrl}/inmobiliaria-cipoletti`,

@@ -13,7 +13,7 @@ interface VideoPlayerProps {
 
 /**
  * Player de video vertical 9:16 (formato story) en card con borde oro
- * y sombra. El video recién se monta al hacer click — no descarga antes.
+ * y sombra. El video recién se monta al hacer click - no descarga antes.
  */
 export function VideoPlayer({
   src,

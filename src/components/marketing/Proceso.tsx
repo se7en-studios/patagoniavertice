@@ -76,7 +76,7 @@ function Paso({
           {paso.descripcion}
         </p>
 
-        {/* Detail — expands smoothly on hover */}
+        {/* Detail - expands smoothly on hover */}
         <motion.div
           className="overflow-hidden"
           initial={false}
@@ -239,9 +239,9 @@ export default function Proceso() {
           </motion.p>
         </div>
 
-        {/* Vertical timeline — mobile/tablet */}
+        {/* Vertical timeline - mobile/tablet */}
         <div ref={railRef} className="relative max-w-3xl lg:hidden">
-          {/* SVG vertical line — drawn on scroll */}
+          {/* SVG vertical line - drawn on scroll */}
           <svg
             className="absolute left-6 top-0 h-full w-px overflow-visible"
             aria-hidden="true"
@@ -274,7 +274,7 @@ export default function Proceso() {
           ))}
         </div>
 
-        {/* Horizontal timeline — desktop */}
+        {/* Horizontal timeline - desktop */}
         <div className="hidden lg:block relative">
           {/* Línea dorada horizontal */}
           <motion.div

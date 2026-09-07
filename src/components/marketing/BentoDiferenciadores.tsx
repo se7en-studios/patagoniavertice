@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 
 /**
- * BentoDiferenciadores — inspirado en Bento Grid de 21st.dev (s/features)
+ * BentoDiferenciadores - inspirado en Bento Grid de 21st.dev (s/features)
  * Reemplaza la sección "Por qué elegirnos" con un layout bento asimétrico
- * Diseño: navy/dorado/crema — Altum design system
+ * Diseño: navy/dorado/crema - Altum design system
  */
 
 const diferenciadores = [
@@ -18,8 +18,18 @@ const diferenciadores = [
     size: "large", // span 2 cols
     accent: "dorado",
     icon: (
-      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+      <svg
+        className="w-8 h-8"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+        />
       </svg>
     ),
   },
@@ -32,30 +42,18 @@ const diferenciadores = [
     size: "small",
     accent: "none",
     icon: (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    ),
-  },
-  {
-    id: "operaciones",
-    title: "+200",
-    subtitle: "Operaciones exitosas",
-    description: "En Río Negro y la Patagonia. Vendemos, alquilamos, asesoramos.",
-    size: "stat",
-    accent: "dorado",
-    icon: null,
-  },
-  {
-    id: "experiencia",
-    title: "5+ años",
-    subtitle: "En el mercado local",
-    description: "Conocemos el mercado de Río Negro como nadie. Cada barrio, cada tendencia, cada oportunidad.",
-    size: "small",
-    accent: "none",
-    icon: (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg
+        className="w-7 h-7"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+        />
       </svg>
     ),
   },
@@ -64,12 +62,22 @@ const diferenciadores = [
     title: "Operás desde cualquier lugar",
     subtitle: "Visitas virtuales + gestión online",
     description:
-      "Compradores de Buenos Aires, Europa y otros países cierran operaciones con nosotros sin pisar Río Negro.",
+      "Coordinamos visitas virtuales y gestionamos poderes notariales para que puedas comprar tu lote sin pisar Neuquén.",
     size: "wide",
     accent: "none",
     icon: (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg
+        className="w-7 h-7"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
     ),
   },
@@ -78,12 +86,22 @@ const diferenciadores = [
     title: "Valuaciones precisas",
     subtitle: "Análisis de mercado real",
     description:
-      "Usamos datos reales de operaciones cerradas para darte el precio justo, no el que querés escuchar.",
+      "Precio justo según superficie, ubicación y comparables reales de la zona, no el que querés escuchar.",
     size: "small",
     accent: "none",
     icon: (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      <svg
+        className="w-7 h-7"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.4}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+        />
       </svg>
     ),
   },
@@ -96,7 +114,15 @@ const containerVariants = {
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
+  },
 };
 
 function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
@@ -111,9 +137,10 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
       className={`relative p-6 lg:p-8 border group cursor-default overflow-hidden transition-all duration-300
         ${isLarge ? "md:col-span-2" : ""}
         ${isWide ? "md:col-span-2" : ""}
-        ${isDorado
-          ? "border-dorado/25 hover:border-dorado/50"
-          : "border-crema/[0.06] hover:border-crema/[0.14]"
+        ${
+          isDorado
+            ? "border-dorado/25 hover:border-dorado/50"
+            : "border-crema/[0.06] hover:border-crema/[0.14]"
         }`}
       style={{
         background: isDorado
@@ -128,7 +155,8 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%)",
           }}
         />
       )}
@@ -138,12 +166,19 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
         <div className="relative z-10">
           <p
             className="font-display font-medium text-dorado leading-none mb-2"
-            style={{ fontSize: "clamp(3.5rem, 7vw, 5rem)", letterSpacing: "-0.04em" }}
+            style={{
+              fontSize: "clamp(3.5rem, 7vw, 5rem)",
+              letterSpacing: "-0.04em",
+            }}
           >
             {d.title}
           </p>
-          <p className="font-body text-[11px] tracking-[0.25em] uppercase text-crema/50 mb-3">{d.subtitle}</p>
-          <p className="font-body text-crema/30 text-[13px] leading-relaxed">{d.description}</p>
+          <p className="font-body text-[11px] tracking-[0.25em] uppercase text-crema/50 mb-3">
+            {d.subtitle}
+          </p>
+          <p className="font-body text-crema/30 text-[13px] leading-relaxed">
+            {d.description}
+          </p>
         </div>
       ) : (
         <div className="relative z-10 h-full flex flex-col">
@@ -163,11 +198,17 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
             </p>
             <h3
               className={`font-display font-medium leading-snug mb-3 ${isDorado ? "text-dorado" : "text-crema"}`}
-              style={{ fontSize: isLarge ? "clamp(1.5rem, 2.5vw, 2rem)" : "clamp(1.1rem, 1.8vw, 1.4rem)" }}
+              style={{
+                fontSize: isLarge
+                  ? "clamp(1.5rem, 2.5vw, 2rem)"
+                  : "clamp(1.1rem, 1.8vw, 1.4rem)",
+              }}
             >
               {d.title}
             </h3>
-            <p className="font-body text-crema/35 text-[13px] leading-relaxed">{d.description}</p>
+            <p className="font-body text-crema/35 text-[13px] leading-relaxed">
+              {d.description}
+            </p>
           </div>
         </div>
       )}
@@ -187,7 +228,8 @@ export default function BentoDiferenciadores() {
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(201,168,76,0.6) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, rgba(201,168,76,0.6) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -210,13 +252,17 @@ export default function BentoDiferenciadores() {
             <h2
               id="diferenciadores-heading"
               className="font-display font-medium text-crema leading-[1.0] max-w-xl"
-              style={{ fontSize: "clamp(2.2rem, 4vw, 3.5rem)", letterSpacing: "-0.02em" }}
+              style={{
+                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+                letterSpacing: "-0.02em",
+              }}
             >
               Lo que nos hace{" "}
               <em className="not-italic italic text-dorado">diferentes</em>
             </h2>
             <p className="font-body text-crema/30 text-[14px] leading-relaxed max-w-xs lg:text-right">
-              No somos una franquicia. Somos un equipo local que conoce Río Negro mejor que nadie.
+              No somos una franquicia. Somos un equipo local que conoce Río
+              Negro mejor que nadie.
             </p>
           </div>
         </motion.div>

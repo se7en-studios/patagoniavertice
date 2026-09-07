@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 
 /**
- * useTypewriter — hook para efecto typewriter con loop
+ * useTypewriter - hook para efecto typewriter con loop
  * Inspirado en componentes de texto animado de 21st.dev (s/text)
  */
 export function useTypewriter(
@@ -65,7 +65,7 @@ export function useTypewriter(
 }
 
 /**
- * TypewriterText — componente de texto con cursor parpadeante
+ * TypewriterText - componente de texto con cursor parpadeante
  */
 export default function TypewriterText({
   texts,

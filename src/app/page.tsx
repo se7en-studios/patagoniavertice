@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/marketing/Hero";
 import Manifiesto from "@/components/marketing/Manifiesto";
+import { createClient } from "@/lib/supabase/server";
+import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
@@ -65,7 +67,27 @@ const SpotlightCursor = dynamic(
   { ssr: false },
 );
 
-export default function HomePage() {
+export default async function HomePage() {
+  let propiedadesDestacadas: PropiedadDestacada[] = [];
+
+  try {
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("propiedades")
+      .select(
+        "id, titulo, ciudad, barrio, precio, moneda, tipo, superficie_m2, imagenes",
+      )
+      .eq("publicado", true)
+      .order("destacado", { ascending: false })
+      .limit(6);
+
+    if (data) {
+      propiedadesDestacadas = data as unknown as PropiedadDestacada[];
+    }
+  } catch {
+    /* Supabase not configured yet */
+  }
+
   return (
     <>
       <SpotlightCursor />
@@ -74,7 +96,7 @@ export default function HomePage() {
       <Manifiesto />
 
       {/* Propiedades destacadas (Portfolio de primer nivel) */}
-      <PropiedadesDestacadasHome />
+      <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
 
       {/* Tasador Express & Valuación Certificada */}
       <TasadorExpress />

@@ -11,101 +11,8 @@ export const metadata = {
     "Catálogo exclusivo de residencias, loteos, departamentos y chacras en Río Negro y la Patagonia Argentina. Asesoría directa y matriculada.",
 };
 
-const demos: ItemPropiedad[] = [
-  {
-    id: "casa-quinta-los-tilos-cipolletti",
-    titulo: "Residencia Exclusiva con Parque & Piscina",
-    barrio: "Los Tilos",
-    ciudad: "Cipolletti",
-    tipo: "venta",
-    estado: "disponible",
-    imagenes: [
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=85",
-    ],
-    descripcion:
-      "Propiedad de diseño contemporáneo sobre lote de 420 m² con piscina climatizada, quincho integrado y suite principal con vestidor.",
-    precio: 185000,
-    moneda: "USD",
-  },
-  {
-    id: "lote-panoramico-paso-cordoba-roca",
-    titulo: "Lote Panorámico con Costa de Río",
-    barrio: "Paso Córdoba",
-    ciudad: "General Roca",
-    tipo: "lote",
-    estado: "disponible",
-    imagenes: [
-      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1000&q=85",
-    ],
-    descripcion:
-      "Terreno exclusivo de 1.500 m² con vista abierta a las bardas y costa de río. Servicios subterráneos y escritura inmediata.",
-    precio: 45000,
-    moneda: "USD",
-  },
-  {
-    id: "semipiso-centro-catriel",
-    titulo: "Semipiso Moderno a Estrenar con Balcón Terraza",
-    barrio: "Centro",
-    ciudad: "Catriel",
-    tipo: "venta",
-    estado: "en_construccion",
-    imagenes: [
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=85",
-    ],
-    descripcion:
-      "Unidad de 3 ambientes con terminaciones de categoría, pisos de porcelanato y cochera cubierta. Ideal para vivienda o renta corporativa petrolera.",
-    precio: 78000,
-    moneda: "USD",
-  },
-  {
-    id: "casa-rincon-lindo-cipolletti",
-    titulo: "Casa Minimalista en Barrio Privado",
-    barrio: "Rincón Lindo",
-    ciudad: "Cipolletti",
-    tipo: "venta",
-    estado: "disponible",
-    imagenes: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=85",
-    ],
-    descripcion:
-      "290 m² cubiertos sobre lote de 550 m². 4 dormitorios, estar en doble altura, galería con parrilla y seguridad 24 horas.",
-    precio: 210000,
-    moneda: "USD",
-  },
-  {
-    id: "chacra-productiva-valle-roca",
-    titulo: "Chacra Productiva con Vivienda Patronal",
-    barrio: "Alto Valle",
-    ciudad: "General Roca",
-    tipo: "chacra",
-    estado: "disponible",
-    imagenes: [
-      "https://images.unsplash.com/photo-1500076656116-558758c991c1?w=1000&q=85",
-    ],
-    descripcion:
-      "Fracción de 4,5 Hectáreas con plantación en producción, riego sistematizado y casa de campo de 180 m² totalmente equipada.",
-    precio: 160000,
-    moneda: "USD",
-  },
-  {
-    id: "chalet-lago-nahuel-huapi-bariloche",
-    titulo: "Chalet de Montaña con Vista al Lago",
-    barrio: "Av. Bustillo Km 7",
-    ciudad: "Bariloche",
-    tipo: "venta",
-    estado: "disponible",
-    imagenes: [
-      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1000&q=85",
-    ],
-    descripcion:
-      "310 m² cubiertos sobre parque forestado de 1.200 m² con vista panorámica ininterrumpida al lago y la cordillera. Apto renta turística.",
-    precio: 320000,
-    moneda: "USD",
-  },
-];
-
 export default async function ProyectosPage() {
-  let propiedades: ItemPropiedad[] = demos;
+  let propiedades: ItemPropiedad[] = [];
 
   try {
     const supabase = createClient();
@@ -115,11 +22,11 @@ export default async function ProyectosPage() {
       .eq("publicado", true)
       .order("destacado", { ascending: false });
 
-    if (data && data.length > 0) {
+    if (data) {
       propiedades = data as unknown as ItemPropiedad[];
     }
   } catch {
-    /* Fallback a demos curados */
+    /* Supabase no disponible */
   }
 
   return (
@@ -179,9 +86,13 @@ export default async function ProyectosPage() {
       {/* ── Catálogo con Filtros Reactivos ─────────────────────────────────────── */}
       <section className="py-20 bg-crema">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <Suspense fallback={
-            <div className="py-24 text-center font-body text-tierra/50">Cargando propiedades...</div>
-          }>
+          <Suspense
+            fallback={
+              <div className="py-24 text-center font-body text-tierra/50">
+                Cargando propiedades...
+              </div>
+            }
+          >
             <CatalogoInteractivo propiedadesIniciales={propiedades} />
           </Suspense>
         </div>

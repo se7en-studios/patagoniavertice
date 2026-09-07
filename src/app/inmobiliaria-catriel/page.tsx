@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 export const metadata: Metadata = {
-  title: "Inmobiliaria en Catriel — Altum | Propiedades & Renta Petrolera en Río Negro",
+  title:
+    "Inmobiliaria en Catriel — Altum | Propiedades & Renta Petrolera en Río Negro",
   description:
     "Altum Inmobiliaria en Catriel, Río Negro. Compra, venta y administración de propiedades y departamentos para renta corporativa petrolera en la Patagonia.",
   keywords: [
@@ -28,16 +28,6 @@ export const metadata: Metadata = {
     url: `${siteUrl}/inmobiliaria-catriel`,
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
-};
-
-const propiedadCatriel = {
-  id: "semipiso-centro-catriel",
-  titulo: "Semipiso Moderno a Estrenar con Balcón Terraza",
-  barrio: "Centro Urbano",
-  precio: "USD 78.000",
-  superficie: "85 m² cubiertos",
-  tipo: "Venta / Renta Petrolera",
-  imagen: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80",
 };
 
 const serviciosCatriel = [
@@ -78,8 +68,18 @@ export default function InmobiliariaCatrielPage() {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Inicio", item: siteUrl },
-              { "@type": "ListItem", position: 2, name: "Inmobiliaria Catriel", item: `${siteUrl}/inmobiliaria-catriel` },
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Inicio",
+                item: siteUrl,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Inmobiliaria Catriel",
+                item: `${siteUrl}/inmobiliaria-catriel`,
+              },
             ],
           }),
         }}
@@ -88,14 +88,25 @@ export default function InmobiliariaCatrielPage() {
       {/* Hero */}
       <section
         className="relative pt-40 pb-24 lg:pb-32 overflow-hidden text-crema"
-        style={{ background: "linear-gradient(135deg, #0A1228 0%, #0F1A3E 50%, #080E1A 100%)" }}
+        style={{
+          background:
+            "linear-gradient(135deg, #0A1228 0%, #0F1A3E 50%, #080E1A 100%)",
+        }}
       >
         <div className="absolute inset-0 grain-overlay opacity-[0.03] pointer-events-none" />
         <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-dorado/20 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12 z-10">
-          <nav className="flex items-center gap-2 mb-8 font-body text-[11px] tracking-[0.15em] uppercase" aria-label="Breadcrumb">
-            <Link href="/" className="text-crema/30 hover:text-dorado transition-colors">Inicio</Link>
+          <nav
+            className="flex items-center gap-2 mb-8 font-body text-[11px] tracking-[0.15em] uppercase"
+            aria-label="Breadcrumb"
+          >
+            <Link
+              href="/"
+              className="text-crema/30 hover:text-dorado transition-colors"
+            >
+              Inicio
+            </Link>
             <span className="text-dorado/30">·</span>
             <span className="text-dorado/70">Catriel</span>
           </nav>
@@ -109,14 +120,21 @@ export default function InmobiliariaCatrielPage() {
 
           <h1
             className="font-display font-medium text-crema leading-[1.05] mb-6 max-w-4xl"
-            style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.02em" }}
+            style={{
+              fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
+              letterSpacing: "-0.02em",
+            }}
           >
             Inmobiliaria en{" "}
-            <em className="not-italic italic text-dorado font-normal">Catriel</em>
+            <em className="not-italic italic text-dorado font-normal">
+              Catriel
+            </em>
           </h1>
 
           <p className="font-body text-crema/50 text-[16px] leading-relaxed max-w-2xl mb-10">
-            Conocimiento especializado del mercado de Catriel. Maximizamos el rendimiento de tus propiedades a través de compraventas seguras y alquileres corporativos para el sector energético.
+            Conocimiento especializado del mercado de Catriel. Maximizamos el
+            rendimiento de tus propiedades a través de compraventas seguras y
+            alquileres corporativos para el sector energético.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -138,49 +156,11 @@ export default function InmobiliariaCatrielPage() {
         </div>
       </section>
 
-      {/* Propiedad Destacada en Catriel */}
-      <section className="py-20 bg-white border-b border-tierra/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="mb-10">
-            <span className="font-body text-dorado text-[10px] tracking-[0.2em] uppercase font-medium block mb-1">
-              Oportunidad de Renta
-            </span>
-            <h2 className="font-display text-2xl lg:text-3xl text-tierra font-medium">
-              Propiedad destacada en Catriel
-            </h2>
-          </div>
-
-          <div className="max-w-2xl">
-            <Link
-              href={`/proyectos/${propiedadCatriel.id}`}
-              className="group border border-tierra/10 bg-crema/30 hover:border-dorado/40 transition-all p-4 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center"
-            >
-              <div className="sm:col-span-5 relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={propiedadCatriel.imagen}
-                  alt={propiedadCatriel.titulo}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 30vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="sm:col-span-7 space-y-2">
-                <span className="font-body text-[10px] tracking-wider text-dorado font-semibold uppercase">
-                  {propiedadCatriel.barrio} · {propiedadCatriel.tipo}
-                </span>
-                <h3 className="font-display text-lg font-medium text-tierra group-hover:text-dorado transition-colors">
-                  {propiedadCatriel.titulo}
-                </h3>
-                <p className="font-body text-xs text-tierra/60">{propiedadCatriel.superficie}</p>
-                <p className="font-display text-xl font-bold text-tierra">{propiedadCatriel.precio}</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Servicios en Catriel */}
-      <section className="py-24 bg-navy-900 text-crema" style={{ background: "#060A13" }}>
+      <section
+        className="py-24 bg-navy-900 text-crema"
+        style={{ background: "#060A13" }}
+      >
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-px w-10 bg-dorado" />
@@ -191,10 +171,15 @@ export default function InmobiliariaCatrielPage() {
 
           <h2
             className="font-display font-medium text-crema mb-14"
-            style={{ fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.02em" }}
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              letterSpacing: "-0.02em",
+            }}
           >
             Servicios inmobiliarios en{" "}
-            <em className="not-italic italic text-dorado font-normal">Catriel</em>
+            <em className="not-italic italic text-dorado font-normal">
+              Catriel
+            </em>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-navy-700/20">
@@ -204,9 +189,15 @@ export default function InmobiliariaCatrielPage() {
                 className="p-8 lg:p-10 bg-navy-950 border-l-2 border-dorado/30 hover:border-dorado transition-colors"
                 style={{ background: "#080E1A" }}
               >
-                <div className="text-3xl mb-4" aria-hidden="true">{s.icon}</div>
-                <h3 className="font-display font-medium text-crema text-xl mb-3">{s.titulo}</h3>
-                <p className="font-body text-crema/45 text-[14px] leading-relaxed">{s.descripcion}</p>
+                <div className="text-3xl mb-4" aria-hidden="true">
+                  {s.icon}
+                </div>
+                <h3 className="font-display font-medium text-crema text-xl mb-3">
+                  {s.titulo}
+                </h3>
+                <p className="font-body text-crema/45 text-[14px] leading-relaxed">
+                  {s.descripcion}
+                </p>
               </div>
             ))}
           </div>
@@ -214,17 +205,27 @@ export default function InmobiliariaCatrielPage() {
       </section>
 
       {/* CTA Tasación */}
-      <section className="py-24 bg-navy-950 text-center text-crema" style={{ background: "#060A13" }}>
+      <section
+        className="py-24 bg-navy-950 text-center text-crema"
+        style={{ background: "#060A13" }}
+      >
         <div className="max-w-2xl mx-auto px-6 space-y-6">
           <h2
             className="font-display font-medium text-crema"
-            style={{ fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.02em" }}
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              letterSpacing: "-0.02em",
+            }}
           >
             ¿Querés publicar o tasar una propiedad en{" "}
-            <em className="not-italic italic text-dorado font-normal">Catriel</em>?
+            <em className="not-italic italic text-dorado font-normal">
+              Catriel
+            </em>
+            ?
           </h2>
           <p className="font-body text-crema/50 text-[15px]">
-            Tasación profesional con la Martillera Estela Mari Rojas (Mat. 35 RP 2026).
+            Tasación profesional con la Martillera Estela Mari Rojas (Mat. 35 RP
+            2026).
           </p>
           <a
             href="https://wa.me/5492996095742?text=Hola%20Altum%2C%20solicito%20tasacion%20en%20Catriel."

@@ -1,6 +1,14 @@
 "use server";
 
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import {
+  emailSchema,
+  esEnvioSospechoso,
+  mensajeSchema,
+  nombreSchema,
+  telefonoSchema,
+} from "@/lib/validacion-leads";
 
 export type TipoConsulta = "venta" | "alquiler" | "consultoria" | "contratos";
 
@@ -10,6 +18,10 @@ export interface LeadAltumInput {
   telefono?: string;
   tipo_consulta: TipoConsulta;
   mensaje: string;
+  /** Honeypot: debe llegar vacío. */
+  empresa_web?: string;
+  /** Date.now() del momento en que se renderizó el formulario. */
+  renderedAt?: number;
 }
 
 export interface LeadAltumResult {
@@ -17,26 +29,37 @@ export interface LeadAltumResult {
   error?: string;
 }
 
+const leadAltumSchema = z.object({
+  nombre: nombreSchema,
+  email: emailSchema,
+  telefono: telefonoSchema,
+  tipo_consulta: z.enum(["venta", "alquiler", "consultoria", "contratos"], {
+    message: "Seleccioná el tipo de consulta.",
+  }),
+  mensaje: mensajeSchema,
+});
+
 export async function guardarLeadAltum(
   data: LeadAltumInput,
 ): Promise<LeadAltumResult> {
-  if (!data.nombre?.trim() || !data.email?.trim() || !data.mensaje?.trim()) {
-    return { success: false, error: "Completá los campos obligatorios." };
+  // Bots: éxito falso, sin insertar, para que no aprendan a evitarlo.
+  if (esEnvioSospechoso(data?.empresa_web, data?.renderedAt)) {
+    return { success: true };
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(data.email)) {
-    return { success: false, error: "El email no es válido." };
+  const parsed = leadAltumSchema.safeParse(data);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error:
+        parsed.error.issues[0]?.message ?? "Completá los campos obligatorios.",
+    };
   }
 
   const supabase = createClient();
 
   const { error } = await supabase.from("leads_altum").insert({
-    nombre: data.nombre.trim(),
-    email: data.email.trim().toLowerCase(),
-    telefono: data.telefono?.trim() || null,
-    tipo_consulta: data.tipo_consulta,
-    mensaje: data.mensaje.trim(),
+    ...parsed.data,
     estado: "nuevo",
   });
 

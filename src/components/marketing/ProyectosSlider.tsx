@@ -41,7 +41,7 @@ export default async function ProyectosSlider() {
   let proyectos: ProyectoCard[] = [];
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("propiedades")
       .select("id, titulo, ubicacion, descripcion, estado, imagenes")

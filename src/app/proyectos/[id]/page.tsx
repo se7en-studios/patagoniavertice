@@ -40,7 +40,7 @@ interface DemoPropiedad {
 
 async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("propiedades")
       .select("*")
@@ -53,8 +53,9 @@ async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const item = await fetchPropiedad(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const item = await fetchPropiedad(id);
   if (item) {
     return {
       title: item.titulo,
@@ -72,9 +73,10 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 export default async function PropiedadDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const propiedad = await fetchPropiedad(params.id);
+  const { id } = await params;
+  const propiedad = await fetchPropiedad(id);
 
   if (!propiedad) notFound();
 

@@ -15,7 +15,7 @@ export default async function ProyectosPage() {
   let propiedades: ItemPropiedad[] = [];
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("propiedades")
       .select("*")

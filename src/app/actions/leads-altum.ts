@@ -56,7 +56,7 @@ export async function guardarLeadAltum(
     };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.from("leads_altum").insert({
     ...parsed.data,

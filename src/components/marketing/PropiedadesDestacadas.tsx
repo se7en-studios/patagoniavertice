@@ -62,7 +62,7 @@ function PropiedadCard({ propiedad }: { propiedad: Propiedad }) {
 }
 
 export default async function PropiedadesDestacadas() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: propiedades } = await supabase
     .from("propiedades")
     .select("*")

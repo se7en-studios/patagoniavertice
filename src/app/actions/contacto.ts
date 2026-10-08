@@ -76,7 +76,7 @@ export async function enviarConsulta(
     return { error: "El mensaje es demasiado largo." };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("leads").insert({
     nombre,
     email,

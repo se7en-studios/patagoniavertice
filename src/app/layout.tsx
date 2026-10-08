@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./styles/typography.css";
 import Navbar from "@/components/marketing/Navbar";
@@ -10,16 +10,18 @@ import ScrollProgress from "@/components/ui/ScrollProgress";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 
 // ── Tipografías Ultra-Modern Luxury Minimalist ──────────────────────────────
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+// Self-hosted (fontsource, variable 300-800): el build no depende de bajar las fuentes de Google,
+// que en Vercel falló con Next 15 ("Cannot read properties of null" en el loader de next/font/google).
+const outfit = localFont({
+  src: "../../node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2",
+  weight: "300 800",
   variable: "--font-outfit",
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const plusJakarta = localFont({
+  src: "../../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2",
+  weight: "300 800",
   variable: "--font-plus-jakarta",
   display: "swap",
 });

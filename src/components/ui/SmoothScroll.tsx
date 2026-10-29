@@ -3,8 +3,7 @@
 import { ReactLenis } from "lenis/react";
 
 /**
- * Smooth scroll global con Lenis. syncTouch queda desactivado: en mobile el
- * scroll nativo es más fluido y evita jank con los parallax.
+ * Smooth scroll global con Lenis optimizado para respuesta inmediata sin lag.
  */
 export default function SmoothScroll({
   children,
@@ -15,8 +14,8 @@ export default function SmoothScroll({
     <ReactLenis
       root
       options={{
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        lerp: 0.14,
+        wheelMultiplier: 1,
         smoothWheel: true,
         syncTouch: false,
       }}

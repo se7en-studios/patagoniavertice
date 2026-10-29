@@ -138,24 +138,16 @@ const cardVariants = {
 
 function BentoCard({
   d,
-  progress,
   reduced,
 }: {
   d: (typeof diferenciadores)[number];
-  progress: MotionValue<number>;
   reduced: boolean | null;
 }) {
   const isWide = d.size === "large" || d.size === "wide";
   const isDorado = d.accent === "dorado";
-  // Cada celda viaja a distinta velocidad: de +shift a -shift/2 px.
-  const y = useTransform(
-    progress,
-    [0, 1],
-    reduced ? [0, 0] : [d.shift, -d.shift / 2],
-  );
 
   return (
-    <motion.div style={{ y }} className={isWide ? "md:col-span-2" : ""}>
+    <div className={isWide ? "md:col-span-2" : ""}>
       <motion.div
         variants={cardVariants}
         className={`relative h-full p-6 lg:p-8 rounded-3xl group cursor-default overflow-hidden transition-all duration-300 hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.4)] ${
@@ -200,21 +192,15 @@ function BentoCard({
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
 export default function BentoDiferenciadores() {
   const reduced = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
 
   return (
     <section
-      ref={sectionRef}
       className="relative py-24 lg:py-32 overflow-hidden bg-[#EAF0F7]"
       aria-labelledby="diferenciadores-heading"
       id="por-que-altum"
@@ -265,7 +251,6 @@ export default function BentoDiferenciadores() {
             <BentoCard
               key={d.id}
               d={d}
-              progress={scrollYProgress}
               reduced={reduced}
             />
           ))}

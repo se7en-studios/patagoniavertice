@@ -1,78 +1,47 @@
 "use client";
 
-import {
-  motion,
-  useAnimationFrame,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-  useReducedMotion,
-  useVelocity,
-} from "framer-motion";
-
 interface CintaMarqueeProps {
   items: string[];
   /** 1 = hacia la izquierda, -1 = hacia la derecha */
   direction?: 1 | -1;
 }
 
-const BASE_SPEED = 0.006; // % de la cinta por ms
-const SPEED_BOOST_MAX = 2.5;
-
-// Cinta de texto gigante: avanza sola y se acelera e inclina con la velocidad del scroll.
+// Cinta editorial acelerada por GPU (CSS puro sin loops JS en cada frame de scroll).
 export default function CintaMarquee({
   items,
   direction = 1,
 }: CintaMarqueeProps) {
-  const reduced = useReducedMotion();
-  const x = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const velocity = useSpring(useVelocity(scrollY), {
-    damping: 50,
-    stiffness: 400,
-  });
-  const skew = useTransform(velocity, [-2000, 0, 2000], [-3, 0, 3]);
-  const translate = useTransform(x, (v) => `${v}%`);
+  const row = [...items, ...items, ...items];
 
-  useAnimationFrame((_, delta) => {
-    if (reduced) return;
-    const boost = Math.min(Math.abs(velocity.get()) / 400, SPEED_BOOST_MAX);
-    let next = x.get() - direction * BASE_SPEED * delta * (1 + boost);
-    // La pista tiene el contenido duplicado: al llegar a -50% vuelve a 0 sin salto.
-    if (next <= -50) next += 50;
-    if (next > 0) next -= 50;
-    x.set(next);
-  });
-
-  const row = [...items, ...items];
   return (
     <div
-      className="relative overflow-hidden border-y border-navy/10 bg-[#F6F8FB] py-6 lg:py-8"
+      className="relative overflow-hidden border-y border-dorado/20 bg-[#F2F5FA] py-5 lg:py-7 select-none"
       aria-hidden="true"
     >
-      <motion.div style={{ skewX: reduced ? 0 : skew }}>
-        <motion.div
-          className="flex w-max items-center"
-          style={{ x: translate }}
-        >
-          {row.map((t, i) => (
-            <span key={i} className="flex items-center">
-              <span
-                className="font-display font-semibold uppercase leading-none tracking-tight whitespace-nowrap"
-                style={{
-                  fontSize: "clamp(2.5rem, 7vw, 6rem)",
-                  color: i % 2 ? "transparent" : "#1A2752",
-                  WebkitTextStroke: i % 2 ? "1px rgba(164,124,27,0.8)" : "0",
-                }}
-              >
-                {t}
-              </span>
-              <span className="mx-8 text-dorado text-2xl">✦</span>
+      <div
+        className={
+          direction === 1 ? "marquee-track" : "marquee-track-reverse"
+        }
+      >
+        {row.map((t, i) => (
+          <span key={`${t}-${i}`} className="flex items-center">
+            <span
+              className="font-display font-semibold uppercase leading-none tracking-tight whitespace-nowrap"
+              style={{
+                fontSize: "clamp(2rem, 5.2vw, 4.4rem)",
+                color: i % 2 ? "transparent" : "#15214A",
+                WebkitTextStroke:
+                  i % 2 ? "1.2px rgba(164,124,27,0.75)" : "0px",
+              }}
+            >
+              {t}
             </span>
-          ))}
-        </motion.div>
-      </motion.div>
+            <span className="mx-6 lg:mx-9 text-[#C9A84C] text-lg lg:text-xl">
+              ✦
+            </span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,29 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
-
-const words = [
-  { text: "El", accent: false },
-  { text: "territorio", accent: false },
-  { text: "más", accent: false },
-  { text: "generoso", accent: true },
-  { text: "de", accent: false },
-  { text: "Argentina", accent: false },
-  { text: "espera", accent: false },
-  { text: "a", accent: false },
-  { text: "quienes", accent: false },
-  { text: "saben", accent: false },
-  { text: "mirar", accent: false },
-  { text: "más", accent: false },
-  { text: "allá.", accent: false },
-];
 
 const STATS = [
   { value: 4, suffix: "", label: "Zonas de operación" },
@@ -32,108 +10,64 @@ const STATS = [
   { value: 100, suffix: "%", label: "Trámite legal y remoto" },
 ];
 
-// Cada palabra se enciende cuando el scroll llega a su turno.
-function Word({
-  text,
-  accent,
-  index,
-  progress,
-}: {
-  text: string;
-  accent: boolean;
-  index: number;
-  progress: MotionValue<number>;
-}) {
-  const step = 1 / words.length;
-  const opacity = useTransform(
-    progress,
-    [index * step, (index + 1) * step],
-    [0.16, 1],
-  );
-  return (
-    <motion.span
-      style={{ opacity }}
-      className={`inline-block mr-[0.28em] ${
-        accent ? "italic text-[#A47C1B]" : ""
-      }`}
-    >
-      {text}
-    </motion.span>
-  );
-}
-
 export default function Manifiesto() {
-  const quoteRef = useRef<HTMLQuoteElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: quoteRef,
-    offset: ["start 0.85", "end 0.5"],
-  });
-
   return (
-    <section className="relative bg-[#F6F8FB] py-28 lg:py-36 overflow-hidden">
-      {/* Glow ambiental dorado suave */}
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center -z-0 opacity-40"
-        aria-hidden="true"
-      >
-        <div className="h-[450px] w-[600px] rounded-full bg-gradient-to-tr from-dorado/25 via-dorado/10 to-transparent blur-3xl" />
-      </div>
-
-      <div className="relative z-10 max-w-4xl mx-auto px-8 lg:px-16 text-center">
+    <section
+      className="relative bg-[#F6F8FB] py-20 lg:py-28 overflow-hidden"
+      style={{
+        backgroundImage:
+          "radial-gradient(550px circle at 50% 35%, rgba(201,168,76,0.13), transparent 70%)",
+      }}
+    >
+      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 text-center">
         {/* Comilla ornamental */}
-        <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center text-dorado/60 text-2xl font-serif">
+        <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-dorado/35 bg-white text-[#A47C1B] text-2xl font-serif shadow-sm">
           &ldquo;
         </div>
 
-        <blockquote
-          ref={quoteRef}
+        <motion.blockquote
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="font-display font-medium text-navy text-3xl sm:text-4xl lg:text-6xl leading-[1.12]"
           style={{ letterSpacing: "-0.03em" }}
-          aria-label="El territorio más generoso de Argentina espera a quienes saben mirar más allá."
         >
-          {words.map((word, i) => (
-            <Word
-              key={i}
-              text={word.text}
-              accent={word.accent}
-              index={i}
-              progress={scrollYProgress}
-            />
-          ))}
-        </blockquote>
+          El territorio más{" "}
+          <span className="italic text-[#A47C1B]">generoso</span> de Argentina
+          espera a quienes saben mirar más allá.
+        </motion.blockquote>
 
-        <p className="mt-8 font-body text-navy/45 text-[10px] tracking-[0.35em] uppercase font-semibold">
+        <p className="mt-7 font-body text-navy/55 text-[10px] tracking-[0.32em] uppercase font-semibold">
           ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Patagonia
         </p>
       </div>
 
-      {/* Datos verificables ya publicados en el resto del sitio */}
-      <motion.dl
-        className="relative z-10 max-w-5xl mx-auto mt-16 px-6 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      >
+      {/* Datos verificables */}
+      <div className="relative z-10 max-w-5xl mx-auto mt-14 px-5 sm:px-8 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
         {STATS.map((s, i) => (
           <motion.div
             key={s.label}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="group rounded-3xl bg-white/90 backdrop-blur-md border border-dorado/20 hover:border-dorado/60 shadow-[0_18px_40px_-24px_rgba(14,26,51,0.25)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 px-5 py-7 text-center relative overflow-hidden"
+            transition={{
+              duration: 0.5,
+              delay: i * 0.07,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="group rounded-3xl bg-white border border-dorado/25 hover:border-dorado/65 shadow-[0_14px_34px_-20px_rgba(14,26,51,0.2)] hover:-translate-y-1 transition-all duration-200 px-5 py-6 lg:py-7 text-center relative overflow-hidden"
           >
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
               <AnimatedNumber value={s.value} suffix={s.suffix} />
             </dd>
-            <dt className="font-body text-navy/60 text-[10px] tracking-[0.2em] uppercase mt-2 font-medium">
+            <dt className="font-body text-navy/65 text-[10px] tracking-[0.18em] uppercase mt-2 font-semibold">
               {s.label}
             </dt>
           </motion.div>
         ))}
-      </motion.dl>
+      </div>
     </section>
   );
 }

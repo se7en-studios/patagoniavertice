@@ -37,15 +37,6 @@ export default function GuiaInversion() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // La "portada" de la guía se endereza y sube mientras scrolleás.
-  const secRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: secRef,
-    offset: ["start end", "center center"],
-  });
-  const coverRotate = useTransform(scrollYProgress, [0, 1], [-9, 0]);
-  const coverY = useTransform(scrollYProgress, [0, 1], [70, 0]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -79,29 +70,25 @@ export default function GuiaInversion() {
   return (
     <MotionConfig reducedMotion="user">
       <section
-        ref={secRef}
-        className="py-24 bg-[#F6F8FB] text-navy relative overflow-hidden"
+        className="py-20 lg:py-24 bg-[#F6F8FB] text-navy relative overflow-hidden"
+        style={{
+          backgroundImage:
+            "radial-gradient(600px circle at 25% 50%, rgba(201,168,76,0.12), transparent 70%)",
+        }}
       >
-        <div
-          className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[300px] opacity-15 blur-[130px] pointer-events-none rounded-full"
-          style={{ background: "#C9A84C" }}
-          aria-hidden="true"
-        />
-
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center p-8 lg:p-14 rounded-[2.5rem] border border-white bg-white/80 backdrop-blur-xl shadow-[0_30px_70px_-34px_rgba(14,26,51,0.35)]"
-            initial={{ opacity: 0, y: 40 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center p-8 lg:p-14 rounded-[2.5rem] border border-dorado/25 bg-white shadow-[0_30px_70px_-34px_rgba(14,26,51,0.32)]"
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Left Info */}
             <div className="lg:col-span-7 space-y-6">
               <div className="flex items-center gap-5">
-                <motion.div
+                <div
                   aria-hidden="true"
-                  style={{ rotate: coverRotate, y: coverY }}
                   className="hidden sm:flex shrink-0 w-20 h-28 rounded-2xl bg-navy text-white flex-col justify-between p-3 shadow-[0_18px_40px_-16px_rgba(14,26,51,0.6)]"
                 >
                   <span className="font-body text-[7px] tracking-[0.2em] uppercase text-dorado">
@@ -112,7 +99,7 @@ export default function GuiaInversion() {
                     <br />
                     <span className="text-dorado">2026</span>
                   </span>
-                </motion.div>
+                </div>
                 <span className="inline-flex items-center gap-2 rounded-full bg-[#FBF0CF] text-[#7A5A12] text-[11px] font-body tracking-[0.2em] uppercase font-semibold px-4 py-2">
                   <span>✦</span>
                   <span>Informe Exclusivo para Inversores</span>

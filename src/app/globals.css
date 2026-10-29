@@ -99,18 +99,26 @@
 }
 @keyframes marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+}
+@keyframes marqueeReverse {
+  from {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }
 @keyframes marqueeSlow {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 @keyframes revealUp {
@@ -148,7 +156,14 @@
   display: flex;
   width: max-content;
   flex-shrink: 0;
-  animation: marquee 28s linear infinite;
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+.marquee-track-reverse {
+  display: flex;
+  width: max-content;
+  flex-shrink: 0;
+  animation: marqueeReverse 32s linear infinite;
   will-change: transform;
 }
 .marquee-track-slow {
@@ -159,6 +174,7 @@
   will-change: transform;
 }
 .marquee-track:hover,
+.marquee-track-reverse:hover,
 .marquee-track-slow:hover {
   animation-play-state: paused;
 }

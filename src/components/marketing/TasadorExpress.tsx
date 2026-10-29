@@ -46,9 +46,6 @@ const rise = {
 };
 
 export default function TasadorExpress() {
-  const secRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: secRef, offset: ["start end", "end start"] });
-  const blobY = useTransform(scrollYProgress, [0, 1], [90, -90]);
   const [tipo, setTipo] = useState("casa");
   const [localidad, setLocalidad] = useState("Cipolletti");
   const [superficie, setSuperficie] = useState("70 a 150 m²");
@@ -100,18 +97,13 @@ export default function TasadorExpress() {
   return (
     <MotionConfig reducedMotion="user">
     <section
-      ref={secRef}
-      className="py-24 lg:py-36 relative overflow-hidden text-navy bg-[#EAF0F7]"
+      className="py-24 lg:py-32 relative overflow-hidden text-navy bg-[#EAF0F7]"
       id="tasador-express"
+      style={{
+        backgroundImage:
+          "radial-gradient(600px circle at 85% 20%, rgba(201,168,76,0.14), transparent 70%)",
+      }}
     >
-      {/* Background accents */}
-      {/* Luz dorada que sube con el scroll */}
-      <motion.div
-        className="absolute top-0 right-0 w-[550px] h-[550px] pointer-events-none opacity-20 blur-[130px] rounded-full"
-        style={{ background: "#C9A84C", y: blobY }}
-        aria-hidden="true"
-      />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Context & Trust */}

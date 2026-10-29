@@ -76,9 +76,6 @@ function AnimNum({ value }: { value: number }) {
 }
 
 export default function CalculadoraRentabilidad() {
-  const secRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: secRef, offset: ["start end", "end start"] });
-  const glowY = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const [modeloSeleccionado, setModeloSeleccionado] = useState<ModeloInversion>(
     MODELOS_INVERSION[0],
   );
@@ -150,17 +147,13 @@ export default function CalculadoraRentabilidad() {
   return (
     <MotionConfig reducedMotion="user">
     <section
-      ref={secRef}
-      className="py-24 lg:py-36 relative overflow-hidden text-navy bg-[#EAF0F7]"
+      className="py-24 lg:py-32 relative overflow-hidden text-navy bg-[#EAF0F7]"
       id="calculadora-inversion"
+      style={{
+        backgroundImage:
+          "radial-gradient(700px circle at 50% 45%, rgba(201,168,76,0.14), transparent 70%)",
+      }}
     >
-      {/* Background Glow */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[450px] opacity-20 blur-[150px] pointer-events-none rounded-full"
-        style={{ background: "#C9A84C", y: glowY }}
-        aria-hidden="true"
-      />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">

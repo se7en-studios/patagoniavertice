@@ -88,8 +88,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <SpotlightCursor />
-      <DecodeText />
       <SectionRail />
 
       <div id="sec-inicio">

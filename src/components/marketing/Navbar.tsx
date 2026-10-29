@@ -23,7 +23,11 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => {
+      const isScrolled = window.scrollY > 40;
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -32,62 +36,64 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
-  // En la home el navbar arranca transparente sobre el hero; en el resto de las páginas siempre va sólido.
   const solid = scrolled || pathname !== "/";
-  // La home va en tema claro; el resto de las páginas sigue oscuro.
   const light = pathname === "/";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500`}
+      className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300"
       style={
         solid && light
           ? {
-              background: "rgba(246,248,251,0.82)",
-              backdropFilter: "blur(20px) saturate(180%)",
-              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-              borderBottom: "1px solid rgba(14,26,51,0.08)",
-              boxShadow: "0 4px 30px rgba(14,26,51,0.08)",
+              background: "rgba(255,255,255,0.94)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderBottom: "1px solid rgba(201,168,76,0.22)",
+              boxShadow: "0 10px 30px -15px rgba(14,26,51,0.12)",
             }
           : solid
-          ? {
-              background: "rgba(8,14,26,0.82)",
-              backdropFilter: "blur(20px) saturate(180%)",
-              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-              borderBottom: "1px solid rgba(201,168,76,0.15)",
-              boxShadow: "0 4px 30px rgba(0,0,0,0.3)",
-            }
-          : {
-              background: "transparent",
-            }
+            ? {
+                background: "rgba(8,14,26,0.94)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderBottom: "1px solid rgba(201,168,76,0.18)",
+                boxShadow: "0 10px 30px -15px rgba(0,0,0,0.45)",
+              }
+            : {
+                background:
+                  "linear-gradient(to bottom, rgba(246,248,251,0.85) 0%, rgba(246,248,251,0) 100%)",
+              }
       }
     >
-      {/* Gold progress line on scroll */}
-      <motion.div
-        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-dorado/60 to-transparent"
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: scrolled ? 1 : 0, opacity: scrolled ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
-        style={{ transformOrigin: "left" }}
-      />
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 md:h-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-16 md:h-20">
         {/* ── Logo & Brand ── */}
-        <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
-          <motion.img
-            src="/logoo.png"
-            alt="ALTUM SCI - Servicios y Consultoría Inmobiliaria"
-            className="h-11 md:h-14 w-auto object-contain"
-            style={light ? undefined : { mixBlendMode: "screen", filter: "brightness(1.08)" }}
-            whileHover={{ filter: "brightness(1.2)" }}
-            transition={{ duration: 0.2 }}
-          />
-          <div className="hidden 2xl:flex flex-col border-l border-dorado/25 pl-3 py-0.5">
-            <span className={`font-display ${light ? "text-navy" : "text-crema"} text-xs md:text-sm font-semibold tracking-[0.16em] uppercase group-hover:text-dorado transition-colors`}>
-              ALTUM <span className="text-dorado">SCI</span>
+        <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <div className="flex items-center justify-center rounded-2xl bg-[#0B1528] px-3 py-1.5 border border-dorado/40 shadow-[0_6px_18px_-6px_rgba(14,26,51,0.35)] group-hover:border-dorado transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logoo.png"
+              alt="ALTUM SCI - Servicios y Consultoría Inmobiliaria"
+              className="h-8 md:h-10 w-auto object-contain"
+              style={{
+                mixBlendMode: "screen",
+                filter: "brightness(1.12)",
+              }}
+            />
+          </div>
+          <div className="hidden xl:flex flex-col pl-1">
+            <span
+              className={`font-display ${
+                light ? "text-navy" : "text-crema"
+              } text-sm font-semibold tracking-[0.15em] uppercase leading-tight group-hover:text-[#8A6A1B] transition-colors`}
+            >
+              ALTUM <span className="text-[#A47C1B]">SCI</span>
             </span>
-            <span className="hidden font-body text-[9px] tracking-[0.22em] text-crema/45 uppercase">
-              Servicios &amp; Consultoría Inmobiliaria
+            <span
+              className={`font-body text-[9px] tracking-[0.2em] uppercase ${
+                light ? "text-navy/55" : "text-crema/50"
+              }`}
+            >
+              Mat. 35 RP 2026
             </span>
           </div>
         </Link>
@@ -105,22 +111,29 @@ export default function Navbar() {
                 href={l.href}
                 onMouseEnter={() => setActiveHover(l.href)}
                 onMouseLeave={() => setActiveHover(null)}
-                className="relative font-body text-[11px] tracking-[0.22em] uppercase transition-colors duration-300 py-1"
+                className="relative font-body text-[11px] font-medium tracking-[0.2em] uppercase transition-colors duration-200 py-1.5"
                 style={{
                   color: active
-                    ? light ? "#8A6A1B" : "#C9A84C"
+                    ? light
+                      ? "#8A6A1B"
+                      : "#C9A84C"
                     : activeHover === l.href
-                      ? light ? "rgba(15,27,51,1)" : "rgba(245,239,230,1)"
-                      : light ? "rgba(15,27,51,0.65)" : "rgba(245,239,230,0.65)",
+                      ? light
+                        ? "rgba(15,27,51,1)"
+                        : "rgba(245,239,230,1)"
+                      : light
+                        ? "rgba(15,27,51,0.72)"
+                        : "rgba(245,239,230,0.72)",
                 }}
               >
                 {l.label}
-                {/* Animated underline */}
                 <motion.span
-                  className="absolute bottom-0 left-0 right-0 h-px"
+                  className="absolute bottom-0 left-0 right-0 h-[1.5px]"
                   style={{ background: "#C9A84C", transformOrigin: "left" }}
-                  animate={{ scaleX: active || activeHover === l.href ? 1 : 0 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  animate={{
+                    scaleX: active || activeHover === l.href ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 />
               </Link>
             );
@@ -128,19 +141,19 @@ export default function Navbar() {
         </nav>
 
         {/* ── Right: CTA ── */}
-        <div className="hidden lg:flex items-center gap-3.5">
+        <div className="hidden lg:flex items-center gap-3">
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`font-body ${
               light
-                ? "text-navy/85 border-dorado/30 bg-white/85 shadow-sm"
-                : "text-crema/80 border-crema/15 bg-white/5"
-            } text-[11px] tracking-wider hover:text-[#8A6A1B] transition-all flex items-center gap-2.5 group px-3.5 py-1.5 border hover:border-dorado rounded-full`}
+                ? "text-navy border-dorado/35 bg-white hover:bg-[#FBF0CF]/40 shadow-sm"
+                : "text-crema border-crema/20 bg-white/5 hover:bg-white/10"
+            } text-[11px] tracking-wider hover:border-dorado transition-all flex items-center gap-2.5 px-3.5 py-1.5 border rounded-full`}
           >
             <div className="relative shrink-0">
-              <div className="relative w-6 h-6 rounded-full overflow-hidden ring-1 ring-dorado/70">
+              <div className="relative w-6 h-6 rounded-full overflow-hidden ring-1 ring-dorado">
                 <Image
                   src="/estela-avatar.jpg"
                   alt="Estela Mari Rojas"
@@ -151,7 +164,7 @@ export default function Navbar() {
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
             </div>
-            <span className="font-medium">WhatsApp con Estela</span>
+            <span className="font-semibold">WhatsApp con Estela</span>
           </a>
           <Link
             href="/#tasador-express"
@@ -164,24 +177,28 @@ export default function Navbar() {
         {/* ── Mobile toggle ── */}
         <button
           onClick={() => setOpen(!open)}
-          className="lg:hidden flex flex-col gap-1.5 p-2"
+          className={`lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-xl border ${
+            light
+              ? "border-navy/15 bg-white/90 text-navy"
+              : "border-white/15 bg-white/5 text-crema"
+          } gap-1.5`}
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
         >
           <motion.span
-            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"} origin-center`}
-            animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-            transition={{ duration: 0.25 }}
-          />
-          <motion.span
-            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"}`}
-            animate={open ? { opacity: 0, x: -8 } : { opacity: 1, x: 0 }}
+            className={`block w-5 h-[1.5px] ${light ? "bg-navy" : "bg-crema"} origin-center`}
+            animate={open ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.2 }}
           />
           <motion.span
-            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"} origin-center`}
-            animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-            transition={{ duration: 0.25 }}
+            className={`block w-5 h-[1.5px] ${light ? "bg-navy" : "bg-crema"}`}
+            animate={open ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.15 }}
+          />
+          <motion.span
+            className={`block w-5 h-[1.5px] ${light ? "bg-navy" : "bg-crema"} origin-center`}
+            animate={open ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.2 }}
           />
         </button>
       </div>
@@ -194,60 +211,52 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="lg:hidden overflow-hidden"
             style={{
-              background: light ? "rgba(246,248,251,0.98)" : "rgba(8,14,26,0.97)",
-              backdropFilter: "blur(20px)",
+              background: light
+                ? "rgba(255,255,255,0.98)"
+                : "rgba(8,14,26,0.98)",
               borderBottom: light
                 ? "1px solid rgba(14,26,51,0.08)"
-                : "1px solid rgba(201,168,76,0.1)",
+                : "1px solid rgba(201,168,76,0.15)",
             }}
           >
             <nav
               className="flex flex-col gap-0 px-6 py-4"
               aria-label="Menú móvil"
             >
-              {links.map((l, i) => (
-                <motion.div
+              {links.map((l) => (
+                <div
                   key={l.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: i * 0.06,
-                    duration: 0.25,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className={`border-b ${light ? "border-navy/[0.08]" : "border-crema/[0.06]"} last:border-b-0`}
+                  className={`border-b ${
+                    light ? "border-navy/[0.07]" : "border-crema/[0.06]"
+                  } last:border-b-0`}
                 >
                   <Link
                     href={l.href}
-                    className={`block font-body text-[11px] tracking-[0.25em] uppercase py-4 transition-colors ${
+                    className={`block font-body text-xs tracking-[0.22em] uppercase py-3.5 font-medium transition-colors ${
                       pathname === l.href
-                        ? light ? "text-[#8A6A1B]" : "text-dorado"
-                        : light ? "text-navy/70 hover:text-[#8A6A1B]" : "text-crema/60 hover:text-dorado"
+                        ? light
+                          ? "text-[#8A6A1B]"
+                          : "text-dorado"
+                        : light
+                          ? "text-navy/75 hover:text-[#8A6A1B]"
+                          : "text-crema/70 hover:text-dorado"
                     }`}
                   >
                     {l.label}
                   </Link>
-                </motion.div>
+                </div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: links.length * 0.06 + 0.05,
-                  duration: 0.25,
-                }}
-                className="pt-4 pb-2 space-y-2.5"
-              >
+              <div className="pt-4 pb-2 space-y-2.5">
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center justify-center gap-2.5 rounded-full border py-3 px-5 font-body text-[11px] tracking-wider font-semibold ${
+                  className={`flex items-center justify-center gap-2.5 rounded-full border py-3 px-5 font-body text-xs tracking-wider font-semibold ${
                     light
-                      ? "border-dorado/40 bg-white text-navy"
+                      ? "border-dorado/45 bg-[#FBF0CF]/40 text-navy"
                       : "border-crema/20 bg-white/5 text-crema"
                   }`}
                 >
@@ -264,11 +273,11 @@ export default function Navbar() {
                 </a>
                 <Link
                   href="/#tasador-express"
-                  className="btn-shimmer block rounded-full font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-3 text-center shadow-md"
+                  className="btn-shimmer block rounded-full font-body text-tierra text-xs tracking-[0.14em] font-semibold uppercase px-5 py-3 text-center shadow-md"
                 >
                   ✦ Tasar Inmueble
                 </Link>
-              </motion.div>
+              </div>
             </nav>
           </motion.div>
         )}
@@ -276,5 +285,3 @@ export default function Navbar() {
     </header>
   );
 }
-
-

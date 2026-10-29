@@ -98,26 +98,15 @@ const ZONAS_PATAGONIA: ZonaInfo[] = [
 export default function ZonasInteractivas() {
   const [zonaActiva, setZonaActiva] = useState<ZonaInfo>(ZONAS_PATAGONIA[0]);
   const reduced = useReducedMotion();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: panelRef,
-    offset: ["start end", "end start"],
-  });
-  // Parallax leve de la foto dentro del panel.
-  const imgY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    reduced ? ["0%", "0%"] : ["-7%", "7%"],
-  );
   const reveal = (delay = 0) =>
     reduced
       ? {}
       : {
-          initial: { opacity: 0, y: 24 },
+          initial: { opacity: 0, y: 20 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
           transition: {
-            duration: 0.6,
+            duration: 0.5,
             delay,
             ease: [0.16, 1, 0.3, 1] as const,
           },
@@ -125,15 +114,13 @@ export default function ZonasInteractivas() {
 
   return (
     <section
-      className="py-24 lg:py-36 relative overflow-hidden text-navy bg-[#F6F8FB]"
+      className="py-24 lg:py-32 relative overflow-hidden text-navy bg-[#F6F8FB]"
       id="zonas-cobertura"
+      style={{
+        backgroundImage:
+          "radial-gradient(600px circle at 30% 50%, rgba(201,168,76,0.10), transparent 70%)",
+      }}
     >
-      {/* Background glow */}
-      <div
-        className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[700px] h-[350px] opacity-10 blur-[140px] pointer-events-none rounded-full"
-        style={{ background: "#C9A84C" }}
-      />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
         <motion.div
@@ -212,37 +199,32 @@ export default function ZonasInteractivas() {
         </div>
 
         {/* Dynamic Feature Panel */}
-        <div ref={panelRef}>
+        <div>
           <AnimatePresence mode="wait">
             <motion.div
               key={zonaActiva.id}
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="relative rounded-[2rem] border border-white bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="relative rounded-[2rem] border border-dorado/25 bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
                 {/* Left Column: Image with dynamic overlay */}
-                <div className="lg:col-span-7 relative min-h-[340px] lg:min-h-[540px] overflow-hidden">
-                  <motion.div
-                    className="absolute inset-x-0 -inset-y-[8%]"
-                    style={{ y: imgY }}
-                  >
-                    <Image
-                      src={zonaActiva.imagen}
-                      alt={zonaActiva.nombre}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 60vw"
-                      className="object-cover"
-                      priority
-                    />
-                  </motion.div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent" />
+                <div className="lg:col-span-7 relative min-h-[320px] lg:min-h-[520px] overflow-hidden">
+                  <Image
+                    src={zonaActiva.imagen}
+                    alt={zonaActiva.nombre}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-navy-950/10 to-transparent" />
 
                   {/* Floating pill over image */}
                   <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white text-[#8A6A1B] font-body text-[10px] tracking-wider uppercase font-semibold">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-dorado/30 text-[#8A6A1B] font-body text-[10px] tracking-wider uppercase font-semibold shadow-sm">
                       <span>✦</span>
                       <span>{zonaActiva.tipoInversion}</span>
                     </div>

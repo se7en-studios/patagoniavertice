@@ -66,7 +66,7 @@ export default function ProyectosSliderClient({ proyectos }: { proyectos: Proyec
   if (total === 0) {
     return (
       <div className="flex items-center justify-center py-32">
-        <p className="font-body text-crema/30 text-sm tracking-wider">
+        <p className="font-body text-crema/55 text-sm tracking-wider">
           Próximamente nuevos proyectos disponibles.
         </p>
       </div>
@@ -118,7 +118,7 @@ export default function ProyectosSliderClient({ proyectos }: { proyectos: Proyec
         </div>
 
         {/* Total */}
-        <div className="absolute bottom-6 right-6 font-body text-crema/25 text-xs tracking-widest">
+        <div className="absolute bottom-6 right-6 font-body text-crema/50 text-xs tracking-widest">
           / {String(total).padStart(2, "0")}
         </div>
 
@@ -171,12 +171,12 @@ export default function ProyectosSliderClient({ proyectos }: { proyectos: Proyec
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="font-body text-crema/35 text-sm">{p.ubicacion}</span>
+                <span className="font-body text-crema/60 text-sm">{p.ubicacion}</span>
               </div>
             )}
 
             {p.descripcion && (
-              <p className="font-body text-crema/30 text-[15px] leading-relaxed line-clamp-3 mb-8">
+              <p className="font-body text-crema/55 text-[15px] leading-relaxed line-clamp-3 mb-8">
                 {p.descripcion}
               </p>
             )}
@@ -197,7 +197,7 @@ export default function ProyectosSliderClient({ proyectos }: { proyectos: Proyec
         <div className="flex items-center gap-4 mt-10">
           <button
             onClick={prev}
-            className="w-10 h-10 border border-crema/12 flex items-center justify-center text-crema/35 hover:border-dorado hover:text-dorado transition-all duration-200"
+            className="w-10 h-10 border border-crema/12 flex items-center justify-center text-crema/60 hover:border-dorado hover:text-dorado transition-all duration-200"
             aria-label="Anterior"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@ export default function ProyectosSliderClient({ proyectos }: { proyectos: Proyec
           </button>
           <button
             onClick={next}
-            className="w-10 h-10 border border-crema/12 flex items-center justify-center text-crema/35 hover:border-dorado hover:text-dorado transition-all duration-200"
+            className="w-10 h-10 border border-crema/12 flex items-center justify-center text-crema/60 hover:border-dorado hover:text-dorado transition-all duration-200"
             aria-label="Siguiente"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

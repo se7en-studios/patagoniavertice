@@ -42,18 +42,16 @@ export default function Footer() {
             <Link href="/" className="inline-block mb-6">
               <img
                 src="/logoo.png"
-                alt="Altum Inmobiliaria"
+                alt="ALTUM SCI - Servicios & Consultoría Inmobiliaria"
                 className="h-16 md:h-24 w-auto object-contain"
                 style={{ mixBlendMode: "screen", filter: "brightness(1.05)" }}
               />
             </Link>
-            <p className="font-body text-crema/40 text-sm leading-relaxed mb-6">
-              Servicios inmobiliarios de primer nivel en Río Negro y la
-              Patagonia. Venta, alquiler, consultoría y contratos con respaldo
-              profesional.
+            <p className="font-body text-crema/50 text-sm leading-relaxed mb-4">
+              <strong>ALTUM SCI</strong> · Servicios &amp; Consultoría Inmobiliaria. Liderado por <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora Colegiada Mat. 35 RP 2026). Operaciones con seguridad jurídica y notarial en Neuquén y Río Negro.
             </p>
-            <p className="font-body text-crema/20 text-[11px] tracking-[0.15em] uppercase">
-              Río Negro, Patagonia Argentina
+            <p className="font-body text-dorado/70 text-[11px] tracking-[0.18em] uppercase">
+              Neuquén · Río Negro · Patagonia
             </p>
           </div>
 
@@ -67,7 +65,7 @@ export default function Footer() {
                 <Link
                   key={l.href + l.label}
                   href={l.href}
-                  className="footer-link self-start font-body text-crema/40 text-sm hover:text-dorado transition-colors duration-200"
+                  className="footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200"
                 >
                   {l.label}
                 </Link>
@@ -85,7 +83,7 @@ export default function Footer() {
                 <Link
                   key={l.label}
                   href={l.href}
-                  className="footer-link self-start font-body text-crema/40 text-sm hover:text-dorado transition-colors duration-200"
+                  className="footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200"
                 >
                   {l.label}
                 </Link>
@@ -99,7 +97,7 @@ export default function Footer() {
               Contacto
             </h4>
 
-            <div className="flex flex-col gap-4 font-body text-crema/40 text-sm mb-7">
+            <div className="flex flex-col gap-4 font-body text-crema/65 text-sm mb-7">
               {/* Dirección */}
               <div className="flex items-start gap-3">
                 <LocationIcon />
@@ -165,7 +163,7 @@ export default function Footer() {
               <Link
                 key={l.href + l.label}
                 href={l.href}
-                className="font-body text-crema/40 text-xs tracking-wide border border-crema/10 px-3.5 py-1.5 hover:border-dorado/50 hover:text-dorado transition-colors duration-200"
+                className="font-body text-crema/65 text-xs tracking-wide border border-crema/10 px-3.5 py-1.5 hover:border-dorado/50 hover:text-dorado transition-colors duration-200"
               >
                 {l.label}
               </Link>
@@ -175,11 +173,11 @@ export default function Footer() {
 
         {/* ── Bottom bar ── */}
         <div className="border-t border-crema/8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-crema/20 text-xs tracking-wider">
-            © 2026 Altum Inmobiliaria. Todos los derechos reservados.
+          <p className="font-body text-crema/60 text-xs tracking-wider">
+            © 2026 ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Mat. 35 RP 2026. Todos los derechos reservados.
           </p>
 
-          <div className="flex items-center gap-2 font-body text-xs tracking-wider text-crema/30">
+          <div className="flex items-center gap-2 font-body text-xs tracking-wider text-crema/55">
             <span>Hecho por</span>
             <a
               href="https://se7endev.vercel.app/"
@@ -198,9 +196,17 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link
               href="/contacto"
-              className="footer-link font-body text-crema/30 text-xs tracking-wider hover:text-dorado transition-colors duration-200"
+              className="footer-link font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200"
             >
               Contacto
+            </Link>
+            <span className="text-crema/10 select-none">·</span>
+            <Link
+              href="/admin"
+              className="font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200 flex items-center gap-1.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-dorado/60 inline-block" />
+              Acceso Propietaria
             </Link>
             <span className="text-crema/10 select-none">·</span>
             <span className="font-body text-crema/15 text-xs tracking-wider">
@@ -230,7 +236,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-8 h-8 flex items-center justify-center border border-crema/10 text-crema/30 hover:border-dorado/50 hover:text-dorado transition-all duration-200"
+      className="w-8 h-8 flex items-center justify-center border border-crema/10 text-crema/55 hover:border-dorado/50 hover:text-dorado transition-all duration-200"
     >
       {children}
     </a>

@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import "./styles/typography.css";
-import Navbar from "@/components/marketing/Navbar";
-import Footer from "@/components/marketing/Footer";
-import FloatingDock from "@/components/marketing/FloatingDock";
-import CustomCursor from "@/components/ui/CustomCursor";
-import ScrollProgress from "@/components/ui/ScrollProgress";
-import SmoothScroll from "@/components/ui/SmoothScroll";
+import AppShell from "@/components/marketing/AppShell";
 
 // ── Tipografías Ultra-Modern Luxury Minimalist ──────────────────────────────
 const outfit = Outfit({
@@ -250,14 +245,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-crema text-tierra">
-        <SmoothScroll>
-          <ScrollProgress />
-          <CustomCursor />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <FloatingDock />
-        </SmoothScroll>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

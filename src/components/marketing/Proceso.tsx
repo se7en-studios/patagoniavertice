@@ -72,7 +72,7 @@ function Paso({
           {paso.titulo}
         </h3>
 
-        <p className="font-body text-crema/40 text-[15px] leading-relaxed max-w-xl">
+        <p className="font-body text-crema/70 text-[15px] leading-relaxed max-w-xl">
           {paso.descripcion}
         </p>
 
@@ -87,7 +87,7 @@ function Paso({
             {paso.detalle.split(" · ").map((d) => (
               <div key={d} className="flex items-center gap-2.5">
                 <span className="w-1 h-1 rounded-full bg-dorado/40 shrink-0" />
-                <span className="font-body text-crema/30 text-[11px] tracking-[0.12em] uppercase">
+                <span className="font-body text-crema/55 text-[11px] tracking-[0.12em] uppercase">
                   {d}
                 </span>
               </div>
@@ -99,75 +99,46 @@ function Paso({
   );
 }
 
-function PasoFlipCard({
+function PasoCard({
   paso,
   index,
 }: {
   paso: (typeof pasos)[number];
   index: number;
 }) {
-  const [flipped, setFlipped] = useState(false);
-
   return (
     <motion.div
-      className="relative"
-      style={{ perspective: "1200px" }}
-      initial={{ opacity: 0, y: 24 }}
+      className="group relative border border-crema/10 bg-crema/[0.025] p-8 xl:p-10 hover:border-dorado/50 hover:bg-dorado/[0.05] transition-colors duration-500"
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: "easeInOut" }}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
     >
-      <motion.div
-        className="relative h-72"
-        style={{ transformStyle: "preserve-3d" }}
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      <span
+        className="block font-display font-semibold text-dorado/25 group-hover:text-dorado/60 transition-colors duration-500 leading-none mb-6"
+        style={{ fontSize: "5rem", letterSpacing: "-0.04em" }}
       >
-        {/* Front */}
-        <div
-          className="absolute inset-0 border border-crema/10 p-8 flex flex-col justify-between"
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          <span className="font-display text-dorado/60 text-sm font-medium">
-            {paso.num}
-          </span>
-          <h3
-            className="font-display text-crema font-medium leading-tight"
-            style={{
-              fontSize: "clamp(1.6rem, 2.2vw, 2rem)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            {paso.titulo}
-          </h3>
-        </div>
-
-        {/* Back */}
-        <div
-          className="absolute inset-0 border border-dorado/30 p-8 flex flex-col justify-center gap-4"
-          style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            background: "rgba(201,168,76,0.05)",
-          }}
-        >
-          <p className="font-body text-crema/50 text-[13px] leading-relaxed">
-            {paso.descripcion}
-          </p>
-          <div className="space-y-1.5">
-            {paso.detalle.split(" · ").map((d) => (
-              <div key={d} className="flex items-center gap-2.5">
-                <span className="w-1 h-1 rounded-full bg-dorado/50 shrink-0" />
-                <span className="font-body text-crema/40 text-[10px] tracking-[0.1em] uppercase">
-                  {d}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
+        {paso.num}
+      </span>
+      <h3
+        className="font-display text-crema font-medium leading-tight mb-4"
+        style={{ fontSize: "clamp(1.6rem, 2.2vw, 2rem)", letterSpacing: "-0.02em" }}
+      >
+        {paso.titulo}
+      </h3>
+      <p className="font-body text-crema/70 text-[14px] leading-relaxed mb-6">
+        {paso.descripcion}
+      </p>
+      <ul className="space-y-2 border-t border-crema/10 pt-5">
+        {paso.detalle.split(" · ").map((d) => (
+          <li key={d} className="flex items-center gap-2.5">
+            <span className="w-1.5 h-1.5 rotate-45 bg-dorado shrink-0" />
+            <span className="font-body text-crema/60 text-[11px] tracking-[0.12em] uppercase">
+              {d}
+            </span>
+          </li>
+        ))}
+      </ul>
     </motion.div>
   );
 }
@@ -208,7 +179,7 @@ export default function Proceso() {
               transition={{ duration: 0.6 }}
             >
               <div className="h-px w-10 bg-dorado/50" />
-              <span className="eyebrow text-crema/30">Cómo trabajamos</span>
+              <span className="eyebrow text-crema/50">Cómo trabajamos</span>
             </motion.div>
 
             <motion.h2
@@ -228,7 +199,7 @@ export default function Proceso() {
           </div>
 
           <motion.p
-            className="font-body text-crema/30 text-[15px] leading-relaxed max-w-xs lg:text-right"
+            className="font-body text-crema/60 text-[15px] leading-relaxed max-w-xs lg:text-right"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -286,7 +257,7 @@ export default function Proceso() {
           />
           <div className="grid grid-cols-3 gap-8 pt-14">
             {pasos.map((paso, i) => (
-              <PasoFlipCard key={paso.num} paso={paso} index={i} />
+              <PasoCard key={paso.num} paso={paso} index={i} />
             ))}
           </div>
         </div>

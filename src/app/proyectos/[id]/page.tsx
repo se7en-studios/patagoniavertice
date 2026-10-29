@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { coverImage, galleryImages } from "@/lib/property-images";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -82,6 +83,9 @@ export default async function PropiedadDetailPage({
     ? propiedad.imagenes
     : ["/mari-menuco/bahia-playas-1.jpg"];
 
+  const cover = coverImage(propiedad.imagenes);
+  const galeria = galleryImages(propiedad.imagenes, cover);
+
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `Hola Altum Inmobiliaria, quisiera consultar información detallada y coordinar una visita para la propiedad: ${propiedad.titulo} (${propiedad.ciudad} - USD ${propiedad.precio?.toLocaleString("es-AR") || "Consultar"})`,
   )}`;
@@ -134,7 +138,7 @@ export default async function PropiedadDetailPage({
       {/* ── Hero Gallery ─────────────────────────────────────────────────── */}
       <section className="relative h-[65vh] md:h-[75vh] bg-navy-950 overflow-hidden">
         <Image
-          src={imagenes[0]}
+          src={cover}
           alt={propiedad.titulo}
           fill
           priority
@@ -262,13 +266,13 @@ export default async function PropiedadDetailPage({
                 )}
 
               {/* Galería adicional de fotos */}
-              {imagenes.length > 1 && (
+              {galeria.length > 0 && (
                 <div className="space-y-6 pt-6 border-t border-tierra/10">
                   <h3 className="font-display text-tierra text-xl lg:text-2xl font-medium">
                     Galería de Imágenes
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {imagenes.slice(1).map((img, i) => (
+                    {galeria.map((img, i) => (
                       <div
                         key={i}
                         className="relative aspect-[4/3] overflow-hidden border border-tierra/10 shadow-sm"

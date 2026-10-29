@@ -1,5 +1,6 @@
 "use client";
 
+import { coverImage } from "@/lib/property-images";
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -210,9 +211,7 @@ export default function CatalogoInteractivo({
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
             {propiedadesFiltradas.map((p) => {
-              const imagen =
-                p.imagenes?.[0] ??
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=85";
+              const imagen = coverImage(p.imagenes);
               const badge = estadoBadge[p.estado] ?? estadoBadge.disponible;
 
               return (

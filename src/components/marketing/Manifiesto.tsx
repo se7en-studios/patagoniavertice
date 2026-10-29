@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 const words = [
   { text: "El", italic: false },
@@ -16,6 +17,13 @@ const words = [
   { text: "mirar", italic: false },
   { text: "más", italic: false },
   { text: "allá.", italic: false },
+];
+
+const STATS = [
+  { value: 4, suffix: "", label: "Zonas de operación" },
+  { value: 65, suffix: " km", label: "Mari Menuco ↔ Neuquén" },
+  { value: 24, suffix: " hs", label: "Dictamen de tasación" },
+  { value: 100, suffix: "%", label: "Trámite legal y remoto" },
 ];
 
 export default function Manifiesto() {
@@ -71,13 +79,36 @@ export default function Manifiesto() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.85 }}
         >
-          <div className="h-px w-8 bg-dorado/40" />
-          <span className="font-body text-tierra/30 text-[10px] tracking-[0.35em] uppercase">
-            Altum Inmobiliaria · Río Negro
+          <div className="h-px w-10 bg-dorado/50" />
+          <span className="font-body text-tierra/40 text-[10px] tracking-[0.35em] uppercase font-semibold">
+            ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Patagonia
           </span>
-          <div className="h-px w-8 bg-dorado/40" />
+          <div className="h-px w-10 bg-dorado/50" />
         </motion.div>
       </div>
+
+      {/* Datos verificables ya publicados en el resto del sitio */}
+      <motion.dl
+        className="relative max-w-5xl mx-auto mt-20 px-8 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-dorado/25 pt-12"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {STATS.map((s) => (
+          <div
+            key={s.label}
+            className="text-center lg:border-l lg:first:border-l-0 border-dorado/20"
+          >
+            <dd className="font-display text-tierra text-4xl lg:text-5xl font-semibold tracking-tight">
+              <AnimatedNumber value={s.value} suffix={s.suffix} />
+            </dd>
+            <dt className="font-body text-tierra/55 text-[10px] tracking-[0.22em] uppercase mt-2">
+              {s.label}
+            </dt>
+          </div>
+        ))}
+      </motion.dl>
 
       <div className="absolute bottom-0 left-0 right-0 h-px gold-line" />
     </section>

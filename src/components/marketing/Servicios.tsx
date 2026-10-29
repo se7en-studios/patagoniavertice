@@ -1,6 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import {
+  ArrowRight,
+  Building2,
+  FileSignature,
+  KeyRound,
+  TrendingUp,
+} from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { VideoPlayer } from "@/components/ui/VideoPlayer";
@@ -40,6 +46,8 @@ const servicios = [
   },
 ];
 
+const ICONOS = [Building2, KeyRound, TrendingUp, FileSignature];
+
 function ServiceCard({
   s,
   i,
@@ -49,91 +57,100 @@ function ServiceCard({
   i: number;
   prefersReduced: boolean | null;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const Icon = ICONOS[i % ICONOS.length];
+
+  // Spotlight dorado que sigue al cursor (solo CSS vars, sin re-render)
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
 
   return (
     <motion.div
-      initial={
-        prefersReduced
-          ? { opacity: 0 }
-          : { clipPath: "inset(0 0 100% 0)", opacity: 0 }
-      }
-      whileInView={
-        prefersReduced
-          ? { opacity: 1 }
-          : { clipPath: "inset(0 0 0% 0)", opacity: 1 }
-      }
-      transition={{ duration: 0.65, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ once: true, margin: "-40px" }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      className="relative overflow-hidden p-8 lg:p-10 bg-navy-800 border-l-2 border-gold-500/40 cursor-pointer"
+      onMouseMove={handleMove}
+      className="group relative overflow-hidden p-8 lg:p-10 bg-navy-800/70 border border-crema/10 hover:border-dorado/50 transition-colors duration-500"
     >
-      {/* Ghost number */}
-      <motion.span
-        animate={{ opacity: hovered ? 0.12 : 0.04 }}
-        transition={{ duration: 0.25 }}
-        className="absolute -bottom-2 right-4 font-display font-bold text-dorado select-none pointer-events-none leading-none"
-        style={{ fontSize: "7rem", zIndex: 0 }}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background:
+            "radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(201,168,76,0.14), transparent 60%)",
+        }}
+        aria-hidden="true"
+      />
+      <span
+        className="absolute -bottom-3 right-4 font-display font-bold text-dorado/[0.06] group-hover:text-dorado/[0.12] transition-colors duration-500 select-none pointer-events-none leading-none"
+        style={{ fontSize: "7.5rem" }}
         aria-hidden="true"
       >
         {s.num}
-      </motion.span>
+      </span>
 
-      {/* Hover background reveal */}
-      {!prefersReduced && (
-        <motion.div
-          className="absolute inset-0 bg-navy-700"
-          animate={{
-            clipPath: hovered ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)",
-          }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          style={{ zIndex: 1 }}
-        />
-      )}
-
-      {/* Content */}
-      <div className="relative" style={{ zIndex: 2 }}>
-        <div className="font-body text-[11px] text-dorado tracking-[0.25em] uppercase mb-4">
-          {s.num}
+      <div className="relative">
+        <div className="flex items-center justify-between mb-8">
+          <span className="flex h-12 w-12 items-center justify-center border border-dorado/40 bg-dorado/10 text-dorado transition-all duration-500 group-hover:bg-dorado group-hover:text-tierra">
+            <Icon className="h-5 w-5" strokeWidth={1.5} />
+          </span>
+          <span className="font-body text-[11px] text-dorado tracking-[0.25em] uppercase">
+            {s.num}
+          </span>
         </div>
         <h3
           className="font-display font-medium text-crema leading-tight mb-4"
-          style={{
-            fontSize: "clamp(1.3rem, 2vw, 1.6rem)",
-            letterSpacing: "0.01em",
-          }}
+          style={{ fontSize: "clamp(1.3rem, 2vw, 1.6rem)" }}
         >
           {s.titulo}
         </h3>
-        <p
-          className="font-body text-[15px] leading-relaxed mb-6 transition-colors duration-300"
-          style={{
-            color: hovered
-              ? "rgba(245,239,230,0.65)"
-              : "rgba(245,239,230,0.35)",
-          }}
-        >
+        <p className="font-body text-[15px] leading-relaxed mb-8 text-crema/65 group-hover:text-crema/85 transition-colors duration-300">
           {s.descripcion}
         </p>
-        <motion.a
+        <a
           href={`https://wa.me/${WA}?text=${s.waText}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.18em] uppercase text-dorado/70 hover:text-dorado transition-colors duration-200"
-          animate={{ x: hovered ? 4 : 0 }}
-          transition={{ duration: 0.2 }}
+          className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.18em] uppercase text-dorado hover:text-crema transition-colors duration-200"
         >
           Consultar por WhatsApp
-          <span className="text-xs">→</span>
-        </motion.a>
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
       </div>
     </motion.div>
   );
 }
 
-export default function Servicios() {
+export interface ServicioProp {
+  id?: string;
+  titulo: string;
+  descripcion: string;
+  activo?: boolean;
+}
+
+export default function Servicios({
+  serviciosCustom,
+}: {
+  serviciosCustom?: ServicioProp[];
+}) {
   const prefersReduced = useReducedMotion();
+
+  const listaServicios =
+    serviciosCustom &&
+    serviciosCustom.filter((s) => s.activo !== false).length > 0
+      ? serviciosCustom
+          .filter((s) => s.activo !== false)
+          .map((s, idx) => ({
+            num: String(idx + 1).padStart(2, "0"),
+            titulo: s.titulo,
+            descripcion: s.descripcion,
+            waText: encodeURIComponent(
+              `Hola Estela, me interesa consultar por el servicio de ${s.titulo}`,
+            ),
+          }))
+      : servicios;
 
   return (
     <section className="py-24 lg:py-32 bg-navy-900">
@@ -160,15 +177,15 @@ export default function Servicios() {
             Nuestros{" "}
             <em className="not-italic italic text-dorado">servicios</em>
           </h2>
-          <p className="font-body text-crema/35 text-[15px] leading-relaxed max-w-2xl">
+          <p className="font-body text-crema/65 text-[15px] leading-relaxed max-w-2xl">
             Cuatro líneas de trabajo para acompañarte en cada etapa de tu
             operación inmobiliaria en la Patagonia.
           </p>
         </motion.div>
 
         {/* Grid 2×2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-navy-700/30 mb-24 lg:mb-32">
-          {servicios.map((s, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-24 lg:mb-32 md:[&>*:last-child:nth-child(odd)]:col-span-2">
+          {listaServicios.map((s, i) => (
             <ServiceCard
               key={s.num}
               s={s}
@@ -190,7 +207,7 @@ export default function Servicios() {
             <div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px w-10 bg-dorado/50" />
-                <span className="eyebrow text-crema/30">
+                <span className="eyebrow text-crema/50">
                   Video institucional
                 </span>
               </div>
@@ -205,13 +222,17 @@ export default function Servicios() {
                 <em className="not-italic italic text-dorado">proceso</em>
               </h3>
             </div>
-            <p className="font-body text-crema/30 text-[15px] leading-relaxed max-w-xs lg:text-right">
+            <p className="font-body text-crema/55 text-[15px] leading-relaxed max-w-xs lg:text-right">
               Un recorrido visual por cómo trabajamos en cada operación.
             </p>
           </div>
 
           <div className="flex justify-center">
-            <VideoPlayer src="/videos/ALTUMSCI.mp4" title="Servicios Altum" />
+            <VideoPlayer
+              src="/videos/ALTUMSCI.mp4"
+              poster="/videos/altumsci-poster.jpg"
+              title="Servicios Altum"
+            />
           </div>
 
           <div className="text-center mt-10">
@@ -222,19 +243,7 @@ export default function Servicios() {
               className="btn-shimmer inline-flex items-center gap-3 font-body text-tierra text-[11px] tracking-[0.15em] font-semibold uppercase px-9 py-4"
             >
               Consultar ahora
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </motion.div>

@@ -114,12 +114,12 @@ export default function FAQ() {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar duda o tema (ej: tasación, escritura)..."
-                className="w-full bg-navy-950/80 border border-crema/15 px-4 py-3 text-xs font-body text-crema placeholder:text-crema/30 focus:outline-none focus:border-dorado transition-colors"
+                className="w-full bg-navy-950/80 border border-crema/15 px-4 py-3 text-xs font-body text-crema placeholder:text-crema/55 focus:outline-none focus:border-dorado transition-colors"
               />
               {busqueda && (
                 <button
                   onClick={() => setBusqueda("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-crema/40 hover:text-crema text-xs"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-crema/65 hover:text-crema text-xs"
                 >
                   ✕
                 </button>
@@ -206,7 +206,7 @@ export default function FAQ() {
                   );
                 })
               ) : (
-                <div className="py-12 text-center text-crema/40 font-body text-sm">
+                <div className="py-12 text-center text-crema/65 font-body text-sm">
                   No se encontraron preguntas con el término ingresado.
                 </div>
               )}

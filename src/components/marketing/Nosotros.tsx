@@ -14,79 +14,92 @@ const valores = [
   "Visión",
   "Territorio",
 ];
+export interface PerfilProps {
+  nombre?: string;
+  titulo?: string;
+  matricula?: string;
+  colegio?: string;
+  foto?: string;
+  bio?: string;
+}
 
-const credenciales = [
-  {
-    icon: (
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-        />
-      </svg>
-    ),
-    label: "Profesional Matriculada",
-    value: "Matrícula 35 RP 2026",
-    sub: "Colegio de Martilleros y Corredores Públicos · Río Negro IV Circunscripción",
-  },
-  {
-    icon: (
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-      </svg>
-    ),
-    label: "Zona de Cobertura",
-    value: "Catriel y Cipolletti",
-    sub: "Todo el Alto Valle de Río Negro · Patagonia Argentina",
-  },
-  {
-    icon: (
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-        />
-      </svg>
-    ),
-    label: "Seguridad Jurídica",
-    value: "Transparencia · Respaldo",
-    sub: "Profesionalismo garantizado en cada operación inmobiliaria",
-  },
-];
-
-export default function Nosotros() {
+export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
   const titleRef = useScrollReveal<HTMLHeadingElement>({ y: 30 });
   const estelaRef = useScrollReveal<HTMLHeadingElement>({ y: 24 });
+
+  const nombreEstela = perfil?.nombre || "Estela Mari Rojas";
+  const matriculaEstela = perfil?.matricula || "Matrícula 35 RP 2026";
+  const colegioEstela = perfil?.colegio || "Colegio de Martilleros y Corredores Públicos · Río Negro IV Circunscripción";
+  const fotoEstela = perfil?.foto || "/estela.jpg";
+
+  const credenciales = [
+    {
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"
+          />
+        </svg>
+      ),
+      label: "Profesional Matriculada",
+      value: matriculaEstela,
+      sub: colegioEstela,
+    },
+    {
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      ),
+      label: "Zona de Cobertura",
+      value: "Mari Menuco, Cipolletti & Catriel",
+      sub: "Alto Valle de Río Negro & Neuquén · Patagonia Argentina",
+    },
+    {
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+          />
+        </svg>
+      ),
+      label: "Seguridad Jurídica",
+      value: "Transparencia · Respaldo Notarial",
+      sub: "Profesionalismo garantizado en cada operación inmobiliaria",
+    },
+  ];
 
   return (
     <section className="bg-crema overflow-hidden">
@@ -126,16 +139,12 @@ export default function Nosotros() {
                 </em>
               </h2>
 
-              <div className="space-y-4 font-body text-tierra/50 text-[15px] leading-relaxed mb-10">
+              <div className="space-y-4 font-body text-tierra/60 text-[15px] leading-relaxed mb-10">
                 <p>
-                  Somos una consultora inmobiliaria especializada en operaciones
-                  de alto nivel en Río Negro y la Patagonia. Servicio directo,
-                  transparencia total, sin intermediarios.
+                  En <strong>ALTUM SCI</strong> (Servicios &amp; Consultoría Inmobiliaria) lideramos operaciones estratégicas de alto nivel en Neuquén, Río Negro y la Patagonia. Conectamos inversores y familias con oportunidades de tierra y residencias con alto potencial de plusvalía.
                 </p>
                 <p>
-                  Cada operación nace de un profundo conocimiento del
-                  territorio, del mercado y de las personas que eligen la
-                  Patagonia como su lugar en el mundo.
+                  Cada operación cuenta con el respaldo legal y matriculado de <strong>Estela Mari Rojas</strong> (Mat. 35 RP 2026), garantizando transparencia notarial absoluta, trato directo y confidencialidad sin intermediarios.
                 </p>
               </div>
 
@@ -200,8 +209,8 @@ export default function Nosotros() {
             <div className="md:col-span-4 flex justify-center md:justify-start">
               <div className="relative w-44 h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden border-2 border-dorado shadow-2xl">
                 <Image
-                  src="/estela.jpg"
-                  alt="Estela Mari Rojas - Martillera Colegiada"
+                  src={fotoEstela}
+                  alt={`${nombreEstela} - Martillera Colegiada`}
                   fill
                   sizes="(max-width: 768px) 180px, 220px"
                   className="object-cover"
@@ -222,8 +231,10 @@ export default function Nosotros() {
                       letterSpacing: "-0.02em",
                     }}
                   >
-                    Estela Mari{" "}
-                    <em className="not-italic italic text-dorado">Rojas</em>
+                    {nombreEstela.split(" ")[0]} {nombreEstela.split(" ")[1] || ""}{" "}
+                    <em className="not-italic italic text-dorado">
+                      {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
+                    </em>
                   </h2>
                   <p className="font-body text-tierra/55 text-xs tracking-[0.2em] uppercase font-semibold">
                     Martillera y Corredora Pública Colegiada

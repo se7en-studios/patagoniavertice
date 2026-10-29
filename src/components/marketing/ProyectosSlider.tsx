@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { coverImage } from "@/lib/property-images";
 import { createClient } from "@/lib/supabase/server";
 import ProyectosSliderClient, {
   type ProyectoCard,
@@ -56,7 +57,7 @@ export default async function ProyectosSlider() {
         ubicacion: p.ubicacion,
         descripcion: p.descripcion,
         estado: p.estado,
-        imagen: p.imagenes?.[0] ?? null,
+        imagen: p.imagenes?.length ? coverImage(p.imagenes) : null,
       }));
     }
   } catch {
@@ -86,13 +87,13 @@ export default async function ProyectosSlider() {
             >
               Nuestros <span className="italic text-dorado">proyectos</span>
             </h2>
-            <p className="font-body text-crema/30 text-sm mt-4 max-w-sm">
+            <p className="font-body text-crema/55 text-sm mt-4 max-w-sm">
               Desarrollos que transforman regiones y generan valor real.
             </p>
           </div>
           <Link
             href="/proyectos"
-            className="inline-flex items-center gap-3 font-body text-crema/40 text-[11px] tracking-[0.2em] uppercase border-b border-crema/15 pb-1 hover:text-dorado hover:border-dorado transition-colors duration-200 self-start md:self-auto shrink-0"
+            className="inline-flex items-center gap-3 font-body text-crema/65 text-[11px] tracking-[0.2em] uppercase border-b border-crema/15 pb-1 hover:text-dorado hover:border-dorado transition-colors duration-200 self-start md:self-auto shrink-0"
           >
             Ver todos los proyectos
             <svg

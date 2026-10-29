@@ -176,7 +176,7 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
           <p className="font-body text-[11px] tracking-[0.25em] uppercase text-crema/50 mb-3">
             {d.subtitle}
           </p>
-          <p className="font-body text-crema/30 text-[13px] leading-relaxed">
+          <p className="font-body text-crema/55 text-[13px] leading-relaxed">
             {d.description}
           </p>
         </div>
@@ -185,7 +185,7 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
           {/* Icon */}
           {d.icon && (
             <div
-              className={`mb-5 ${isDorado ? "text-dorado" : "text-crema/40 group-hover:text-crema/60"} transition-colors`}
+              className={`mb-5 ${isDorado ? "text-dorado" : "text-crema/65 group-hover:text-crema/60"} transition-colors`}
             >
               {d.icon}
             </div>
@@ -206,7 +206,7 @@ function BentoCard({ d }: { d: (typeof diferenciadores)[number] }) {
             >
               {d.title}
             </h3>
-            <p className="font-body text-crema/35 text-[13px] leading-relaxed">
+            <p className="font-body text-crema/60 text-[13px] leading-relaxed">
               {d.description}
             </p>
           </div>
@@ -260,9 +260,9 @@ export default function BentoDiferenciadores() {
               Lo que nos hace{" "}
               <em className="not-italic italic text-dorado">diferentes</em>
             </h2>
-            <p className="font-body text-crema/30 text-[14px] leading-relaxed max-w-xs lg:text-right">
-              No somos una franquicia. Somos un equipo local que conoce Río
-              Negro mejor que nadie.
+            <p className="font-body text-crema/45 text-[14px] leading-relaxed max-w-sm lg:text-right">
+              No somos una franquicia masiva. En ALTUM SCI brindamos asesoría
+              estratégica, notarial y territorial directa en Neuquén y Río Negro.
             </p>
           </div>
         </motion.div>
@@ -289,10 +289,10 @@ export default function BentoDiferenciadores() {
           className="mt-12 flex justify-center"
         >
           <a
-            href="https://wa.me/5492996095742?text=Hola%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20Altum%20Inmobiliaria"
+            href="https://wa.me/5492996095742?text=Hola%20Altum%20SCI%2C%20quisiera%20conocer%20m%C3%A1s%20sobre%20sus%20servicios%20e%20inversiones."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.2em] uppercase text-dorado/50 hover:text-dorado transition-colors duration-200"
+            className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.2em] uppercase text-dorado/70 hover:text-dorado transition-colors duration-200"
           >
             Consultanos sin compromiso
             <span>→</span>

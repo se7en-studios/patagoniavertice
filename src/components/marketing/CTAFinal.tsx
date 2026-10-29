@@ -158,7 +158,7 @@ export default function CTAFinal() {
             transition={{ duration: 0.6 }}
           >
             <div className="h-px w-10 bg-dorado/50" />
-            <span className="eyebrow text-crema/30">Dando el primer paso</span>
+            <span className="eyebrow text-crema/55">Dando el primer paso</span>
           </motion.div>
 
           {/* Title - split-line reveal: each line slides up from a mask */}
@@ -204,7 +204,7 @@ export default function CTAFinal() {
 
           {/* Subtitle */}
           <motion.p
-            className="font-body text-crema/35 text-[15px] leading-relaxed mb-12 max-w-md"
+            className="font-body text-crema/60 text-[15px] leading-relaxed mb-12 max-w-md"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -265,7 +265,7 @@ export default function CTAFinal() {
 
           {/* Contador de operaciones */}
           <motion.p
-            className="font-body text-crema/40 text-[13px] tracking-wider mt-10"
+            className="font-body text-crema/65 text-[13px] tracking-wider mt-10"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -345,7 +345,7 @@ export default function CTAFinal() {
           >
             &ldquo;Donde el paisaje define el valor.&rdquo;
           </p>
-          <p className="font-body text-crema/25 text-[10px] tracking-[0.25em] uppercase mt-2">
+          <p className="font-body text-crema/50 text-[10px] tracking-[0.25em] uppercase mt-2">
             - Altum Inmobiliaria
           </p>
         </motion.div>

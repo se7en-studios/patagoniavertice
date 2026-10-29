@@ -13,11 +13,12 @@ const TIPOS_INMUEBLE = [
 
 const LOCALIDADES = [
   "Cipolletti",
-  "Catriel",
+  "Mari Menuco / Lagos",
+  "Catriel (Polo Energético)",
   "General Roca",
   "Neuquén Capital",
-  "Bariloche",
-  "Otras zonas de Río Negro",
+  "Bariloche & Cordillera",
+  "Otras zonas de Río Negro & Neuquén",
 ];
 
 const RANGOS_SUPERFICIE = [
@@ -25,7 +26,7 @@ const RANGOS_SUPERFICIE = [
   "70 a 150 m²",
   "150 a 300 m²",
   "300 a 800 m²",
-  "Más de 800 m² / Fracción",
+  "Más de 800 m² / Fracción o Lote",
 ];
 
 export default function TasadorExpress() {
@@ -36,12 +37,12 @@ export default function TasadorExpress() {
   const [step, setStep] = useState<1 | 2>(1);
 
   const generarMensajeWhatsApp = () => {
-    const texto = `Hola Estela Mari Rojas (Altum Inmobiliaria). Quisiera solicitar la tasación profesional de mi inmueble:
+    const texto = `Hola Estela Mari Rojas (ALTUM SCI - Servicios & Consultoría Inmobiliaria). Quisiera solicitar la tasación profesional de mi inmueble:
 • Tipo: ${TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label || tipo}
 • Localidad: ${localidad}
 • Superficie aprox: ${superficie}
-• Intención: ${operacion === "vender" ? "Venta" : "Alquiler / Administración"}
-¿Cuándo podríamos coordinar una tasación o visita?`;
+• Intención: ${operacion === "vender" ? "Venta Inmobiliaria" : "Alquiler / Administración"}
+¿Cuándo podríamos coordinar la visita técnica o peritaje preliminar?`;
 
     return `https://wa.me/5492996095742?text=${encodeURIComponent(texto)}`;
   };
@@ -49,16 +50,16 @@ export default function TasadorExpress() {
   return (
     <section
       className="py-24 lg:py-36 relative overflow-hidden text-crema"
-      style={{ background: "#080E1A" }}
+      style={{ background: "#060A14" }}
       id="tasador-express"
     >
       {/* Background accents */}
       <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none opacity-15 blur-[120px] rounded-full"
+        className="absolute top-0 right-0 w-[550px] h-[550px] pointer-events-none opacity-15 blur-[130px] rounded-full"
         style={{ background: "#C9A84C" }}
       />
       <div
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] pointer-events-none opacity-10 blur-[140px] rounded-full"
+        className="absolute bottom-0 left-0 w-[550px] h-[550px] pointer-events-none opacity-10 blur-[150px] rounded-full"
         style={{ background: "#1A2752" }}
       />
 
@@ -68,7 +69,9 @@ export default function TasadorExpress() {
           <div className="lg:col-span-5 space-y-6">
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow">Valuación Certificada</span>
+              <span className="eyebrow tracking-[0.25em] text-dorado">
+                ALTUM SCI · Tasación Oficial Certificada
+              </span>
             </div>
 
             <h2
@@ -79,53 +82,53 @@ export default function TasadorExpress() {
               }}
             >
               ¿Cuánto vale tu propiedad en{" "}
-              <em className="not-italic italic text-dorado">Río Negro?</em>
+              <em className="not-italic italic text-dorado">Patagonia?</em>
             </h2>
 
-            <p className="font-body text-crema/55 text-sm lg:text-base leading-relaxed">
-              Tasaciones inmobiliarias con respaldo legal de <strong>Estela Mari Rojas</strong> (Martillera & Corredora Pública Mat. 35 RP 2026).
+            <p className="font-body text-crema/60 text-sm lg:text-base leading-relaxed">
+              Tasaciones inmobiliarias con rigor técnico y legal a cargo de <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora Pública Colegiada Mat. 35 RP 2026).
             </p>
 
             {/* Checklist de Garantías */}
             <div className="space-y-4 pt-4 border-t border-crema/10">
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Análisis de Mercado Real
+                    Análisis Comparativo de Mercado Real
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Basado en operaciones efectivas cerradas en la zona, sin sobrevaluaciones ficticias.
+                  <p className="font-body text-crema/45 text-xs">
+                    Basado en operaciones efectivas y escrituras cerradas en la zona, sin sobrevaluaciones ficticias.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Seguridad Jurídica y Notarial
+                    Validez Notarial, Judicial y Bancaria
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Revisión de títulos, planos y estado dominial para una venta sin contratiempos.
+                  <p className="font-body text-crema/45 text-xs">
+                    Revisión de títulos, planos y estado dominial para garantizar una operación sin sorpresas.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Respuesta en 24/48 Horas
+                    Dictamen Rápido en Menos de 24 Horas
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Coordinamos inspección física o virtual de inmediato.
+                  <p className="font-body text-crema/45 text-xs">
+                    Coordinamos inspección in situ o relevamiento satelital y virtual inmediato.
                   </p>
                 </div>
               </div>
@@ -284,7 +287,7 @@ export default function TasadorExpress() {
                       </h4>
                       <div className="grid grid-cols-2 gap-4 text-xs font-body text-crema/70 pt-2 border-t border-crema/10">
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Inmueble
                           </span>
                           <span className="font-medium text-crema">
@@ -292,19 +295,19 @@ export default function TasadorExpress() {
                           </span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Ubicación
                           </span>
                           <span className="font-medium text-crema">{localidad}</span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Superficie
                           </span>
                           <span className="font-medium text-crema">{superficie}</span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Operación
                           </span>
                           <span className="font-medium text-crema capitalize">

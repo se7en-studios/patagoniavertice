@@ -153,7 +153,7 @@ export default function GuiaInversion() {
                   Solicitar Guía en PDF
                 </button>
 
-                <p className="text-[10px] font-body text-crema/30 text-center">
+                <p className="text-[10px] font-body text-crema/55 text-center">
                   Sin spam. Atención directa y confidencial.
                 </p>
               </form>

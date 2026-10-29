@@ -3,6 +3,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Building2,
+  Ruler,
+  Star,
+  Inbox,
+  ArrowUpRight,
+  MessageCircle,
+  Plus,
+  UserCog,
+  Globe,
+  Sparkles,
+} from "lucide-react";
 import { Propiedad } from "@/lib/supabase/types";
 
 interface LeadItem {
@@ -14,6 +26,39 @@ interface LeadItem {
   estado: string;
   created_at: string;
 }
+
+const ESTADOS_LEAD = [
+  { id: "nuevo", label: "Nuevos", color: "bg-dorado" },
+  { id: "contactado", label: "Contactados", color: "bg-sky-400" },
+  { id: "en_seguimiento", label: "En seguimiento", color: "bg-violet-400" },
+  { id: "cerrado", label: "Cerrados", color: "bg-emerald-400" },
+];
+
+function saludo() {
+  const h = new Date().getHours();
+  if (h < 12) return "Buen día";
+  if (h < 20) return "Buenas tardes";
+  return "Buenas noches";
+}
+
+function hace(fecha: string) {
+  const diff = Date.now() - new Date(fecha).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 60) return `hace ${Math.max(min, 1)} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `hace ${d} d`;
+  return new Date(fecha).toLocaleDateString("es-AR");
+}
+
+const iniciales = (n: string) =>
+  n
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
 
 export default function AdminDashboardPage() {
   const [propiedades, setPropiedades] = useState<Propiedad[]>([]);
@@ -50,180 +95,216 @@ export default function AdminDashboardPage() {
   const totalPropiedades = propiedades.length;
   const totalLotes = propiedades.filter((p) => p.tipo === "lote").length;
   const totalDestacadas = propiedades.filter((p) => p.destacado).length;
+  const totalPublicadas = propiedades.filter((p) => p.publicado).length;
   const totalLeads = leads.length;
+  const leadsNuevos = leads.filter((l) => !l.estado || l.estado === "nuevo").length;
+  const leadsSemana = leads.filter(
+    (l) => Date.now() - new Date(l.created_at).getTime() < 7 * 86400000,
+  ).length;
+
+  const kpis = [
+    {
+      label: "Catálogo total",
+      value: totalPropiedades,
+      sub: `${totalPublicadas} publicadas en el sitio`,
+      icon: Building2,
+      accent: "from-dorado/25 to-dorado/0",
+      iconCls: "bg-dorado/15 text-dorado",
+    },
+    {
+      label: "Lotes & terrenos",
+      value: totalLotes,
+      sub: "Mari Menuco y zonas clave",
+      icon: Ruler,
+      accent: "from-sky-400/20 to-sky-400/0",
+      iconCls: "bg-sky-400/15 text-sky-300",
+    },
+    {
+      label: "En portada",
+      value: totalDestacadas,
+      sub: "Destacadas en la landing",
+      icon: Star,
+      accent: "from-amber-300/20 to-amber-300/0",
+      iconCls: "bg-amber-300/15 text-amber-200",
+    },
+    {
+      label: "Consultas",
+      value: totalLeads,
+      sub: `${leadsSemana} en los últimos 7 días`,
+      icon: Inbox,
+      accent: "from-emerald-400/20 to-emerald-400/0",
+      iconCls: "bg-emerald-400/15 text-emerald-300",
+    },
+  ];
+
+  const accesos = [
+    { href: "/admin/propiedades?action=new", label: "Publicar inmueble", icon: Plus },
+    { href: "/admin/leads", label: "Responder consultas", icon: MessageCircle },
+    { href: "/admin/configuracion", label: "Editar perfil", icon: UserCog },
+    { href: "/", label: "Ver sitio", icon: Globe, external: true },
+  ];
 
   return (
-    <div className="space-y-10">
-      {/* Title & Welcome */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-crema/10 pb-6">
-        <div>
-          <span className="font-body text-dorado text-[10px] tracking-[0.25em] uppercase font-semibold">
-            Panel de Control General
-          </span>
-          <h1 className="font-display text-3xl font-medium text-crema mt-1">
-            Bienvenida, Estela
-          </h1>
-          <p className="font-body text-crema/50 text-sm mt-0.5">
-            Gestión en tiempo real de catálogo, tasaciones y contenidos de ALTUM SCI.
-          </p>
-        </div>
+    <div className="space-y-8 max-w-[1400px]">
+      {/* Bienvenida */}
+      <section className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-gradient-to-br from-[#121A33] via-[#0C1326] to-[#090E1C] p-7 lg:p-9">
+        <div
+          className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-dorado/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-dorado/30 bg-dorado/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-dorado">
+              <Sparkles className="h-3 w-3" />
+              Panel de control
+            </span>
+            <h1 className="mt-4 font-display text-3xl lg:text-4xl font-medium text-crema">
+              {saludo()}, <span className="italic text-dorado">Estela</span>
+            </h1>
+            <p className="mt-2 text-sm text-crema/50 max-w-lg">
+              {loading
+                ? "Cargando el resumen de hoy…"
+                : leadsNuevos > 0
+                  ? `Tenés ${leadsNuevos} ${leadsNuevos === 1 ? "consulta nueva" : "consultas nuevas"} esperando respuesta.`
+                  : "Estás al día con todas las consultas. Buen momento para publicar algo nuevo."}
+            </p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/admin/propiedades?action=new"
-            className="px-5 py-2.5 bg-dorado text-tierra font-body text-xs font-bold tracking-wider uppercase hover:bg-dorado-light transition-all shadow-md"
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            {accesos.map(({ href, label, icon: Icon, external }) => (
+              <Link
+                key={href}
+                href={href}
+                target={external ? "_blank" : undefined}
+                className="group flex flex-col items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-3.5 w-full sm:w-32 hover:border-dorado/40 hover:bg-white/[0.06] transition-all"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-crema/70 group-hover:bg-dorado group-hover:text-tierra transition-colors">
+                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                </span>
+                <span className="text-[12px] leading-tight text-crema/75 group-hover:text-crema">
+                  {label}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* KPIs */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {kpis.map(({ label, value, sub, icon: Icon, accent, iconCls }) => (
+          <div
+            key={label}
+            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1020] p-5"
           >
-            + Publicar Inmueble
-          </Link>
-          <Link
-            href="/admin/configuracion"
-            className="px-4 py-2.5 border border-crema/20 text-crema font-body text-xs tracking-wider uppercase hover:border-dorado hover:text-dorado transition-colors"
-          >
-            Editar Perfil
-          </Link>
-        </div>
-      </div>
+            <div
+              className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b ${accent}`}
+              aria-hidden="true"
+            />
+            <div className="relative flex items-start justify-between">
+              <span className="text-[11px] uppercase tracking-[0.16em] text-crema/45">
+                {label}
+              </span>
+              <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${iconCls}`}>
+                <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
+              </span>
+            </div>
+            <div className="relative mt-3 font-display text-4xl font-semibold text-crema tabular-nums">
+              {loading ? (
+                <span className="inline-block h-9 w-14 rounded-lg bg-white/[0.06] animate-pulse" />
+              ) : (
+                value
+              )}
+            </div>
+            <p className="relative mt-1.5 text-xs text-crema/40">{sub}</p>
+          </div>
+        ))}
+      </section>
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="p-6 bg-[#090E1C] border border-crema/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-body text-[10px] tracking-wider text-crema/40 uppercase">
-              Total Catálogo
-            </span>
-            <span className="text-xl">🏡</span>
-          </div>
-          <div className="font-display text-3xl text-crema font-bold">
-            {loading ? "..." : totalPropiedades}
-          </div>
-          <span className="font-body text-dorado text-xs mt-1 block">
-            Propiedades registradas
-          </span>
-        </div>
-
-        <div className="p-6 bg-[#090E1C] border border-crema/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-body text-[10px] tracking-wider text-crema/40 uppercase">
-              Lotes &amp; Terrenos
-            </span>
-            <span className="text-xl">📐</span>
-          </div>
-          <div className="font-display text-3xl text-crema font-bold">
-            {loading ? "..." : totalLotes}
-          </div>
-          <span className="font-body text-crema/40 text-xs mt-1 block">
-            Mari Menuco y zonas clave
-          </span>
-        </div>
-
-        <div className="p-6 bg-[#090E1C] border border-crema/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-body text-[10px] tracking-wider text-crema/40 uppercase">
-              En Portada (Home)
-            </span>
-            <span className="text-xl">⭐</span>
-          </div>
-          <div className="font-display text-3xl text-dorado font-bold">
-            {loading ? "..." : totalDestacadas}
-          </div>
-          <span className="font-body text-crema/40 text-xs mt-1 block">
-            Destacadas en la landing
-          </span>
-        </div>
-
-        <div className="p-6 bg-[#090E1C] border border-crema/10 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-body text-[10px] tracking-wider text-crema/40 uppercase">
-              Consultas &amp; Leads
-            </span>
-            <span className="text-xl">📩</span>
-          </div>
-          <div className="font-display text-3xl text-emerald-400 font-bold">
-            {loading ? "..." : totalLeads}
-          </div>
-          <span className="font-body text-crema/40 text-xs mt-1 block">
-            Tasaciones y contactos
-          </span>
-        </div>
-      </div>
-
-      {/* Grid: Recent Properties & Recent Inquiries */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column: Propiedades Recientes */}
-        <div className="lg:col-span-8 bg-[#090E1C] border border-crema/10 p-6">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-crema/10">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Catálogo */}
+        <div className="lg:col-span-8 rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6">
+          <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="font-display text-xl text-crema font-medium">
-                Propiedades &amp; Lotes en Catálogo
-              </h3>
-              <p className="font-body text-xs text-crema/40 mt-0.5">
+              <h2 className="font-display text-xl text-crema font-medium">
+                Catálogo reciente
+              </h2>
+              <p className="text-xs text-crema/40 mt-0.5">
                 Últimas unidades sincronizadas con la base de datos
               </p>
             </div>
             <Link
               href="/admin/propiedades"
-              className="text-dorado font-body text-xs tracking-wider uppercase hover:underline"
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs text-dorado hover:bg-dorado/10 transition-colors"
             >
-              Ver todas ({totalPropiedades}) →
+              Ver todas ({totalPropiedades})
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-crema/40 font-body text-sm">
-              Cargando catálogo...
+            <div className="space-y-3">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="h-[72px] rounded-2xl bg-white/[0.03] animate-pulse" />
+              ))}
             </div>
           ) : propiedades.length === 0 ? (
-            <div className="py-12 text-center text-crema/40 font-body text-sm">
-              Aún no hay propiedades cargadas en Supabase.
-              <div className="mt-4">
-                <Link
-                  href="/admin/propiedades?action=new"
-                  className="px-4 py-2 bg-dorado text-tierra font-body text-xs font-semibold uppercase inline-block"
-                >
-                  + Cargar Primera Propiedad
-                </Link>
-              </div>
+            <div className="py-14 text-center rounded-2xl border border-dashed border-white/10">
+              <Building2 className="mx-auto h-8 w-8 text-crema/25" strokeWidth={1.5} />
+              <p className="mt-3 text-sm text-crema/50">
+                Aún no hay propiedades cargadas.
+              </p>
+              <Link
+                href="/admin/propiedades?action=new"
+                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-dorado px-4 py-2 text-xs font-semibold text-tierra"
+              >
+                <Plus className="h-4 w-4" /> Cargar la primera
+              </Link>
             </div>
           ) : (
-            <div className="divide-y divide-crema/10">
+            <div className="space-y-2">
               {propiedades.slice(0, 5).map((p) => {
                 const img =
                   p.imagenes && p.imagenes.length > 0
                     ? p.imagenes[0]
                     : "/mari-menuco/bahia-playas-1.jpg";
+                const disponible = !p.estado || p.estado === "disponible";
 
                 return (
                   <div
                     key={p.id}
-                    className="py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group"
+                    className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl p-3 hover:bg-white/[0.03] transition-colors"
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="relative w-14 h-14 rounded-sm overflow-hidden border border-crema/15 shrink-0">
-                        <Image
-                          src={img}
-                          alt={p.titulo}
-                          fill
-                          className="object-cover"
-                        />
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 ring-1 ring-white/10">
+                        <Image src={img} alt={p.titulo} fill sizes="64px" className="object-cover" />
+                        {p.destacado && (
+                          <span className="absolute top-1 left-1 flex h-5 w-5 items-center justify-center rounded-full bg-dorado text-tierra">
+                            <Star className="h-3 w-3" fill="currentColor" />
+                          </span>
+                        )}
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-display text-sm font-semibold text-crema truncate group-hover:text-dorado transition-colors">
+                        <h3 className="font-display text-[15px] font-semibold text-crema truncate group-hover:text-dorado transition-colors">
                           {p.titulo}
-                        </h4>
-                        <p className="font-body text-[11px] text-crema/50">
+                        </h3>
+                        <p className="text-[12px] text-crema/45 truncate">
                           {p.ciudad} {p.barrio && `· ${p.barrio}`}
                         </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="font-body text-[9px] uppercase px-2 py-0.5 bg-dorado/10 text-dorado border border-dorado/30">
+                        <div className="flex items-center gap-1.5 mt-1.5">
+                          <span className="rounded-md bg-dorado/10 px-2 py-0.5 text-[10px] uppercase tracking-wider text-dorado">
                             {p.tipo || "lote"}
                           </span>
                           <span
-                            className={`font-body text-[9px] uppercase px-2 py-0.5 ${
-                              p.estado === "disponible"
-                                ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/30"
-                                : "bg-zinc-800 text-crema/70"
+                            className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wider ${
+                              disponible
+                                ? "bg-emerald-500/10 text-emerald-300"
+                                : "bg-white/[0.06] text-crema/60"
                             }`}
                           >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${disponible ? "bg-emerald-400" : "bg-crema/40"}`}
+                            />
                             {p.estado || "disponible"}
                           </span>
                         </div>
@@ -232,19 +313,18 @@ export default function AdminDashboardPage() {
 
                     <div className="flex items-center gap-4 self-end sm:self-center">
                       <div className="text-right">
-                        <span className="font-display text-base font-bold text-dorado block">
+                        <span className="font-display text-base font-bold text-crema block tabular-nums">
                           {p.precio
                             ? `${p.moneda || "USD"} ${p.precio.toLocaleString("es-AR")}`
                             : "Consultar"}
                         </span>
-                        <span className="font-body text-[10px] text-crema/40 block">
+                        <span className="text-[11px] text-crema/40 block">
                           {p.superficie_m2 ? `${p.superficie_m2} m²` : ""}
                         </span>
                       </div>
-
                       <Link
                         href={`/admin/propiedades?edit=${p.id}`}
-                        className="px-3 py-1.5 border border-crema/20 text-crema/70 hover:text-dorado hover:border-dorado font-body text-[11px] tracking-wider uppercase transition-colors"
+                        className="rounded-lg border border-white/10 px-3 py-1.5 text-[12px] text-crema/70 hover:border-dorado hover:text-dorado transition-colors"
                       >
                         Editar
                       </Link>
@@ -256,72 +336,102 @@ export default function AdminDashboardPage() {
           )}
         </div>
 
-        {/* Right Column: Leads & Consultas */}
-        <div className="lg:col-span-4 bg-[#090E1C] border border-crema/10 p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-crema/10">
-              <h3 className="font-display text-xl text-crema font-medium">
-                Últimos Leads
-              </h3>
+        {/* Leads */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Embudo */}
+          <div className="rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6">
+            <h2 className="font-display text-xl text-crema font-medium">Embudo de consultas</h2>
+            <p className="text-xs text-crema/40 mt-0.5 mb-5">Estado de cada lead recibido</p>
+            <div className="space-y-3.5">
+              {ESTADOS_LEAD.map((e) => {
+                const n = leads.filter((l) => (l.estado || "nuevo") === e.id).length;
+                const pct = totalLeads ? Math.round((n / totalLeads) * 100) : 0;
+                return (
+                  <div key={e.id}>
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="flex items-center gap-2 text-crema/70">
+                        <span className={`h-2 w-2 rounded-full ${e.color}`} />
+                        {e.label}
+                      </span>
+                      <span className="tabular-nums text-crema/50">
+                        {n} <span className="text-crema/25">· {pct}%</span>
+                      </span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${e.color} transition-all duration-700`}
+                        style={{ width: loading ? "0%" : `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Últimos leads */}
+          <div className="rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl text-crema font-medium">Últimas consultas</h2>
               <Link
                 href="/admin/leads"
-                className="text-dorado font-body text-xs tracking-wider uppercase hover:underline"
+                className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-dorado hover:bg-dorado/10 transition-colors"
               >
-                Ver todos →
+                Ver todas <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="py-8 text-center text-crema/40 font-body text-xs">
-                Cargando leads...
+              <div className="space-y-2">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="h-16 rounded-2xl bg-white/[0.03] animate-pulse" />
+                ))}
               </div>
             ) : leads.length === 0 ? (
-              <div className="py-8 text-center text-crema/40 font-body text-xs">
-                No hay consultas registradas aún.
+              <div className="py-10 text-center">
+                <Inbox className="mx-auto h-7 w-7 text-crema/25" strokeWidth={1.5} />
+                <p className="mt-2 text-xs text-crema/45">No hay consultas registradas aún.</p>
               </div>
             ) : (
-              <div className="space-y-3.5">
-                {leads.slice(0, 4).map((l) => (
+              <div className="space-y-1">
+                {leads.slice(0, 5).map((l) => (
                   <div
                     key={l.id}
-                    className="p-3 bg-navy-950/70 border border-crema/10 text-xs space-y-1.5"
+                    className="flex gap-3 rounded-2xl p-2.5 hover:bg-white/[0.03] transition-colors"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-crema">{l.nombre}</span>
-                      <span className="text-[10px] text-crema/40">
-                        {new Date(l.created_at).toLocaleDateString("es-AR")}
-                      </span>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-dorado/30 to-dorado/10 text-[11px] font-semibold text-dorado">
+                      {iniciales(l.nombre) || "?"}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate text-[13px] font-medium text-crema">
+                          {l.nombre}
+                        </span>
+                        <span className="shrink-0 text-[10px] text-crema/35">
+                          {hace(l.created_at)}
+                        </span>
+                      </div>
+                      <p className="text-[12px] text-crema/45 line-clamp-1">
+                        {l.mensaje || "Interesado en propiedades"}
+                      </p>
+                      {l.telefono && (
+                        <a
+                          href={`https://wa.me/${l.telefono.replace(/\D/g, "")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-1 inline-flex items-center gap-1 text-[11px] text-emerald-300/90 hover:text-emerald-300"
+                        >
+                          <MessageCircle className="h-3 w-3" /> Responder por WhatsApp
+                        </a>
+                      )}
                     </div>
-                    <p className="text-crema/60 text-[11px] line-clamp-2">
-                      {l.mensaje || "Interesado en propiedades"}
-                    </p>
-                    {l.telefono && (
-                      <a
-                        href={`https://wa.me/${l.telefono.replace(/\D/g, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-emerald-400 text-[10px] tracking-wider uppercase hover:underline flex items-center gap-1 pt-1"
-                      >
-                        <span>Responder por WhatsApp →</span>
-                      </a>
-                    )}
                   </div>
                 ))}
               </div>
             )}
           </div>
-
-          <div className="mt-6 pt-4 border-t border-crema/10">
-            <Link
-              href="/admin/configuracion"
-              className="w-full py-3 bg-navy-900 border border-dorado/30 text-dorado font-body text-xs font-semibold tracking-wider uppercase hover:bg-dorado hover:text-tierra transition-all flex items-center justify-center gap-2"
-            >
-              <span>⚙️</span>
-              <span>Ajustes de Perfil &amp; Textos</span>
-            </Link>
-          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

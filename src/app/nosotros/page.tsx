@@ -168,7 +168,7 @@ export default function NosotrosPage() {
               <div className="lg:col-span-3 flex justify-center">
                 <div className="relative w-36 h-36 lg:w-44 lg:h-44 rounded-full overflow-hidden border-2 border-dorado shadow-xl">
                   <Image
-                    src="/estela.jpg"
+                    src="/estela-avatar.jpg"
                     alt="Estela Mari Rojas - Martillera y Corredora Pública"
                     fill
                     sizes="(max-width: 768px) 150px, 200px"

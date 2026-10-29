@@ -2,13 +2,26 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import {
+  User,
+  Briefcase,
+  Plus,
+  Trash2,
+  Check,
+  AlertCircle,
+  Save,
+  Sparkles,
+} from "lucide-react";
 import { SiteConfig, ServicioConfig } from "@/lib/site-config";
 
 export default function AdminConfiguracionPage() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
-  const [mensaje, setMensaje] = useState<{ tipo: "exito" | "error"; texto: string } | null>(null);
+  const [mensaje, setMensaje] = useState<{
+    tipo: "exito" | "error";
+    texto: string;
+  } | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/config")
@@ -38,13 +51,22 @@ export default function AdminConfiguracionPage() {
 
       const data = await res.json();
       if (data.success) {
-        setMensaje({ tipo: "exito", texto: "¡Configuración guardada y actualizada en la landing page!" });
+        setMensaje({
+          tipo: "exito",
+          texto: "¡Configuración guardada y actualizada en la landing page!",
+        });
         setTimeout(() => setMensaje(null), 5000);
       } else {
-        setMensaje({ tipo: "error", texto: data.error || "No se pudo guardar la configuración" });
+        setMensaje({
+          tipo: "error",
+          texto: data.error || "No se pudo guardar la configuración",
+        });
       }
     } catch {
-      setMensaje({ tipo: "error", texto: "Error al conectar con el servidor" });
+      setMensaje({
+        tipo: "error",
+        texto: "Error al conectar con el servidor",
+      });
     } finally {
       setGuardando(false);
     }
@@ -74,7 +96,7 @@ export default function AdminConfiguracionPage() {
 
   if (loading || !config) {
     return (
-      <div className="py-20 text-center text-crema/40 font-body text-sm">
+      <div className="py-20 text-center text-crema/40 text-sm">
         Cargando configuración...
       </div>
     );
@@ -83,60 +105,67 @@ export default function AdminConfiguracionPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-crema/10 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <span className="font-body text-dorado text-[10px] tracking-[0.25em] uppercase font-semibold">
-            Personalización de la Landing Page
+          <span className="text-[10px] tracking-[0.25em] uppercase font-semibold text-dorado">
+            Identidad &amp; Contenidos
           </span>
-          <h1 className="font-display text-3xl font-medium text-crema mt-1">
-            Perfil de la Propietaria &amp; Servicios
+          <h1 className="font-display text-3xl lg:text-4xl font-medium text-crema mt-1">
+            Perfil de la titular &amp; servicios
           </h1>
-          <p className="font-body text-crema/50 text-sm mt-0.5">
-            Cambiá tu foto, bio, teléfono y los servicios que se muestran en el sitio web.
+          <p className="text-sm text-crema/45 mt-1">
+            Editá tu foto, bio profesional, canales de contacto directo y servicios en la web.
           </p>
         </div>
 
         <button
           onClick={handleGuardar}
           disabled={guardando}
-          className="px-6 py-3 bg-dorado text-tierra font-body text-xs font-bold tracking-wider uppercase hover:bg-dorado-light transition-all shadow-md self-start md:self-auto disabled:opacity-50"
+          className="inline-flex items-center gap-2 self-start md:self-auto rounded-xl bg-dorado px-5 py-3 text-[12px] font-semibold text-tierra shadow-[0_10px_24px_-10px_rgba(184,150,90,0.8)] hover:bg-dorado-light transition-all hover:-translate-y-px disabled:opacity-50"
         >
-          {guardando ? "Guardando..." : "Guardar Cambios"}
+          <Save className="h-4 w-4" />
+          <span>{guardando ? "Guardando..." : "Guardar cambios"}</span>
         </button>
       </div>
 
       {mensaje && (
         <div
-          className={`p-4 text-xs font-body flex items-center gap-2 border ${
+          className={`flex items-center gap-2 rounded-2xl border p-4 text-xs font-medium ${
             mensaje.tipo === "exito"
-              ? "bg-emerald-950/80 border-emerald-500/50 text-emerald-200"
-              : "bg-red-950/80 border-red-500/50 text-red-200"
+              ? "border-emerald-500/40 bg-emerald-950/70 text-emerald-200"
+              : "border-red-500/40 bg-red-950/70 text-red-200"
           }`}
         >
-          <span>{mensaje.tipo === "exito" ? "✓" : "⚠️"}</span>
+          {mensaje.tipo === "exito" ? (
+            <Check className="h-4 w-4 text-emerald-400" />
+          ) : (
+            <AlertCircle className="h-4 w-4 text-red-400" />
+          )}
           <span>{mensaje.texto}</span>
         </div>
       )}
 
-      <form onSubmit={handleGuardar} className="space-y-10">
+      <form onSubmit={handleGuardar} className="space-y-8">
         {/* ── BLOQUE 1: PERFIL DE LA MARTILLERA ── */}
-        <div className="p-8 bg-[#090E1C] border border-crema/10 space-y-6">
-          <div className="flex items-center gap-3 border-b border-crema/10 pb-4">
-            <span className="text-xl">👤</span>
+        <section className="rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6 lg:p-8 space-y-6">
+          <div className="flex items-center gap-3 border-b border-white/[0.08] pb-4">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dorado/15 text-dorado">
+              <User className="h-5 w-5" />
+            </span>
             <div>
-              <h2 className="font-display text-xl text-crema font-semibold">
-                Perfil Profesional (Estela Mari Rojas)
+              <h2 className="font-display text-xl text-crema font-medium">
+                Perfil profesional · Estela Mari Rojas
               </h2>
-              <p className="font-body text-xs text-crema/40">
-                Se refleja en la sección Nosotros, credenciales y en el pie de página.
+              <p className="text-xs text-crema/40">
+                Se refleja en la sección Nosotros, tarjeta institucional y pie de página.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            {/* Foto preview */}
-            <div className="md:col-span-4 flex flex-col items-center gap-3">
-              <div className="relative w-36 h-36 rounded-full overflow-hidden border-2 border-dorado shadow-xl">
+            {/* Foto preview dual */}
+            <div className="md:col-span-5 flex flex-col items-center gap-3">
+              <div className="relative w-44 aspect-square rounded-2xl overflow-hidden border border-dorado/40 shadow-xl bg-black/40">
                 <Image
                   src={config.perfil.foto || "/estela.jpg"}
                   alt={config.perfil.nombre}
@@ -144,16 +173,17 @@ export default function AdminConfiguracionPage() {
                   className="object-cover"
                 />
               </div>
-              <span className="font-body text-[10px] text-crema/40 uppercase">
-                Foto actual de perfil
-              </span>
+              <div className="flex items-center gap-2 text-[11px] text-crema/45">
+                <Sparkles className="h-3 w-3 text-dorado" />
+                <span>Pieza institucional oficial</span>
+              </div>
             </div>
 
             {/* Inputs de foto y nombre */}
-            <div className="md:col-span-8 space-y-4">
+            <div className="md:col-span-7 space-y-4">
               <div>
-                <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
-                  URL de Fotografía de Perfil
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
+                  Ruta o URL de Fotografía
                 </label>
                 <input
                   type="text"
@@ -164,16 +194,16 @@ export default function AdminConfiguracionPage() {
                       perfil: { ...config.perfil, foto: e.target.value },
                     })
                   }
-                  className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2.5 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                  className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
                 />
-                <p className="font-body text-[10px] text-crema/30 mt-1">
-                  Podés usar <code>/estela.jpg</code> o pegar cualquier enlace HTTPS directo a tu foto.
+                <p className="text-[11px] text-crema/35 mt-1">
+                  Predeterminado: <code>/estela.jpg</code>
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                     Nombre Completo
                   </label>
                   <input
@@ -185,12 +215,12 @@ export default function AdminConfiguracionPage() {
                         perfil: { ...config.perfil, nombre: e.target.value },
                       })
                     }
-                    className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                    className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                     Título Profesional
                   </label>
                   <input
@@ -202,7 +232,7 @@ export default function AdminConfiguracionPage() {
                         perfil: { ...config.perfil, titulo: e.target.value },
                       })
                     }
-                    className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                    className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
                   />
                 </div>
               </div>
@@ -210,9 +240,9 @@ export default function AdminConfiguracionPage() {
           </div>
 
           {/* Matrícula & Colegio */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-white/[0.06]">
             <div>
-              <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                 Matrícula Oficial
               </label>
               <input
@@ -224,12 +254,12 @@ export default function AdminConfiguracionPage() {
                     perfil: { ...config.perfil, matricula: e.target.value },
                   })
                 }
-                className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                 Colegio Profesional
               </label>
               <input
@@ -241,16 +271,16 @@ export default function AdminConfiguracionPage() {
                     perfil: { ...config.perfil, colegio: e.target.value },
                   })
                 }
-                className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Contacto directo */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
-                Número de WhatsApp (con código de país)
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
+                WhatsApp Directo
               </label>
               <input
                 type="text"
@@ -262,12 +292,12 @@ export default function AdminConfiguracionPage() {
                   })
                 }
                 placeholder="5492996095742"
-                className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                 Teléfono de Contacto
               </label>
               <input
@@ -279,12 +309,12 @@ export default function AdminConfiguracionPage() {
                     perfil: { ...config.perfil, telefono: e.target.value },
                   })
                 }
-                className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
                 Correo Electrónico
               </label>
               <input
@@ -296,14 +326,14 @@ export default function AdminConfiguracionPage() {
                     perfil: { ...config.perfil, email: e.target.value },
                   })
                 }
-                className="w-full bg-navy-950 border border-crema/20 px-3.5 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3.5 py-2.5 text-xs text-crema focus:border-dorado/60 focus:outline-none"
               />
             </div>
           </div>
 
-          {/* Bio / Descripción */}
+          {/* Bio */}
           <div>
-            <label className="block font-body text-[10px] tracking-wider uppercase text-dorado mb-1 font-semibold">
+            <label className="block text-[11px] font-semibold uppercase tracking-wider text-dorado mb-1">
               Descripción / Biografía Profesional
             </label>
             <textarea
@@ -315,21 +345,23 @@ export default function AdminConfiguracionPage() {
                   perfil: { ...config.perfil, bio: e.target.value },
                 })
               }
-              className="w-full bg-navy-950 border border-crema/20 p-3 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#060913] p-3 text-xs leading-relaxed text-crema focus:border-dorado/60 focus:outline-none"
             />
           </div>
-        </div>
+        </section>
 
         {/* ── BLOQUE 2: SERVICIOS QUE OFRECE ── */}
-        <div className="p-8 bg-[#090E1C] border border-crema/10 space-y-6">
-          <div className="flex items-center justify-between border-b border-crema/10 pb-4">
+        <section className="rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6 lg:p-8 space-y-6">
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
             <div className="flex items-center gap-3">
-              <span className="text-xl">🛠️</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dorado/15 text-dorado">
+                <Briefcase className="h-5 w-5" />
+              </span>
               <div>
-                <h2 className="font-display text-xl text-crema font-semibold">
-                  Servicios Ofrecidos en la Landing
+                <h2 className="font-display text-xl text-crema font-medium">
+                  Servicios ofrecidos en la landing
                 </h2>
-                <p className="font-body text-xs text-crema/40">
+                <p className="text-xs text-crema/40">
                   Podés modificar títulos, descripciones o sumar nuevos servicios.
                 </p>
               </div>
@@ -338,34 +370,36 @@ export default function AdminConfiguracionPage() {
             <button
               type="button"
               onClick={handleAgregarServicio}
-              className="px-3.5 py-1.5 border border-dorado text-dorado font-body text-[11px] font-semibold tracking-wider uppercase hover:bg-dorado hover:text-tierra transition-all"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-dorado/40 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-dorado hover:bg-dorado hover:text-tierra transition-all"
             >
-              + Agregar Servicio
+              <Plus className="h-3.5 w-3.5" />
+              <span>Agregar</span>
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {config.servicios.map((srv, idx) => (
               <div
                 key={srv.id}
-                className="p-5 bg-navy-950/70 border border-crema/10 space-y-3 relative group"
+                className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4 space-y-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-body text-[10px] text-dorado tracking-wider uppercase font-semibold">
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-dorado">
                     Servicio #{idx + 1}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleEliminarServicio(srv.id)}
-                    className="text-red-400 hover:text-red-300 text-xs font-body uppercase tracking-wider"
+                    className="inline-flex items-center gap-1 text-[11px] text-red-400/70 hover:text-red-300"
                   >
-                    Eliminar
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Eliminar</span>
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                   <div className="sm:col-span-5">
-                    <label className="block font-body text-[9px] uppercase tracking-wider text-crema/50 mb-1">
+                    <label className="block text-[10px] uppercase tracking-wider text-crema/45 mb-1">
                       Título
                     </label>
                     <input
@@ -376,12 +410,12 @@ export default function AdminConfiguracionPage() {
                         nuevos[idx].titulo = e.target.value;
                         setConfig({ ...config, servicios: nuevos });
                       }}
-                      className="w-full bg-navy-900 border border-crema/20 px-3 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                      className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3 py-2 text-xs text-crema focus:border-dorado/60 focus:outline-none"
                     />
                   </div>
 
                   <div className="sm:col-span-7">
-                    <label className="block font-body text-[9px] uppercase tracking-wider text-crema/50 mb-1">
+                    <label className="block text-[10px] uppercase tracking-wider text-crema/45 mb-1">
                       Descripción
                     </label>
                     <input
@@ -392,23 +426,24 @@ export default function AdminConfiguracionPage() {
                         nuevos[idx].descripcion = e.target.value;
                         setConfig({ ...config, servicios: nuevos });
                       }}
-                      className="w-full bg-navy-900 border border-crema/20 px-3 py-2 text-crema font-body text-xs focus:outline-none focus:border-dorado"
+                      className="w-full rounded-xl border border-white/[0.08] bg-[#060913] px-3 py-2 text-xs text-crema focus:border-dorado/60 focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Submit final */}
-        <div className="pt-4 flex justify-end gap-4">
+        <div className="flex justify-end pt-2">
           <button
             type="submit"
             disabled={guardando}
-            className="px-8 py-3.5 bg-dorado text-tierra font-body text-xs font-bold tracking-wider uppercase hover:bg-dorado-light transition-all shadow-xl disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-dorado px-7 py-3.5 text-xs font-semibold text-tierra shadow-[0_10px_24px_-10px_rgba(184,150,90,0.8)] hover:bg-dorado-light transition-all disabled:opacity-50"
           >
-            {guardando ? "Guardando..." : "Guardar Toda la Configuración"}
+            <Save className="h-4 w-4" />
+            <span>{guardando ? "Guardando..." : "Guardar toda la configuración"}</span>
           </button>
         </div>
       </form>

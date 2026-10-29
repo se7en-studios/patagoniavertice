@@ -18,7 +18,7 @@ interface CintaMarqueeProps {
 }
 
 const BASE_SPEED = 0.006; // % de la cinta por ms
-const SPEED_BOOST_MAX = 6;
+const SPEED_BOOST_MAX = 2.5;
 
 // Cinta de texto gigante: avanza sola y se acelera e inclina con la velocidad del scroll.
 export default function CintaMarquee({
@@ -32,7 +32,7 @@ export default function CintaMarquee({
     damping: 50,
     stiffness: 400,
   });
-  const skew = useTransform(velocity, [-2000, 0, 2000], [-6, 0, 6]);
+  const skew = useTransform(velocity, [-2000, 0, 2000], [-3, 0, 3]);
   const translate = useTransform(x, (v) => `${v}%`);
 
   useAnimationFrame((_, delta) => {
@@ -48,7 +48,7 @@ export default function CintaMarquee({
   const row = [...items, ...items];
   return (
     <div
-      className="relative overflow-hidden border-y border-dorado/15 bg-navy-950 py-6 lg:py-8"
+      className="relative overflow-hidden border-y border-navy/10 bg-[#F6F8FB] py-6 lg:py-8"
       aria-hidden="true"
     >
       <motion.div style={{ skewX: reduced ? 0 : skew }}>
@@ -62,8 +62,8 @@ export default function CintaMarquee({
                 className="font-display font-semibold uppercase leading-none tracking-tight whitespace-nowrap"
                 style={{
                   fontSize: "clamp(2.5rem, 7vw, 6rem)",
-                  color: i % 2 ? "transparent" : "rgba(245,239,230,0.92)",
-                  WebkitTextStroke: i % 2 ? "1px rgba(201,168,76,0.7)" : "0",
+                  color: i % 2 ? "transparent" : "#1A2752",
+                  WebkitTextStroke: i % 2 ? "1px rgba(164,124,27,0.8)" : "0",
                 }}
               >
                 {t}

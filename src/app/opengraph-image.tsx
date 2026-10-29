@@ -4,6 +4,8 @@ import { siteName, siteTagline } from "@/lib/seo";
 export const alt = `${siteName} · ${siteTagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+// Edge: el runtime Node de next/og falla al prerenderizar en Windows (fileURLToPath).
+export const runtime = "edge";
 
 export default function Image() {
   return new ImageResponse(

@@ -7,6 +7,7 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  useReducedMotion,
   useVelocity,
 } from "framer-motion";
 
@@ -24,6 +25,7 @@ export default function CintaMarquee({
   items,
   direction = 1,
 }: CintaMarqueeProps) {
+  const reduced = useReducedMotion();
   const x = useMotionValue(0);
   const { scrollY } = useScroll();
   const velocity = useSpring(useVelocity(scrollY), {
@@ -34,6 +36,7 @@ export default function CintaMarquee({
   const translate = useTransform(x, (v) => `${v}%`);
 
   useAnimationFrame((_, delta) => {
+    if (reduced) return;
     const boost = Math.min(Math.abs(velocity.get()) / 400, SPEED_BOOST_MAX);
     let next = x.get() - direction * BASE_SPEED * delta * (1 + boost);
     // La pista tiene el contenido duplicado: al llegar a -50% vuelve a 0 sin salto.
@@ -48,7 +51,7 @@ export default function CintaMarquee({
       className="relative overflow-hidden border-y border-dorado/15 bg-navy-950 py-6 lg:py-8"
       aria-hidden="true"
     >
-      <motion.div style={{ skewX: skew }}>
+      <motion.div style={{ skewX: reduced ? 0 : skew }}>
         <motion.div
           className="flex w-max items-center"
           style={{ x: translate }}

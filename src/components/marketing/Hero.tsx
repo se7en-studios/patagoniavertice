@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import gsap from "gsap";
 import {
   ArrowRight,
   BadgeCheck,
@@ -86,38 +85,6 @@ export default function Hero() {
     if (videoRef.current) videoRef.current.playbackRate = 0.75;
   }, []);
 
-  // Entrada escalonada: eyebrow → titular (por línea) → subtítulo → CTAs → buscador
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.fromTo(
-        ".hero-eyebrow",
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.8 },
-        0.2,
-      );
-      tl.fromTo(
-        ".hero-line",
-        { yPercent: 110, autoAlpha: 0 },
-        { yPercent: 0, autoAlpha: 1, duration: 1, stagger: 0.14 },
-        0.4,
-      );
-      tl.fromTo(
-        ".hero-sub, .hero-cta",
-        { autoAlpha: 0, y: 18 },
-        { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.12 },
-        1.0,
-      );
-      tl.fromTo(
-        ".hero-search",
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 0.9 },
-        1.3,
-      );
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -157,7 +124,7 @@ export default function Hero() {
         className="relative flex-1 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-12 w-full pt-28 md:pt-32 pb-8"
         style={{ y: contentY, opacity: contentOpacity }}
       >
-        <div className="hero-eyebrow flex items-center gap-4 mb-5 opacity-0">
+        <div className="hero-rise flex items-center gap-4 mb-5" style={{ "--d": "0.2s" } as React.CSSProperties}>
           <div className="h-px w-10 bg-dorado" />
           <span className="font-body text-dorado text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
             Altum SCI · Servicios &amp; Consultoría Inmobiliaria
@@ -172,20 +139,23 @@ export default function Hero() {
           }}
           aria-label={TITLE_LINES.map((l) => l.text).join(" ")}
         >
-          {TITLE_LINES.map((line) => (
+          {TITLE_LINES.map((line, i) => (
             <span
               key={line.text}
               className="block overflow-hidden pb-[0.08em]"
               aria-hidden="true"
             >
-              <span className={`hero-line block opacity-0 ${line.cls}`}>
+              <span
+                className={`hero-line block ${line.cls}`}
+                style={{ "--d": `${0.4 + i * 0.14}s` } as React.CSSProperties}
+              >
                 {line.text}
               </span>
             </span>
           ))}
         </h1>
 
-        <p className="hero-sub opacity-0 font-body text-crema/85 text-base lg:text-lg leading-relaxed max-w-xl mb-6 [text-shadow:0_1px_16px_rgba(0,0,0,0.7)]">
+        <p style={{ "--d": "1s" } as React.CSSProperties} className="hero-rise font-body text-crema/85 text-base lg:text-lg leading-relaxed max-w-xl mb-6 [text-shadow:0_1px_16px_rgba(0,0,0,0.7)]">
           Lotes frente al lago Mari Menuco, residencias y oportunidades de
           inversión en Neuquén y Río Negro, con el respaldo de una martillera
           matriculada.
@@ -194,7 +164,8 @@ export default function Hero() {
         <div className="flex flex-wrap items-center gap-4 mb-8">
           <a
             href="#propiedades-destacadas"
-            className="hero-cta opacity-0 group btn-shimmer inline-flex items-center gap-3 px-9 py-4 text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase shadow-lg"
+            style={{ "--d": "1.1s" } as React.CSSProperties}
+            className="hero-rise group btn-shimmer inline-flex items-center gap-3 px-9 py-4 text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase shadow-lg"
           >
             Explorar propiedades
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -203,14 +174,15 @@ export default function Hero() {
             href={WA_HERO}
             target="_blank"
             rel="noopener noreferrer"
-            className="hero-cta opacity-0 inline-flex items-center gap-2.5 px-8 py-4 border border-crema/35 text-crema font-body text-[11px] font-semibold tracking-[0.16em] uppercase backdrop-blur-sm hover:border-dorado hover:text-dorado transition-colors duration-300"
+            style={{ "--d": "1.2s" } as React.CSSProperties}
+            className="hero-rise inline-flex items-center gap-2.5 px-8 py-4 border border-crema/35 text-crema font-body text-[11px] font-semibold tracking-[0.16em] uppercase backdrop-blur-sm hover:border-dorado hover:text-dorado transition-colors duration-300"
           >
             Hablar con Estela
           </a>
         </div>
 
         {/* Buscador en vidrio */}
-        <div className="hero-search opacity-0 w-full max-w-5xl border border-crema/20 bg-navy-950/55 backdrop-blur-xl shadow-2xl">
+        <div style={{ "--d": "1.3s" } as React.CSSProperties} className="hero-rise [--rise:30px] w-full max-w-5xl border border-crema/20 bg-navy-950/55 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center gap-1 px-3 pt-3 border-b border-crema/10">
             {TABS.map((t) => (
               <button
@@ -268,7 +240,7 @@ export default function Hero() {
         </div>
 
         {/* Barra de confianza */}
-        <ul className="hero-sub opacity-0 mt-5 flex flex-wrap gap-x-8 gap-y-3">
+        <ul style={{ "--d": "1.5s" } as React.CSSProperties} className="hero-rise mt-5 flex flex-wrap gap-x-8 gap-y-3">
           {CONFIANZA.map(({ icon: Icon, text }) => (
             <li
               key={text}

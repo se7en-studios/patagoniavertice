@@ -386,3 +386,24 @@
     background: linear-gradient(to right, transparent, #c49555, transparent);
   }
 }
+
+/* Entrada escalonada del hero (CSS puro: sin JS, no bloquea el LCP) */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(var(--rise, 18px)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes heroLine {
+  from { opacity: 0; transform: translateY(110%); }
+  to { opacity: 1; transform: none; }
+}
+.hero-rise { animation: heroRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both; }
+.hero-line { animation: heroLine 1s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise, .hero-line { animation: none; }
+}
+
+/* Foco visible para navegación por teclado */
+:focus-visible {
+  outline: 2px solid #c9a84c;
+  outline-offset: 3px;
+}

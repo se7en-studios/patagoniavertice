@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import {
   ArrowRight,
   Building2,
@@ -7,7 +8,13 @@ import {
   KeyRound,
   TrendingUp,
 } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { VideoPlayer } from "@/components/ui/VideoPlayer";
 
@@ -48,6 +55,7 @@ const servicios = [
 
 const ICONOS = [Building2, KeyRound, TrendingUp, FileSignature];
 
+// La tarjeta crece y se opaca del todo al llegar al centro de la pantalla.
 function ServiceCard({
   s,
   i,
@@ -58,6 +66,21 @@ function ServiceCard({
   prefersReduced: boolean | null;
 }) {
   const Icon = ICONOS[i % ICONOS.length];
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.92", "start 0.5"],
+  });
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReduced ? [1, 1] : [0.94, 1],
+  );
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReduced ? [1, 1] : [0.45, 1],
+  );
 
   // Spotlight dorado que sigue al cursor (solo CSS vars, sin re-render)
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -68,12 +91,10 @@ function ServiceCard({
 
   return (
     <motion.div
-      initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      viewport={{ once: true, margin: "-40px" }}
+      ref={ref}
+      style={{ scale, opacity }}
       onMouseMove={handleMove}
-      className="group relative overflow-hidden p-8 lg:p-10 bg-navy-800/70 border border-crema/10 hover:border-dorado/50 transition-colors duration-500"
+      className="group relative overflow-hidden rounded-3xl p-8 lg:p-10 bg-white border border-white shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] transition-shadow duration-500"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -84,7 +105,7 @@ function ServiceCard({
         aria-hidden="true"
       />
       <span
-        className="absolute -bottom-3 right-4 font-display font-bold text-dorado/[0.06] group-hover:text-dorado/[0.12] transition-colors duration-500 select-none pointer-events-none leading-none"
+        className="absolute -bottom-3 right-4 font-display font-bold text-navy/[0.05] group-hover:text-dorado/[0.18] transition-colors duration-500 select-none pointer-events-none leading-none"
         style={{ fontSize: "7.5rem" }}
         aria-hidden="true"
       >
@@ -93,27 +114,27 @@ function ServiceCard({
 
       <div className="relative">
         <div className="flex items-center justify-between mb-8">
-          <span className="flex h-12 w-12 items-center justify-center border border-dorado/40 bg-dorado/10 text-dorado transition-all duration-500 group-hover:bg-dorado group-hover:text-tierra">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FBF0CF] text-[#7A5A12] transition-all duration-500 group-hover:bg-dorado group-hover:text-tierra">
             <Icon className="h-5 w-5" strokeWidth={1.5} />
           </span>
-          <span className="font-body text-[11px] text-dorado tracking-[0.25em] uppercase">
+          <span className="rounded-full bg-[#EAF0F7] px-3 py-1 font-body text-[11px] text-navy/60 tracking-[0.2em] uppercase">
             {s.num}
           </span>
         </div>
         <h3
-          className="font-display font-medium text-crema leading-tight mb-4"
+          className="font-display font-medium text-navy leading-tight mb-4"
           style={{ fontSize: "clamp(1.3rem, 2vw, 1.6rem)" }}
         >
           {s.titulo}
         </h3>
-        <p className="font-body text-[15px] leading-relaxed mb-8 text-crema/65 group-hover:text-crema/85 transition-colors duration-300">
+        <p className="font-body text-[15px] leading-relaxed mb-8 text-navy/65 group-hover:text-navy/85 transition-colors duration-300">
           {s.descripcion}
         </p>
         <a
           href={`https://wa.me/${WA}?text=${s.waText}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.18em] uppercase text-dorado hover:text-crema transition-colors duration-200"
+          className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.18em] uppercase text-[#8A6A1B] hover:text-navy transition-colors duration-200"
         >
           Consultar por WhatsApp
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -136,6 +157,8 @@ export default function Servicios({
   serviciosCustom?: ServicioProp[];
 }) {
   const prefersReduced = useReducedMotion();
+  const listRef = useRef<HTMLDivElement>(null);
+  const [activo, setActivo] = useState(0);
 
   const listaServicios =
     serviciosCustom &&
@@ -152,47 +175,76 @@ export default function Servicios({
           }))
       : servicios;
 
-  return (
-    <section className="py-24 lg:py-32 bg-navy-900">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 lg:mb-20"
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-px w-10 bg-dorado" />
-            <span className="eyebrow">Lo que hacemos</span>
-          </div>
-          <h2
-            className="font-display font-medium text-crema leading-[1.0] mb-5"
-            style={{
-              fontSize: "clamp(2.5rem, 5vw, 4rem)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Nuestros{" "}
-            <em className="not-italic italic text-dorado">servicios</em>
-          </h2>
-          <p className="font-body text-crema/65 text-[15px] leading-relaxed max-w-2xl">
-            Cuatro líneas de trabajo para acompañarte en cada etapa de tu
-            operación inmobiliaria en la Patagonia.
-          </p>
-        </motion.div>
+  // El índice lateral sigue al servicio que está en foco.
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 0.6", "end 0.6"],
+  });
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const n = listaServicios.length;
+    setActivo(Math.max(0, Math.min(n - 1, Math.floor(v * n))));
+  });
 
-        {/* Grid 2×2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-24 lg:mb-32 md:[&>*:last-child:nth-child(odd)]:col-span-2">
-          {listaServicios.map((s, i) => (
-            <ServiceCard
-              key={s.num}
-              s={s}
-              i={i}
-              prefersReduced={prefersReduced}
-            />
-          ))}
+  return (
+    <section className="py-24 lg:py-32 bg-[#EAF0F7]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 mb-24 lg:mb-32">
+          {/* Header fijo con índice (sticky en desktop) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="mb-12 lg:mb-0 lg:sticky lg:top-32 lg:self-start"
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px w-10 bg-dorado" />
+              <span className="eyebrow !text-[#8A6A1B]">Lo que hacemos</span>
+            </div>
+            <h2
+              className="font-display font-medium text-navy leading-[1.0] mb-5"
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Nuestros{" "}
+              <em className="not-italic italic text-[#A47C1B]">servicios</em>
+            </h2>
+            <p className="font-body text-navy/65 text-[15px] leading-relaxed max-w-md">
+              Cuatro líneas de trabajo para acompañarte en cada etapa de tu
+              operación inmobiliaria en la Patagonia.
+            </p>
+
+            {/* Índice: se enciende el servicio en foco */}
+            <ol className="hidden lg:flex mt-10 gap-2" aria-label="Servicios">
+              {listaServicios.map((s, i) => (
+                <li
+                  key={s.num}
+                  aria-current={i === activo ? "true" : undefined}
+                  className={`rounded-full px-4 py-2 font-body text-[11px] tracking-[0.2em] transition-colors duration-300 ${
+                    i === activo
+                      ? "bg-dorado text-tierra font-semibold"
+                      : "bg-white text-navy/45"
+                  }`}
+                >
+                  {s.num}
+                </li>
+              ))}
+            </ol>
+          </motion.div>
+
+          {/* Lista */}
+          <div ref={listRef} className="grid grid-cols-1 gap-5 lg:gap-6">
+            {listaServicios.map((s, i) => (
+              <ServiceCard
+                key={s.num}
+                s={s}
+                i={i}
+                prefersReduced={prefersReduced}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Video - separado con border */}
@@ -201,28 +253,28 @@ export default function Servicios({
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="pt-20 lg:pt-24 border-t border-dorado/15"
+          className="pt-20 lg:pt-24 border-t border-navy/10"
         >
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
             <div>
               <div className="flex items-center gap-4 mb-6">
-                <div className="h-px w-10 bg-dorado/50" />
-                <span className="eyebrow text-crema/50">
+                <div className="h-px w-10 bg-dorado/60" />
+                <span className="eyebrow !text-navy/50">
                   Video institucional
                 </span>
               </div>
               <h3
-                className="font-display font-medium text-crema leading-[1.0]"
+                className="font-display font-medium text-navy leading-[1.0]"
                 style={{
                   fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
                   letterSpacing: "-0.02em",
                 }}
               >
                 Conocé nuestro{" "}
-                <em className="not-italic italic text-dorado">proceso</em>
+                <em className="not-italic italic text-[#A47C1B]">proceso</em>
               </h3>
             </div>
-            <p className="font-body text-crema/55 text-[15px] leading-relaxed max-w-xs lg:text-right">
+            <p className="font-body text-navy/55 text-[15px] leading-relaxed max-w-xs lg:text-right">
               Un recorrido visual por cómo trabajamos en cada operación.
             </p>
           </div>
@@ -240,7 +292,7 @@ export default function Servicios({
               href={`https://wa.me/${WA}?text=Vi%20vuestro%20video%20y%20quiero%20consultar`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-shimmer inline-flex items-center gap-3 font-body text-tierra text-[11px] tracking-[0.15em] font-semibold uppercase px-9 py-4"
+              className="btn-shimmer inline-flex items-center gap-3 rounded-full font-body text-tierra text-[11px] tracking-[0.15em] font-semibold uppercase px-9 py-4"
             >
               Consultar ahora
               <ArrowRight className="h-4 w-4" />

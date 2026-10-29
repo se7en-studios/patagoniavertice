@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 
 const pasos = [
   {
@@ -49,21 +55,17 @@ function Paso({
     >
       {/* Circle on the rail */}
       <div className="relative shrink-0 w-12 flex justify-center">
-        <motion.div
-          className="relative z-10 w-12 h-12 rounded-full border border-dorado/50 bg-tierra flex items-center justify-center"
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-        >
-          <span className="font-display text-dorado text-sm font-medium">
+        <div className="relative z-10 w-12 h-12 rounded-full border border-dorado/60 bg-white shadow-[0_8px_20px_-10px_rgba(14,26,51,0.35)] flex items-center justify-center">
+          <span className="font-display text-[#8A6A1B] text-sm font-medium">
             {paso.num}
           </span>
-        </motion.div>
+        </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 pt-1">
         <h3
-          className="font-display text-crema font-medium leading-tight mb-4"
+          className="font-display text-navy font-medium leading-tight mb-4"
           style={{
             fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
             letterSpacing: "-0.02em",
@@ -72,7 +74,7 @@ function Paso({
           {paso.titulo}
         </h3>
 
-        <p className="font-body text-crema/70 text-[15px] leading-relaxed max-w-xl">
+        <p className="font-body text-navy/65 text-[15px] leading-relaxed max-w-xl">
           {paso.descripcion}
         </p>
 
@@ -86,8 +88,8 @@ function Paso({
           <div className="pt-5 space-y-1.5">
             {paso.detalle.split(" · ").map((d) => (
               <div key={d} className="flex items-center gap-2.5">
-                <span className="w-1 h-1 rounded-full bg-dorado/40 shrink-0" />
-                <span className="font-body text-crema/55 text-[11px] tracking-[0.12em] uppercase">
+                <span className="w-1 h-1 rounded-full bg-dorado shrink-0" />
+                <span className="font-body text-navy/55 text-[11px] tracking-[0.12em] uppercase">
                   {d}
                 </span>
               </div>
@@ -99,41 +101,67 @@ function Paso({
   );
 }
 
+// Cada tarjeta se "enciende" cuando la línea de progreso llega a su turno.
 function PasoCard({
   paso,
   index,
+  progress,
+  reduced,
 }: {
   paso: (typeof pasos)[number];
   index: number;
+  progress: MotionValue<number>;
+  reduced: boolean | null;
 }) {
+  const start = index * 0.28;
+  const active = useTransform(progress, [start, start + 0.18], [0, 1]);
+  const lift = useTransform(
+    progress,
+    [start, start + 0.18],
+    reduced ? [0, 0] : [22, 0],
+  );
+  const dim = useTransform(progress, [start, start + 0.18], [0.55, 1]);
+
   return (
     <motion.div
-      className="group relative border border-crema/10 bg-crema/[0.025] p-8 xl:p-10 hover:border-dorado/50 hover:bg-dorado/[0.05] transition-colors duration-500"
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      className="relative rounded-3xl bg-white p-8 xl:p-10 shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)]"
+      style={{ y: lift, opacity: dim }}
     >
-      <span
-        className="block font-display font-semibold text-dorado/25 group-hover:text-dorado/60 transition-colors duration-500 leading-none mb-6"
+      {/* Borde dorado que aparece al activarse */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-3xl border-2 border-dorado/70"
+        style={{ opacity: active }}
+        aria-hidden="true"
+      />
+      <div
+        className="relative mb-6 h-[5rem] font-display font-semibold leading-none"
         style={{ fontSize: "5rem", letterSpacing: "-0.04em" }}
       >
-        {paso.num}
-      </span>
+        <span className="absolute inset-0 text-navy/[0.07]">{paso.num}</span>
+        <motion.span
+          className="absolute inset-0 text-[#C9A84C]"
+          style={{ opacity: active }}
+        >
+          {paso.num}
+        </motion.span>
+      </div>
       <h3
-        className="font-display text-crema font-medium leading-tight mb-4"
-        style={{ fontSize: "clamp(1.6rem, 2.2vw, 2rem)", letterSpacing: "-0.02em" }}
+        className="font-display text-navy font-medium leading-tight mb-4"
+        style={{
+          fontSize: "clamp(1.6rem, 2.2vw, 2rem)",
+          letterSpacing: "-0.02em",
+        }}
       >
         {paso.titulo}
       </h3>
-      <p className="font-body text-crema/70 text-[14px] leading-relaxed mb-6">
+      <p className="font-body text-navy/65 text-[14px] leading-relaxed mb-6">
         {paso.descripcion}
       </p>
-      <ul className="space-y-2 border-t border-crema/10 pt-5">
+      <ul className="space-y-2 border-t border-navy/10 pt-5">
         {paso.detalle.split(" · ").map((d) => (
           <li key={d} className="flex items-center gap-2.5">
-            <span className="w-1.5 h-1.5 rotate-45 bg-dorado shrink-0" />
-            <span className="font-body text-crema/60 text-[11px] tracking-[0.12em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
+            <span className="font-body text-navy/60 text-[11px] tracking-[0.12em] uppercase">
               {d}
             </span>
           </li>
@@ -144,20 +172,23 @@ function PasoCard({
 }
 
 export default function Proceso() {
+  const reduced = useReducedMotion();
   const railRef = useRef<HTMLDivElement>(null);
+  const deskRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: railRef,
     offset: ["start 0.8", "end 0.55"],
   });
+  const { scrollYProgress: deskProgress } = useScroll({
+    target: deskRef,
+    offset: ["start 0.75", "end 0.6"],
+  });
 
   return (
-    <section className="bg-tierra relative overflow-hidden py-28 lg:py-36">
-      {/* Grain */}
-      <div className="absolute inset-0 grain-overlay opacity-[0.04] pointer-events-none" />
-
+    <section className="bg-[#F6F8FB] relative overflow-hidden py-28 lg:py-36">
       {/* Large background word */}
       <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 font-display text-crema/[0.025] font-medium leading-none select-none pointer-events-none"
+        className="absolute right-0 top-1/2 -translate-y-1/2 font-display text-navy/[0.035] font-medium leading-none select-none pointer-events-none"
         style={{
           fontSize: "clamp(8rem, 22vw, 18rem)",
           letterSpacing: "-0.06em",
@@ -178,12 +209,12 @@ export default function Proceso() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="h-px w-10 bg-dorado/50" />
-              <span className="eyebrow text-crema/50">Cómo trabajamos</span>
+              <div className="h-px w-10 bg-dorado" />
+              <span className="eyebrow !text-[#8A6A1B]">Cómo trabajamos</span>
             </motion.div>
 
             <motion.h2
-              className="font-display text-crema font-medium leading-[1.0]"
+              className="font-display text-navy font-medium leading-[1.0]"
               style={{
                 fontSize: "clamp(2.8rem, 6vw, 5rem)",
                 letterSpacing: "-0.03em",
@@ -194,12 +225,12 @@ export default function Proceso() {
               transition={{ duration: 0.7, delay: 0.1, ease: "easeInOut" }}
             >
               Tu operación,{" "}
-              <em className="not-italic italic text-dorado">paso a paso</em>
+              <em className="not-italic italic text-[#A47C1B]">paso a paso</em>
             </motion.h2>
           </div>
 
           <motion.p
-            className="font-body text-crema/60 text-[15px] leading-relaxed max-w-xs lg:text-right"
+            className="font-body text-navy/60 text-[15px] leading-relaxed max-w-xs lg:text-right"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -225,7 +256,7 @@ export default function Proceso() {
               y1="0"
               x2="0.5"
               y2="100"
-              stroke="rgba(245,239,230,0.08)"
+              stroke="rgba(26,39,82,0.12)"
               strokeWidth="1"
               vectorEffect="non-scaling-stroke"
             />
@@ -233,10 +264,10 @@ export default function Proceso() {
             <motion.path
               d="M 0.5 0 L 0.5 100"
               stroke="#C9A84C"
-              strokeWidth="1"
+              strokeWidth="2"
               fill="none"
               vectorEffect="non-scaling-stroke"
-              style={{ pathLength: scrollYProgress }}
+              style={{ pathLength: reduced ? 1 : scrollYProgress }}
             />
           </svg>
 
@@ -245,19 +276,26 @@ export default function Proceso() {
           ))}
         </div>
 
-        {/* Horizontal timeline - desktop */}
-        <div className="hidden lg:block relative">
-          {/* Línea dorada horizontal */}
+        {/* Horizontal timeline - desktop: la línea se dibuja con el scroll */}
+        <div ref={deskRef} className="hidden lg:block relative">
+          <div
+            className="absolute top-0 left-[16.5%] right-[16.5%] h-[2px] rounded-full bg-navy/10"
+            aria-hidden="true"
+          />
           <motion.div
-            className="absolute top-0 left-[16.5%] right-[16.5%] h-px bg-gradient-to-r from-transparent via-dorado/50 to-transparent origin-left"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-0 left-[16.5%] right-[16.5%] h-[2px] rounded-full bg-dorado origin-left"
+            style={{ scaleX: reduced ? 1 : deskProgress }}
+            aria-hidden="true"
           />
           <div className="grid grid-cols-3 gap-8 pt-14">
             {pasos.map((paso, i) => (
-              <PasoCard key={paso.num} paso={paso} index={i} />
+              <PasoCard
+                key={paso.num}
+                paso={paso}
+                index={i}
+                progress={deskProgress}
+                reduced={reduced}
+              />
             ))}
           </div>
         </div>

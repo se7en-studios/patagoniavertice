@@ -1,10 +1,16 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { coverImage } from "@/lib/property-images";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const tipoLabel: Record<string, string> = {
@@ -122,12 +128,44 @@ const CATEGORIAS_TAB = [
   { id: "inversion", label: "Inversión & Lotes" },
 ];
 
+// La foto se desplaza más lento que la tarjeta al scrollear (profundidad).
+function FotoParallax({ src, alt }: { src: string; alt: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduced ? ["0%", "0%"] : ["-7%", "7%"],
+  );
+  return (
+    <div ref={ref} className="absolute inset-0">
+      <motion.div
+        className="absolute inset-0"
+        style={{ y, scale: reduced ? 1 : 1.18 }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 export default function PropiedadesDestacadasHome({
   propiedades,
 }: {
   propiedades: PropiedadDestacada[];
 }) {
   const [tabActiva, setTabActiva] = useState("todas");
+  const reduced = useReducedMotion();
 
   // Si no hay propiedades en Supabase, mostramos la selección curada de Altum SCI
   const listaBase = useMemo(() => {
@@ -183,7 +221,16 @@ export default function PropiedadesDestacadasHome({
                 ALTUM SCI · Portfolio Seleccionado
               </span>
             </div>
-            <h2
+            {/* El contenedor (quieto) dispara la animación: un h2 desplazado y recortado nunca "entra" en pantalla. */}
+            <motion.div
+              className="overflow-hidden pb-1"
+              initial={reduced ? false : "hidden"}
+              whileInView="show"
+              viewport={{ once: true, margin: "-80px" }}
+            >
+            <motion.h2
+              variants={{ hidden: { y: "105%" }, show: { y: 0 } }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               className="font-display font-medium text-navy leading-[1.05]"
               style={{
                 fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
@@ -194,7 +241,8 @@ export default function PropiedadesDestacadasHome({
               <em className="not-italic italic text-[#A47C1B] font-normal">
                 primer nivel
               </em>
-            </h2>
+            </motion.h2>
+            </motion.div>
             <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-4">
               Lotes exclusivos en Mari Menuco, residencias en Cipolletti y
               fracciones estratégicas con plusvalía real en el eje Neuquén – Río
@@ -233,7 +281,7 @@ export default function PropiedadesDestacadasHome({
         {/* Grid de Propiedades */}
         <motion.div layout className="flex flex-wrap justify-center gap-8">
           <AnimatePresence mode="popLayout">
-            {listaFiltrada.map((p) => {
+            {listaFiltrada.map((p, idx) => {
               const precioLabel = p.precio
                 ? `${p.moneda} ${p.precio.toLocaleString("es-AR")}`
                 : "Consultar precio";
@@ -245,10 +293,15 @@ export default function PropiedadesDestacadasHome({
                 <motion.article
                   key={p.id}
                   layout
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={reduced ? false : { opacity: 0, y: 60, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-60px" }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    duration: 0.8,
+                    delay: reduced ? 0 : (idx % 3) * 0.12,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   onMouseMove={(e) => {
                     const r = e.currentTarget.getBoundingClientRect();
                     e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
@@ -267,13 +320,7 @@ export default function PropiedadesDestacadasHome({
                   />
                   {/* Imagen & Badges */}
                   <div className="relative aspect-[16/11] overflow-hidden">
-                    <Image
-                      src={coverImage(p.imagenes)}
-                      alt={p.titulo}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+                    <FotoParallax src={coverImage(p.imagenes)} alt={p.titulo} />
 
                     {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent" />

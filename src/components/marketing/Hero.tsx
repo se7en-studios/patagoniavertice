@@ -74,6 +74,7 @@ export default function Hero() {
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const contentScale = useTransform(scrollYProgress, [0, 0.65], [1, 0.94]);
 
   // El video arranca dentro de un marco redondeado y se abre hasta llenar la pantalla.
   const inset = useTransform(scrollYProgress, [0, 0.35], [4, 0]);
@@ -107,7 +108,7 @@ export default function Hero() {
 
       <motion.div
         className="relative flex-1 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-12 w-full pt-28 md:pt-32 pb-14 md:pb-20"
-        style={{ y: contentY, opacity: contentOpacity }}
+        style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
       >
         <h1
           className="font-display font-semibold leading-[1.02] mb-6 max-w-4xl"

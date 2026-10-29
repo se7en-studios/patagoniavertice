@@ -29,13 +29,27 @@ export default function BandaLago() {
     [0, 1],
     reduced ? ["0%", "0%"] : ["-10%", "10%"],
   );
+  // Capas: el marco se abre al entrar y la tarjeta viaja más rápido que la foto.
+  const frameScale = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    reduced ? [1, 1] : [0.92, 1],
+  );
+  const cardY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduced ? [0, 0] : [90, -90],
+  );
 
   return (
     <section
       ref={ref}
       className="relative bg-[#F6F8FB] px-4 lg:px-8 py-10 lg:py-16"
     >
-      <div className="relative h-[78vh] min-h-[540px] max-w-[1400px] mx-auto overflow-hidden rounded-[2.5rem] lg:rounded-[3rem]">
+      <motion.div
+        style={{ scale: frameScale }}
+        className="relative h-[78vh] min-h-[540px] max-w-[1400px] mx-auto overflow-hidden rounded-[2.5rem] lg:rounded-[3rem]"
+      >
         <motion.div className="absolute inset-x-0 -inset-y-[12%]" style={{ y }}>
           <Image
             src="/mari-menuco/bahia-playas-2.jpg"
@@ -47,8 +61,9 @@ export default function BandaLago() {
         </motion.div>
 
         <div className="relative h-full px-5 lg:px-14 flex items-end lg:items-center justify-center lg:justify-end pb-5 lg:pb-0">
+          <motion.div style={{ y: cardY }} className="w-full max-w-md">
           <motion.div
-            className="w-full max-w-md rounded-[2rem] border border-white/90 bg-white/80 backdrop-blur-xl shadow-[0_30px_70px_-30px_rgba(14,26,51,0.5)] p-7 lg:p-9"
+            className="w-full rounded-[2rem] border border-white/90 bg-white/80 backdrop-blur-xl shadow-[0_30px_70px_-30px_rgba(14,26,51,0.5)] p-7 lg:p-9"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
@@ -88,8 +103,9 @@ export default function BandaLago() {
               <span aria-hidden="true">→</span>
             </Link>
           </motion.div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

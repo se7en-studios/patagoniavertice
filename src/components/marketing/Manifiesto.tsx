@@ -102,9 +102,13 @@ export default function Manifiesto() {
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
-        {STATS.map((s) => (
-          <div
+        {STATS.map((s, i) => (
+          <motion.div
             key={s.label}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="rounded-3xl bg-white/80 border border-white shadow-[0_18px_40px_-24px_rgba(14,26,51,0.3)] px-5 py-7 text-center"
           >
             <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
@@ -113,7 +117,7 @@ export default function Manifiesto() {
             <dt className="font-body text-navy/55 text-[10px] tracking-[0.2em] uppercase mt-2">
               {s.label}
             </dt>
-          </div>
+          </motion.div>
         ))}
       </motion.dl>
     </section>

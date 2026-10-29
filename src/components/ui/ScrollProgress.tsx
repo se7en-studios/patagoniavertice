@@ -1,27 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 
+// Barra dorada con inercia; escala en X (transform) en vez de animar el ancho.
 export default function ScrollProgress() {
-  const barRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const bar = barRef.current;
-    if (!bar) return;
-
-    const onScroll = () => {
-      const scrolled = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = total > 0 ? `${(scrolled / total) * 100}%` : "0%";
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001,
+  });
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9998] h-[2px] pointer-events-none">
-      <div ref={barRef} className="h-full bg-dorado" style={{ width: "0%" }} />
+    <div className="fixed top-0 left-0 right-0 z-[9998] h-[3px] pointer-events-none">
+      <motion.div
+        className="h-full origin-left bg-gradient-to-r from-dorado/40 via-dorado to-[#E8D5B7]"
+        style={{ scaleX }}
+      />
     </div>
   );
 }

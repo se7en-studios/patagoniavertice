@@ -1,22 +1,28 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 const words = [
-  { text: "El", italic: false },
-  { text: "territorio", italic: false },
-  { text: "más", italic: false },
-  { text: "generoso", italic: true },
-  { text: "de", italic: false },
-  { text: "Argentina", italic: false },
-  { text: "espera", italic: false },
-  { text: "a", italic: false },
-  { text: "quienes", italic: false },
-  { text: "saben", italic: false },
-  { text: "mirar", italic: false },
-  { text: "más", italic: false },
-  { text: "allá.", italic: false },
+  { text: "El", accent: false },
+  { text: "territorio", accent: false },
+  { text: "más", accent: false },
+  { text: "generoso", accent: true },
+  { text: "de", accent: false },
+  { text: "Argentina", accent: false },
+  { text: "espera", accent: false },
+  { text: "a", accent: false },
+  { text: "quienes", accent: false },
+  { text: "saben", accent: false },
+  { text: "mirar", accent: false },
+  { text: "más", accent: false },
+  { text: "allá.", accent: false },
 ];
 
 const STATS = [
@@ -26,70 +32,71 @@ const STATS = [
   { value: 100, suffix: "%", label: "Trámite legal y remoto" },
 ];
 
-export default function Manifiesto() {
+// Cada palabra se enciende cuando el scroll llega a su turno.
+function Word({
+  text,
+  accent,
+  index,
+  progress,
+}: {
+  text: string;
+  accent: boolean;
+  index: number;
+  progress: MotionValue<number>;
+}) {
+  const step = 1 / words.length;
+  const opacity = useTransform(
+    progress,
+    [index * step, (index + 1) * step],
+    [0.16, 1],
+  );
   return (
-    <section className="relative bg-crema py-28 lg:py-40 overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px gold-line" />
+    <motion.span
+      style={{ opacity }}
+      className={`inline-block mr-[0.28em] ${
+        accent ? "italic text-[#A47C1B]" : ""
+      }`}
+    >
+      {text}
+    </motion.span>
+  );
+}
 
-      <div className="relative max-w-3xl mx-auto px-8 lg:px-16 text-center">
-        {/* Ornament */}
-        <motion.div
-          className="flex items-center justify-center gap-3 mb-12"
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          aria-hidden="true"
-        >
-          <div className="h-px w-16 bg-dorado" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-dorado" />
-          <div className="h-px w-16 bg-dorado" />
-        </motion.div>
+export default function Manifiesto() {
+  const quoteRef = useRef<HTMLQuoteElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: quoteRef,
+    offset: ["start 0.85", "end 0.5"],
+  });
 
-        {/* Word-by-word reveal */}
+  return (
+    <section className="relative bg-[#F6F8FB] py-28 lg:py-40 overflow-hidden">
+      <div className="relative max-w-4xl mx-auto px-8 lg:px-16 text-center">
         <blockquote
-          className="font-display font-medium text-tierra text-2xl sm:text-3xl lg:text-4xl leading-snug"
-          style={{ letterSpacing: "-0.02em" }}
+          ref={quoteRef}
+          className="font-display font-medium text-navy text-3xl sm:text-4xl lg:text-6xl leading-[1.12]"
+          style={{ letterSpacing: "-0.03em" }}
           aria-label="El territorio más generoso de Argentina espera a quienes saben mirar más allá."
         >
           {words.map((word, i) => (
-            <motion.span
+            <Word
               key={i}
-              initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{
-                duration: 0.55,
-                delay: i * 0.06,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className={`inline-block mr-[0.28em] ${
-                word.italic ? "not-italic italic text-dorado" : ""
-              }`}
-            >
-              {word.text}
-            </motion.span>
+              text={word.text}
+              accent={word.accent}
+              index={i}
+              progress={scrollYProgress}
+            />
           ))}
         </blockquote>
 
-        <motion.div
-          className="flex items-center justify-center gap-5 mt-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.85 }}
-        >
-          <div className="h-px w-10 bg-dorado/50" />
-          <span className="font-body text-tierra/40 text-[10px] tracking-[0.35em] uppercase font-semibold">
-            ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Patagonia
-          </span>
-          <div className="h-px w-10 bg-dorado/50" />
-        </motion.div>
+        <p className="mt-10 font-body text-navy/45 text-[10px] tracking-[0.35em] uppercase font-semibold">
+          ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Patagonia
+        </p>
       </div>
 
       {/* Datos verificables ya publicados en el resto del sitio */}
       <motion.dl
-        className="relative max-w-5xl mx-auto mt-20 px-8 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-dorado/25 pt-12"
+        className="relative max-w-5xl mx-auto mt-20 px-6 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
@@ -98,19 +105,17 @@ export default function Manifiesto() {
         {STATS.map((s) => (
           <div
             key={s.label}
-            className="text-center lg:border-l lg:first:border-l-0 border-dorado/20"
+            className="rounded-3xl bg-white/80 border border-white shadow-[0_18px_40px_-24px_rgba(14,26,51,0.3)] px-5 py-7 text-center"
           >
-            <dd className="font-display text-tierra text-4xl lg:text-5xl font-semibold tracking-tight">
+            <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
               <AnimatedNumber value={s.value} suffix={s.suffix} />
             </dd>
-            <dt className="font-body text-tierra/55 text-[10px] tracking-[0.22em] uppercase mt-2">
+            <dt className="font-body text-navy/55 text-[10px] tracking-[0.2em] uppercase mt-2">
               {s.label}
             </dt>
           </div>
         ))}
       </motion.dl>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px gold-line" />
     </section>
   );
 }

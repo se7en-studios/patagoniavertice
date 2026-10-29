@@ -161,16 +161,15 @@ export default function PropiedadesDestacadasHome({
 
   return (
     <section
-      className="py-24 lg:py-36 relative overflow-hidden"
-      style={{ background: "#060A14" }}
+      className="py-24 lg:py-36 relative overflow-hidden bg-[#F6F8FB]"
       id="propiedades-destacadas"
     >
       {/* Background ambient lighting */}
       <div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none opacity-20 blur-[140px] rounded-full"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none opacity-10 blur-[140px] rounded-full"
         style={{
           background:
-            "radial-gradient(circle, #C9A84C 0%, #1A2752 70%, transparent 100%)",
+            "radial-gradient(circle, #C9A84C 0%, transparent 70%)",
         }}
       />
 
@@ -180,23 +179,23 @@ export default function PropiedadesDestacadasHome({
           <div>
             <div className="flex items-center gap-4 mb-4">
               <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] text-dorado">
+              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
                 ALTUM SCI · Portfolio Seleccionado
               </span>
             </div>
             <h2
-              className="font-display font-medium text-crema leading-[1.05]"
+              className="font-display font-medium text-navy leading-[1.05]"
               style={{
                 fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
                 letterSpacing: "-0.02em",
               }}
             >
               Propiedades &amp; Terrenos de{" "}
-              <em className="not-italic italic text-dorado font-normal">
+              <em className="not-italic italic text-[#A47C1B] font-normal">
                 primer nivel
               </em>
             </h2>
-            <p className="font-body text-crema/60 text-sm lg:text-base max-w-xl mt-4">
+            <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-4">
               Lotes exclusivos en Mari Menuco, residencias en Cipolletti y
               fracciones estratégicas con plusvalía real en el eje Neuquén – Río
               Negro.
@@ -205,7 +204,7 @@ export default function PropiedadesDestacadasHome({
 
           <Link
             href="/proyectos"
-            className="group inline-flex items-center gap-3 font-body text-dorado text-xs tracking-[0.2em] uppercase border-b border-dorado/40 pb-1.5 hover:border-dorado transition-all self-start lg:self-auto"
+            className="group inline-flex items-center gap-3 font-body text-[#8A6A1B] text-xs tracking-[0.2em] uppercase border-b border-dorado/50 pb-1.5 hover:border-dorado transition-all self-start lg:self-auto"
           >
             <span>Ver Catálogo Completo</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -215,15 +214,15 @@ export default function PropiedadesDestacadasHome({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 mb-10 border-b border-crema/10 pb-4">
+        <div className="flex flex-wrap items-center gap-2 mb-10">
           {CATEGORIAS_TAB.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setTabActiva(tab.id)}
-              className={`font-body text-[11px] tracking-[0.16em] uppercase px-4 py-2 transition-all rounded-sm ${
+              className={`font-body text-[11px] tracking-[0.16em] uppercase px-5 py-2.5 transition-all rounded-full ${
                 tabActiva === tab.id
                   ? "bg-dorado text-tierra font-semibold shadow-md"
-                  : "bg-navy-900/60 text-crema/60 border border-crema/10 hover:border-dorado/40 hover:text-crema"
+                  : "bg-white text-navy/60 border border-navy/10 hover:border-dorado hover:text-navy"
               }`}
             >
               {tab.label}
@@ -255,7 +254,7 @@ export default function PropiedadesDestacadasHome({
                     e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
                     e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
                   }}
-                  className="group relative flex flex-col w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] bg-navy-900/80 border border-crema/15 overflow-hidden hover:border-dorado/60 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.7)] backdrop-blur-sm"
+                  className="group relative flex flex-col w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] rounded-3xl bg-white border border-white overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] hover:-translate-y-1 transition-all duration-500"
                 >
                   {/* Brillo dorado que sigue al cursor */}
                   <div
@@ -277,22 +276,22 @@ export default function PropiedadesDestacadasHome({
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/25 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent" />
 
                     {/* Badge Superior Izquierdo: Tipo */}
                     <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
-                      <span className="font-body text-[9px] font-semibold tracking-[0.2em] uppercase bg-dorado text-tierra px-2.5 py-1 shadow-sm">
+                      <span className="font-body text-[9px] font-semibold tracking-[0.2em] uppercase rounded-full bg-dorado text-tierra px-3 py-1 shadow-sm">
                         {tipoLabel[p.tipo] ?? p.tipo}
                       </span>
                       {p.destacado_badge && (
-                        <span className="font-body text-[8.5px] font-medium tracking-[0.15em] uppercase bg-navy-950/90 text-dorado border border-dorado/40 px-2 py-0.5 backdrop-blur-md">
+                        <span className="font-body text-[8.5px] font-medium tracking-[0.15em] uppercase rounded-full bg-navy-950/85 text-dorado border border-dorado/40 px-2.5 py-1 backdrop-blur-md">
                           {p.destacado_badge}
                         </span>
                       )}
                     </div>
 
                     {/* Categoría Badge Superior Derecho */}
-                    <span className="absolute top-3.5 right-3.5 font-body text-[9px] tracking-[0.15em] uppercase text-crema/80 bg-black/60 backdrop-blur-md px-2 py-0.5 border border-white/10">
+                    <span className="absolute top-3.5 right-3.5 font-body text-[9px] tracking-[0.15em] uppercase rounded-full text-navy/80 bg-white/80 backdrop-blur-md px-2.5 py-1 border border-white">
                       {categoriaLabel[p.tipo] ?? p.tipo}
                     </span>
 
@@ -310,22 +309,22 @@ export default function PropiedadesDestacadasHome({
                   {/* Body Content */}
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="font-body text-crema/65 text-[10px] tracking-widest uppercase mb-1.5">
+                      <p className="font-body text-navy/55 text-[10px] tracking-widest uppercase mb-1.5">
                         {p.barrio ? `${p.barrio}` : p.ciudad}
                       </p>
-                      <h3 className="font-display text-crema text-lg font-medium leading-snug group-hover:text-dorado transition-colors duration-200 mb-4 line-clamp-2">
+                      <h3 className="font-display text-navy text-lg font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
                         {p.titulo}
                       </h3>
 
                       {/* Metadatos: Superficie & Seguridad */}
-                      <div className="grid grid-cols-2 gap-2 py-3 border-y border-crema/10 mb-6 font-body text-xs text-crema/65">
+                      <div className="grid grid-cols-2 gap-2 py-3 border-y border-navy/10 mb-6 font-body text-xs text-navy/60">
                         <div className="flex items-center gap-2">
                           <SurfaceIcon />
                           <span className="truncate">
                             {formatSuperficie(p.superficie_m2)}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-dorado/90 justify-end">
+                        <div className="flex items-center gap-1.5 text-[#8A6A1B] justify-end">
                           <span>✦</span>
                           <span className="truncate text-[10px] uppercase tracking-wider">
                             Mat. Colegiada
@@ -340,7 +339,7 @@ export default function PropiedadesDestacadasHome({
                         href={waLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 bg-dorado text-tierra font-body text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-colors shadow-sm"
+                        className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-dorado text-tierra font-body text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-colors shadow-sm"
                       >
                         <WaMiniIcon />
                         <span>Consultar</span>
@@ -348,7 +347,7 @@ export default function PropiedadesDestacadasHome({
 
                       <Link
                         href={`/contacto?propiedad=${encodeURIComponent(p.titulo)}`}
-                        className="inline-flex items-center justify-center p-3 border border-crema/20 text-crema/70 hover:text-dorado hover:border-dorado transition-colors"
+                        className="inline-flex items-center justify-center p-3 rounded-full border border-navy/15 text-navy/60 hover:text-[#8A6A1B] hover:border-dorado transition-colors"
                         title="Agendar visita"
                       >
                         <CalendarIcon />
@@ -362,16 +361,16 @@ export default function PropiedadesDestacadasHome({
         </motion.div>
 
         {/* Bottom Banner */}
-        <div className="mt-16 p-8 lg:p-10 border border-dorado/30 bg-navy-900/60 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="mt-16 p-8 lg:p-10 rounded-[2rem] border border-white bg-white/80 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_24px_60px_-30px_rgba(14,26,51,0.4)]">
           <div className="space-y-1.5 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-dorado text-xs font-semibold uppercase tracking-widest">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-[#8A6A1B] text-xs font-semibold uppercase tracking-widest">
               <span>✦</span>
               <span>Asesoría Directa por Martillera Colegiada</span>
             </div>
-            <h4 className="font-display text-crema text-xl lg:text-2xl font-medium">
+            <h4 className="font-display text-navy text-xl lg:text-2xl font-medium">
               ¿Buscás una propiedad específica o querés tasar la tuya?
             </h4>
-            <p className="font-body text-crema/55 text-xs lg:text-sm max-w-xl">
+            <p className="font-body text-navy/60 text-xs lg:text-sm max-w-xl">
               Análisis comparativo de mercado en 24 horas, tasaciones oficiales
               con firma colegiada y gestión notarial transparente.
             </p>
@@ -379,7 +378,7 @@ export default function PropiedadesDestacadasHome({
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <a
               href="#tasador-express"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-md"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-md"
             >
               ✦ Tasar mi propiedad
             </a>
@@ -387,7 +386,7 @@ export default function PropiedadesDestacadasHome({
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola Altum SCI, busco asesoramiento para una inversión o venta.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border border-crema/25 text-crema font-body text-[11px] font-medium tracking-[0.16em] uppercase hover:border-dorado hover:text-dorado transition-all"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-navy/20 text-navy font-body text-[11px] font-medium tracking-[0.16em] uppercase hover:border-dorado hover:text-[#8A6A1B] transition-all"
             >
               <span>Consultar Asesor</span>
               <span>→</span>

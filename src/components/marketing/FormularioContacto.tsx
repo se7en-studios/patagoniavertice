@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState, useEffect } from "react";
-import { guardarLeadAltum, type TipoConsulta } from "@/app/actions/leads-altum";
+import { guardarLeadAltum } from "@/app/actions/leads-altum";
+import { track } from "@/lib/analytics";
 
 /* ── Schema Zod ──────────────────────────────────────────────────────────── */
 
@@ -27,7 +28,7 @@ type FormValues = z.infer<typeof schema>;
 
 /* ── Labels y opciones ───────────────────────────────────────────────────── */
 
-const TIPOS: { value: TipoConsulta; label: string }[] = [
+const TIPOS: { value: FormValues["tipo_consulta"]; label: string }[] = [
   { value: "venta", label: "Venta" },
   { value: "alquiler", label: "Alquiler" },
   { value: "consultoria", label: "Consultoría" },
@@ -157,7 +158,7 @@ export default function FormularioContacto() {
       setValue(
         "mensaje",
         `Hola, quisiera recibir más información y coordinar una visita para la propiedad: ${propiedadQuery}.`,
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
       setValue("tipo_consulta", "venta", { shouldValidate: true });
     }
@@ -172,12 +173,18 @@ export default function FormularioContacto() {
       telefono: data.telefono || undefined,
       tipo_consulta: data.tipo_consulta,
       mensaje: data.mensaje,
+      origen: propiedadQuery ? "contacto_propiedad" : "contacto",
     });
 
     if (result.success) {
+      track("lead_submit", {
+        origen: propiedadQuery ? "contacto_propiedad" : "contacto",
+        tipo_consulta: data.tipo_consulta,
+      });
       setToast({
         type: "success",
-        message: "Consulta enviada. Te contactamos a la brevedad.",
+        message:
+          "Consulta enviada. Estela te responde personalmente por WhatsApp o mail.",
       });
       reset();
     } else {

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { guardarLeadAltum } from "@/app/actions/leads-altum";
+import { track } from "@/lib/analytics";
 
 export default function GuiaInversion() {
   const [solicitado, setSolicitado] = useState(false);
@@ -10,8 +12,26 @@ export default function GuiaInversion() {
   const [telefono, setTelefono] = useState("");
   const [ciudadInteres, setCiudadInteres] = useState("Cipolletti");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setEnviando(true);
+    const result = await guardarLeadAltum({
+      nombre,
+      telefono,
+      tipo_consulta: "guia",
+      origen: "guia",
+      mensaje: `Solicita la Guía de Inversión 2026. Zona de interés: ${ciudadInteres}.`,
+      detalle: { zona: ciudadInteres },
+    });
+    setEnviando(false);
+    // Si el guardado falla igual abrimos WhatsApp: la consulta llega por ahí y no se pierde.
+    track("guia_download", { zona: ciudadInteres });
+    if (result.success) track("lead_submit", { origen: "guia" });
+    track("whatsapp_click", { origen: "guia" });
     setSolicitado(true);
 
     const mensaje = `Hola Altum Inmobiliaria. Solicito la "Guía Estratégica de Inversión Inmobiliaria en Río Negro & Vaca Muerta 2026":
@@ -21,12 +41,15 @@ export default function GuiaInversion() {
 
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`,
-      "_blank"
+      "_blank",
     );
   };
 
   return (
-    <section className="py-24 bg-navy-950 text-crema relative overflow-hidden" style={{ background: "#060A13" }}>
+    <section
+      className="py-24 bg-navy-950 text-crema relative overflow-hidden"
+      style={{ background: "#060A13" }}
+    >
       <div
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[300px] opacity-10 blur-[130px] pointer-events-none rounded-full"
         style={{ background: "#C9A84C" }}
@@ -52,31 +75,44 @@ export default function GuiaInversion() {
             </h2>
 
             <p className="font-body text-crema/60 text-sm lg:text-base leading-relaxed">
-              Descubrí las zonas con mayor tasa de plusvalía, rendimientos en alquiler corporativo y aspectos fiscales y notariales clave antes de comprar en la Patagonia.
+              Descubrí las zonas con mayor tasa de plusvalía, rendimientos en
+              alquiler corporativo y aspectos fiscales y notariales clave antes
+              de comprar en la Patagonia.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
                 <span className="text-dorado">✓</span>
-                <span>Análisis de plusvalía y precios por m² en Alto Valle.</span>
+                <span>
+                  Análisis de plusvalía y precios por m² en Alto Valle.
+                </span>
               </div>
               <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
                 <span className="text-dorado">✓</span>
-                <span>Renta en USD en Catriel y zonas de influencia energética.</span>
+                <span>
+                  Renta en USD en Catriel y zonas de influencia energética.
+                </span>
               </div>
               <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
                 <span className="text-dorado">✓</span>
-                <span>Procedimiento 100% legal y remoto para no residentes.</span>
+                <span>
+                  Procedimiento 100% legal y remoto para no residentes.
+                </span>
               </div>
               <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
                 <span className="text-dorado">✓</span>
-                <span>Supervisado por Martillera Colegiada (Mat. 35 RP 2026).</span>
+                <span>
+                  Supervisado por Martillera Colegiada (Mat. 35 RP 2026).
+                </span>
               </div>
             </div>
           </div>
 
           {/* Right Lead Capture Box */}
-          <div className="lg:col-span-5 p-6 lg:p-8 bg-navy-950 border border-dorado/40 shadow-2xl" style={{ background: "#080E1A" }}>
+          <div
+            className="lg:col-span-5 p-6 lg:p-8 bg-navy-950 border border-dorado/40 shadow-2xl"
+            style={{ background: "#080E1A" }}
+          >
             {solicitado ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -86,9 +122,12 @@ export default function GuiaInversion() {
                 <div className="w-12 h-12 mx-auto rounded-full bg-dorado/20 text-dorado flex items-center justify-center text-xl font-bold">
                   ✓
                 </div>
-                <h3 className="font-display text-2xl text-crema">¡Solicitud enviada!</h3>
+                <h3 className="font-display text-2xl text-crema">
+                  ¡Solicitud enviada!
+                </h3>
                 <p className="font-body text-crema/60 text-xs leading-relaxed">
-                  Te hemos redirigido a WhatsApp para enviarte la guía de forma inmediata.
+                  Te hemos redirigido a WhatsApp para enviarte la guía de forma
+                  inmediata.
                 </p>
               </motion.div>
             ) : (
@@ -141,20 +180,32 @@ export default function GuiaInversion() {
                   >
                     <option value="Cipolletti">Cipolletti (Alto Valle)</option>
                     <option value="Catriel">Catriel (Renta Petrolera)</option>
-                    <option value="General Roca">General Roca (Lotes & Chacras)</option>
-                    <option value="Bariloche">Bariloche (Renta Turística)</option>
+                    <option value="General Roca">
+                      General Roca (Lotes & Chacras)
+                    </option>
+                    <option value="Bariloche">
+                      Bariloche (Renta Turística)
+                    </option>
                   </select>
                 </div>
 
+                {error && (
+                  <p role="alert" className="font-body text-xs text-red-400">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center"
+                  disabled={enviando}
+                  className="w-full py-3.5 px-6 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
                 >
-                  Solicitar Guía en PDF
+                  {enviando ? "Enviando..." : "Solicitar Guía en PDF"}
                 </button>
 
                 <p className="text-[10px] font-body text-crema/55 text-center">
-                  Sin spam. Atención directa y confidencial.
+                  Sin spam. Estela te responde personalmente por WhatsApp o
+                  mail.
                 </p>
               </form>
             )}

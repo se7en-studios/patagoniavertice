@@ -13,7 +13,6 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useTransform,
 } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { VideoPlayer } from "@/components/ui/VideoPlayer";
@@ -55,32 +54,15 @@ const servicios = [
 
 const ICONOS = [Building2, KeyRound, TrendingUp, FileSignature];
 
-// La tarjeta crece y se opaca del todo al llegar al centro de la pantalla.
 function ServiceCard({
   s,
   i,
-  prefersReduced,
 }: {
   s: (typeof servicios)[number];
   i: number;
-  prefersReduced: boolean | null;
+  prefersReduced?: boolean | null;
 }) {
   const Icon = ICONOS[i % ICONOS.length];
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.92", "start 0.5"],
-  });
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 1],
-    prefersReduced ? [1, 1] : [0.94, 1],
-  );
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 1],
-    prefersReduced ? [1, 1] : [0.45, 1],
-  );
 
   // Spotlight dorado que sigue al cursor (solo CSS vars, sin re-render)
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -91,10 +73,12 @@ function ServiceCard({
 
   return (
     <motion.div
-      ref={ref}
-      style={{ scale, opacity }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={handleMove}
-      className="group relative overflow-hidden rounded-3xl p-8 lg:p-10 bg-white border border-dorado/20 hover:border-dorado/60 shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] transition-all duration-500"
+      className="group relative overflow-hidden rounded-3xl p-8 lg:p-10 bg-white border border-dorado/20 hover:border-dorado/60 shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] transition-all duration-300"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -182,7 +166,8 @@ export default function Servicios({
   });
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const n = listaServicios.length;
-    setActivo(Math.max(0, Math.min(n - 1, Math.floor(v * n))));
+    const nextIdx = Math.max(0, Math.min(n - 1, Math.floor(v * n)));
+    setActivo((prev) => (prev !== nextIdx ? nextIdx : prev));
   });
 
   return (

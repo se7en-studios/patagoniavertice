@@ -6,7 +6,6 @@ import { track } from "@/lib/analytics";
 import {
   motion,
   MotionConfig,
-  useScroll,
   useSpring,
   useTransform,
 } from "framer-motion";

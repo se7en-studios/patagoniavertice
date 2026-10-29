@@ -6,10 +6,10 @@ import BandaLago from "@/components/marketing/BandaLago";
 import CintaMarquee from "@/components/marketing/CintaMarquee";
 import Ubicacion from "@/components/marketing/Ubicacion";
 import SectionRail from "@/components/marketing/SectionRail";
-import DecodeText from "@/components/ui/DecodeText";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { createClient } from "@/lib/supabase/server";
 import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
+import { getSiteConfig } from "@/lib/site-config";
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
@@ -32,8 +32,20 @@ export const metadata: Metadata = {
   },
 };
 
-const CINTA_UBICACIONES = ["Mari Menuco", "Cipolletti", "Catriel", "General Roca", "Vaca Muerta"];
-const CINTA_SERVICIOS = ["Compra & Venta", "Tasaciones", "Loteos", "Consultoría", "Contratos"];
+const CINTA_UBICACIONES = [
+  "Mari Menuco",
+  "Cipolletti",
+  "Catriel",
+  "General Roca",
+  "Vaca Muerta",
+];
+const CINTA_SERVICIOS = [
+  "Compra & Venta",
+  "Tasaciones",
+  "Loteos",
+  "Consultoría",
+  "Contratos",
+];
 
 // ── Lazy loading de secciones below-fold ────────────────────────────────────
 const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
@@ -59,10 +71,6 @@ const PorQueElegirnos = dynamic(
 );
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
 const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
-// Next 15 no permite ssr:false en Server Components; el canvas solo usa window dentro de useEffect.
-const SpotlightCursor = dynamic(() => import("@/components/ui/SpotlightCursor"));
-
-import { getSiteConfig } from "@/lib/site-config";
 
 export default async function HomePage() {
   let propiedadesDestacadas: PropiedadDestacada[] = [];
@@ -91,16 +99,14 @@ export default async function HomePage() {
       <SectionRail />
 
       <div id="sec-inicio">
-        <Hero />
+        <Hero heroConfig={siteConfig.hero} />
       </div>
-      <Manifiesto />
+      <Manifiesto statsCustom={siteConfig.statsManifiesto} />
 
-      {/* Cinta de texto que reacciona a la velocidad del scroll */}
       <CintaMarquee items={CINTA_UBICACIONES} />
 
-      {/* Banda full-bleed con parallax: Mari Menuco */}
       <div id="sec-lago">
-        <BandaLago />
+        <BandaLago config={siteConfig.bandaLago} />
       </div>
 
       <div id="sec-propiedades">
@@ -140,7 +146,7 @@ export default async function HomePage() {
       <PorQueElegirnos />
 
       <div id="sec-faq">
-        <FAQ />
+        <FAQ faqsCustom={siteConfig.faqs} />
         <FaqJsonLd />
       </div>
 

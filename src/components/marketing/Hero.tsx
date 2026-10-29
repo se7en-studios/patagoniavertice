@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import type { HeroLandingConfig } from "@/lib/site-config-types";
 
 const WA_HERO =
   "https://wa.me/5492996095742?text=Hola%20Altum%20SCI%2C%20quisiera%20asesoramiento%20personalizado%20sobre%20propiedades%20e%20inversiones.";
@@ -40,13 +41,27 @@ const TITLE_LINES = [
 const SELECT =
   "appearance-none bg-[#FBF0CF]/85 hover:bg-[#FBF0CF] px-3 py-1 rounded-xl font-display font-semibold text-navy border border-dorado/50 hover:border-dorado focus:outline-none focus:border-dorado cursor-pointer [field-sizing:content] max-w-full transition-colors shadow-sm";
 
-export default function Hero() {
+export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
 
   const [operacion, setOperacion] = useState("venta");
   const [tipo, setTipo] = useState("todos");
   const [zona, setZona] = useState("todas");
+
+  const eyebrowText =
+    heroConfig?.eyebrow || "ALTUM SCI · Servicios & Consultoría Inmobiliaria";
+  const lines = heroConfig?.tituloPrincipal
+    ? [
+        { text: heroConfig.tituloPrincipal, cls: "text-navy" },
+        {
+          text: heroConfig.tituloCursiva || "de la Patagonia.",
+          cls: "italic text-[#A47C1B]",
+        },
+      ]
+    : TITLE_LINES;
+  const ctaSecundarioText =
+    heroConfig?.ctaSecundario || "Hablar directamente con Estela";
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -90,7 +105,7 @@ export default function Hero() {
         >
           <span className="w-2 h-2 rounded-full bg-dorado" />
           <span className="font-body text-[10px] sm:text-[11px] font-semibold tracking-[0.18em] uppercase text-navy">
-            ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria
+            {eyebrowText}
           </span>
           <span className="hidden sm:inline font-body text-[11px] text-[#8A6A1B] font-semibold">
             · Neuquén &amp; Río Negro
@@ -103,9 +118,9 @@ export default function Hero() {
             fontSize: "clamp(2.5rem, min(6.4vw, 9.5vh), 5.6rem)",
             letterSpacing: "-0.03em",
           }}
-          aria-label={TITLE_LINES.map((l) => l.text).join(" ")}
+          aria-label={lines.map((l) => l.text).join(" ")}
         >
-          {TITLE_LINES.map((line, i) => (
+          {lines.map((line, i) => (
             <span
               key={line.text}
               className="block overflow-hidden pb-[0.08em]"
@@ -236,7 +251,7 @@ export default function Hero() {
                 className="object-cover"
               />
             </span>
-            <span>Hablar directamente con Estela</span>
+            <span>{ctaSecundarioText}</span>
             <span>→</span>
           </a>
         </div>

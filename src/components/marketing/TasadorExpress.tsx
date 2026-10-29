@@ -6,8 +6,6 @@ import {
   motion,
   AnimatePresence,
   MotionConfig,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";

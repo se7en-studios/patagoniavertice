@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import type { StatManifiesto } from "@/lib/site-config-types";
 
 const STATS = [
   { value: 4, suffix: "", label: "Zonas de operación" },
@@ -10,7 +11,11 @@ const STATS = [
   { value: 100, suffix: "%", label: "Trámite legal y remoto" },
 ];
 
-export default function Manifiesto() {
+export default function Manifiesto({
+  statsCustom,
+}: {
+  statsCustom?: StatManifiesto[];
+}) {
   return (
     <section
       className="relative bg-[#F6F8FB] py-20 lg:py-28 overflow-hidden"
@@ -45,28 +50,51 @@ export default function Manifiesto() {
 
       {/* Datos verificables */}
       <div className="relative z-10 max-w-5xl mx-auto mt-14 px-5 sm:px-8 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
-        {STATS.map((s, i) => (
-          <motion.div
-            key={s.label}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{
-              duration: 0.5,
-              delay: i * 0.07,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            className="group rounded-3xl bg-white border border-dorado/25 hover:border-dorado/65 shadow-[0_14px_34px_-20px_rgba(14,26,51,0.2)] hover:-translate-y-1 transition-all duration-200 px-5 py-6 lg:py-7 text-center relative overflow-hidden"
-          >
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
-              <AnimatedNumber value={s.value} suffix={s.suffix} />
-            </dd>
-            <dt className="font-body text-navy/65 text-[10px] tracking-[0.18em] uppercase mt-2 font-semibold">
-              {s.label}
-            </dt>
-          </motion.div>
-        ))}
+        {statsCustom && statsCustom.length > 0
+          ? statsCustom.map((st, i) => (
+              <motion.div
+                key={st.id || i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.07,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="group rounded-3xl bg-white border border-dorado/25 hover:border-dorado/65 shadow-[0_14px_34px_-20px_rgba(14,26,51,0.2)] hover:-translate-y-1 transition-all duration-200 px-5 py-6 lg:py-7 text-center relative overflow-hidden"
+              >
+                <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
+                  {st.valor}
+                </dd>
+                <dt className="font-body text-navy/65 text-[10px] tracking-[0.18em] uppercase mt-2 font-semibold">
+                  {st.etiqueta}
+                </dt>
+              </motion.div>
+            ))
+          : STATS.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.07,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="group rounded-3xl bg-white border border-dorado/25 hover:border-dorado/65 shadow-[0_14px_34px_-20px_rgba(14,26,51,0.2)] hover:-translate-y-1 transition-all duration-200 px-5 py-6 lg:py-7 text-center relative overflow-hidden"
+              >
+                <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
+                  <AnimatedNumber value={s.value} suffix={s.suffix} />
+                </dd>
+                <dt className="font-body text-navy/65 text-[10px] tracking-[0.18em] uppercase mt-2 font-semibold">
+                  {s.label}
+                </dt>
+              </motion.div>
+            ))}
       </div>
     </section>
   );

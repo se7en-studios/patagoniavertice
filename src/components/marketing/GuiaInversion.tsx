@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, MotionConfig, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion, MotionConfig } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";

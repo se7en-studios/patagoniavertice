@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { faqs } from "@/components/seo/faqData";
+import type { FaqLandingItem } from "@/lib/site-config-types";
 
 const categorias = [
   "Todas",
@@ -12,13 +14,22 @@ const categorias = [
   "Marco Legal",
 ] as const;
 
-export default function FAQ() {
+export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
   const [categoriaActiva, setCategoriaActiva] =
     useState<(typeof categorias)[number]>("Todas");
   const [busqueda, setBusqueda] = useState("");
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const filtradas = faqs.filter((faq) => {
+  const baseFaqs =
+    faqsCustom && faqsCustom.length > 0
+      ? faqsCustom.map((f) => ({
+          categoria: f.categoria || "Comprar & Invertir",
+          pregunta: f.pregunta,
+          respuesta: f.respuesta,
+        }))
+      : faqs;
+
+  const filtradas = baseFaqs.filter((faq) => {
     const matchCat =
       categoriaActiva === "Todas" || faq.categoria === categoriaActiva;
     const matchText =
@@ -92,11 +103,15 @@ export default function FAQ() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-dorado/30 hover:border-dorado shadow-sm transition-all"
               >
-                <img
-                  src="/estela-avatar.jpg"
-                  alt="Estela Mari Rojas"
-                  className="w-11 h-11 rounded-full object-cover ring-2 ring-dorado/50 shrink-0"
-                />
+                <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-dorado/50 shrink-0">
+                  <Image
+                    src="/estela-avatar.jpg"
+                    alt="Estela Mari Rojas"
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
+                </div>
                 <div className="min-w-0 flex-1">
                   <span className="block font-display text-sm font-semibold text-navy group-hover:text-[#8A6A1B] transition-colors">
                     ¿Tenés una consulta específica?

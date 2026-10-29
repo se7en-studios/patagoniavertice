@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import type { BandaLagoConfig } from "@/lib/site-config-types";
 
 const PUNTOS = [
   "Frente al lago con bajada náutica",
@@ -10,7 +11,13 @@ const PUNTOS = [
   "Escrituración con martillera colegiada",
 ];
 
-export default function BandaLago() {
+export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
+  const etiqueta = config?.etiqueta || "Mari Menuco · Neuquén";
+  const precioDesde = config?.precioDesde || "Desde USD 32.000";
+  const titulo = config?.titulo || "Tu lote,";
+  const tituloCursiva = config?.tituloCursiva || "frente al lago";
+  const superficieRef = config?.superficieRef || "750–1000 m²";
+  const distanciaRef = config?.distanciaRef || "65 km";
   return (
     <section className="relative bg-[#F6F8FB] px-4 lg:px-8 py-10 lg:py-16">
       <div className="relative h-[78vh] min-h-[560px] max-w-[1400px] mx-auto overflow-hidden rounded-[2rem] lg:rounded-[3rem] shadow-[0_30px_70px_-30px_rgba(14,26,51,0.45)] border border-dorado/25">
@@ -41,10 +48,10 @@ export default function BandaLago() {
             >
               <div className="flex items-center justify-between gap-2 mb-5">
                 <span className="inline-flex items-center rounded-full bg-[#FBF0CF] text-[#7A5A12] font-body text-[11px] font-semibold tracking-[0.14em] uppercase px-3.5 py-1.5">
-                  Mari Menuco · Neuquén
+                  {etiqueta}
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-wider text-navy/60 font-semibold">
-                  Desde USD 32.000
+                  {precioDesde}
                 </span>
               </div>
               <h2
@@ -54,9 +61,9 @@ export default function BandaLago() {
                   letterSpacing: "-0.03em",
                 }}
               >
-                Tu lote,{" "}
+                {titulo}{" "}
                 <em className="not-italic italic text-[#A47C1B]">
-                  frente al lago
+                  {tituloCursiva}
                 </em>
               </h2>
 
@@ -64,7 +71,7 @@ export default function BandaLago() {
               <div className="grid grid-cols-3 gap-2 mb-5 py-3 border-y border-navy/10 text-center">
                 <div>
                   <span className="block font-display text-base font-bold text-navy">
-                    750–1000 m²
+                    {superficieRef}
                   </span>
                   <span className="block font-body text-[9px] uppercase tracking-wider text-navy/55">
                     Superficie
@@ -72,7 +79,7 @@ export default function BandaLago() {
                 </div>
                 <div className="border-x border-navy/10">
                   <span className="block font-display text-base font-bold text-navy">
-                    65 km
+                    {distanciaRef}
                   </span>
                   <span className="block font-body text-[9px] uppercase tracking-wider text-navy/55">
                     De Neuquén

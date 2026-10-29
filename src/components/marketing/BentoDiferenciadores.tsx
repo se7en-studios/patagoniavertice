@@ -1,12 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import {
   motion,
   useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
 } from "framer-motion";
 
 /**

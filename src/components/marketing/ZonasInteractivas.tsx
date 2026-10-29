@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 interface ZonaInfo {
@@ -91,64 +97,97 @@ const ZONAS_PATAGONIA: ZonaInfo[] = [
 
 export default function ZonasInteractivas() {
   const [zonaActiva, setZonaActiva] = useState<ZonaInfo>(ZONAS_PATAGONIA[0]);
+  const reduced = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: panelRef,
+    offset: ["start end", "end start"],
+  });
+  // Parallax leve de la foto dentro del panel.
+  const imgY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduced ? ["0%", "0%"] : ["-7%", "7%"],
+  );
+  const reveal = (delay = 0) =>
+    reduced
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-60px" },
+          transition: {
+            duration: 0.6,
+            delay,
+            ease: [0.16, 1, 0.3, 1] as const,
+          },
+        };
 
   return (
     <section
-      className="py-24 lg:py-36 relative overflow-hidden text-crema"
-      style={{ background: "#050811" }}
+      className="py-24 lg:py-36 relative overflow-hidden text-navy bg-[#F6F8FB]"
       id="zonas-cobertura"
     >
       {/* Background glow */}
       <div
-        className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[700px] h-[350px] opacity-15 blur-[140px] pointer-events-none rounded-full"
+        className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[700px] h-[350px] opacity-10 blur-[140px] pointer-events-none rounded-full"
         style={{ background: "#C9A84C" }}
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
+        <motion.div
+          {...reveal()}
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12"
+        >
           <div>
             <div className="flex items-center gap-4 mb-4">
               <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] text-dorado">
+              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
                 Territorio &amp; Mercado Estratégico
               </span>
             </div>
             <h2
-              className="font-display font-medium text-crema leading-[1.05]"
+              className="font-display font-medium text-navy leading-[1.05]"
               style={{
                 fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
                 letterSpacing: "-0.02em",
               }}
             >
               Donde la Patagonia{" "}
-              <em className="not-italic italic text-dorado">crece y rinde</em>
+              <em className="not-italic italic text-[#A47C1B]">
+                crece y rinde
+              </em>
             </h2>
-            <p className="font-body text-crema/55 text-sm lg:text-base max-w-xl mt-4">
-              Explorá las 4 micro-regiones con mayor desarrollo, plusvalía y retorno de capital en Neuquén y Río Negro con el respaldo de <strong>ALTUM SCI</strong>.
+            <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-4">
+              Explorá las 4 micro-regiones con mayor desarrollo, plusvalía y
+              retorno de capital en Neuquén y Río Negro con el respaldo de{" "}
+              <strong>ALTUM SCI</strong>.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 border border-dorado/30 bg-navy-950/80 px-4 py-2 self-start lg:self-auto backdrop-blur-sm">
+          <div className="flex items-center gap-2 rounded-full border border-white bg-white/80 px-4 py-2 self-start lg:self-auto shadow-sm backdrop-blur-sm">
             <span className="w-2 h-2 rounded-full bg-dorado animate-ping" />
-            <span className="font-body text-crema/70 text-xs tracking-wider uppercase font-medium">
+            <span className="font-body text-navy/70 text-xs tracking-wider uppercase font-medium">
               4 Zonas con Operaciones Activas
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Territory Tabs Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-          {ZONAS_PATAGONIA.map((zona) => {
+          {ZONAS_PATAGONIA.map((zona, i) => {
             const isSelected = zona.id === zonaActiva.id;
             return (
-              <button
+              <motion.button
                 key={zona.id}
+                {...reveal(0.08 * i)}
                 onClick={() => setZonaActiva(zona)}
-                className={`p-4 text-left border transition-all relative overflow-hidden backdrop-blur-sm ${
+                aria-pressed={isSelected}
+                className={`p-4 text-left border rounded-2xl transition-colors relative overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado ${
                   isSelected
-                    ? "border-dorado bg-navy-900/90 text-crema shadow-lg"
-                    : "border-crema/10 bg-navy-950/40 text-crema/50 hover:border-crema/30 hover:text-crema"
+                    ? "border-dorado bg-white text-navy shadow-lg"
+                    : "border-white bg-white/50 text-navy/50 hover:border-navy/20 hover:text-navy"
                 }`}
               >
                 {isSelected && (
@@ -158,114 +197,121 @@ export default function ZonasInteractivas() {
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                <span className="block font-body text-[9px] tracking-[0.2em] uppercase text-dorado/80 mb-1">
+                <span className="block font-body text-[9px] tracking-[0.2em] uppercase text-[#8A6A1B] mb-1">
                   {zona.provincia}
                 </span>
-                <span className="block font-display text-sm md:text-base font-semibold text-crema">
+                <span className="block font-display text-sm md:text-base font-semibold text-navy">
                   {zona.nombre}
                 </span>
-                <span className="block font-body text-[9.5px] text-crema/65 truncate mt-0.5">
+                <span className="block font-body text-[9.5px] text-navy/55 truncate mt-0.5">
                   {zona.tipoInversion.split("·")[0]}
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>
 
         {/* Dynamic Feature Panel */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={zonaActiva.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative border border-dorado/30 bg-navy-900/70 overflow-hidden backdrop-blur-xl shadow-2xl"
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
-              {/* Left Column: Image with dynamic overlay */}
-              <div className="lg:col-span-7 relative min-h-[340px] lg:min-h-[540px] overflow-hidden">
-                <Image
-                  src={zonaActiva.imagen}
-                  alt={zonaActiva.nombre}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-navy-950 via-navy-950/45 to-transparent" />
+        <div ref={panelRef}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={zonaActiva.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="relative rounded-[2rem] border border-white bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
+                {/* Left Column: Image with dynamic overlay */}
+                <div className="lg:col-span-7 relative min-h-[340px] lg:min-h-[540px] overflow-hidden">
+                  <motion.div
+                    className="absolute inset-x-0 -inset-y-[8%]"
+                    style={{ y: imgY }}
+                  >
+                    <Image
+                      src={zonaActiva.imagen}
+                      alt={zonaActiva.nombre}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 60vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </motion.div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-navy-950/5 to-transparent" />
 
-                {/* Floating pill over image */}
-                <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-black/60 backdrop-blur-md border border-dorado/30 text-dorado font-body text-[10px] tracking-wider uppercase font-semibold">
-                    <span>✦</span>
-                    <span>{zonaActiva.tipoInversion}</span>
+                  {/* Floating pill over image */}
+                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white text-[#8A6A1B] font-body text-[10px] tracking-wider uppercase font-semibold">
+                      <span>✦</span>
+                      <span>{zonaActiva.tipoInversion}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: Information & Points */}
+                <div className="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-between space-y-6">
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <span className="font-body text-[#8A6A1B] text-[11px] tracking-[0.25em] uppercase font-semibold">
+                        {zonaActiva.provincia} · Polo Seleccionado
+                      </span>
+                      <h3 className="font-display text-3xl lg:text-4xl text-navy font-medium">
+                        {zonaActiva.nombre}
+                      </h3>
+                    </div>
+
+                    <p className="font-body text-[#8A6A1B] text-sm font-medium leading-snug">
+                      {zonaActiva.tagline}
+                    </p>
+
+                    <p className="font-body text-navy/65 text-sm leading-relaxed">
+                      {zonaActiva.descripcion}
+                    </p>
+
+                    {/* Highlights */}
+                    <div className="space-y-2.5 pt-4 border-t border-navy/10">
+                      <h4 className="font-body text-navy/55 text-[10px] tracking-[0.2em] uppercase">
+                        Ventajas Estratégicas
+                      </h4>
+                      {zonaActiva.destacados.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2.5 text-xs text-navy/80 font-body"
+                        >
+                          <span className="text-[#A47C1B] mt-0.5">✓</span>
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t border-navy/10">
+                    <Link
+                      href={zonaActiva.enlace}
+                      className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all text-center shadow-md"
+                    >
+                      <span>Ver Oportunidades</span>
+                      <span>→</span>
+                    </Link>
+
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                        `Hola ALTUM SCI, me interesa consultar opciones de inversión y propiedades en ${zonaActiva.nombre} (${zonaActiva.provincia}).`,
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-6 py-3.5 rounded-full border border-navy/15 text-navy/70 hover:text-[#8A6A1B] hover:border-dorado transition-colors text-center text-xs tracking-wider"
+                    >
+                      Consultar Asesor
+                    </a>
                   </div>
                 </div>
               </div>
-
-              {/* Right Column: Information & Points */}
-              <div className="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <span className="font-body text-dorado text-[11px] tracking-[0.25em] uppercase font-semibold">
-                      {zonaActiva.provincia} · Polo Seleccionado
-                    </span>
-                    <h3 className="font-display text-3xl lg:text-4xl text-crema font-medium">
-                      {zonaActiva.nombre}
-                    </h3>
-                  </div>
-
-                  <p className="font-body text-dorado text-sm font-medium leading-snug">
-                    {zonaActiva.tagline}
-                  </p>
-
-                  <p className="font-body text-crema/65 text-sm leading-relaxed">
-                    {zonaActiva.descripcion}
-                  </p>
-
-                  {/* Highlights */}
-                  <div className="space-y-2.5 pt-4 border-t border-crema/10">
-                    <h4 className="font-body text-crema/65 text-[10px] tracking-[0.2em] uppercase">
-                      Ventajas Estratégicas
-                    </h4>
-                    {zonaActiva.destacados.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-2.5 text-xs text-crema/80 font-body"
-                      >
-                        <span className="text-dorado mt-0.5">✓</span>
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t border-crema/10">
-                  <Link
-                    href={zonaActiva.enlace}
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all text-center shadow-md"
-                  >
-                    <span>Ver Oportunidades</span>
-                    <span>→</span>
-                  </Link>
-
-                  <a
-                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                      `Hola ALTUM SCI, me interesa consultar opciones de inversión y propiedades en ${zonaActiva.nombre} (${zonaActiva.provincia}).`,
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center p-3.5 border border-crema/20 text-crema/80 hover:text-dorado hover:border-dorado transition-colors text-center text-xs tracking-wider"
-                  >
-                    Consultar Asesor
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );

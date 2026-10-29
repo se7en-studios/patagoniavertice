@@ -1,0 +1,74 @@
+{
+  "perfil": {
+    "nombre": "Estela Mari Rojas",
+    "titulo": "Martillera y Corredora Pública Colegiada",
+    "matricula": "Mat. 35 RP 2026",
+    "colegio": "Colegio de Martilleros y Corredores Públicos de Río Negro (IV Circunscripción)",
+    "telefono": "+54 9 299 609-5742",
+    "whatsapp": "5492996095742",
+    "email": "altumsci@gmail.com",
+    "foto": "/estela.jpg",
+    "bio": "Martillera y Corredora Pública con amplia trayectoria en el mercado inmobiliario patagónico. Especializada en desarrollo territorial, loteos premium frente al lago Mari Menuco, tasaciones periciales oficiales y contratos corporativos con máxima seguridad jurídica y notarial.",
+    "cobertura": "Mari Menuco, Cipolletti, Catriel, General Roca y Río Negro",
+    "aniosExperiencia": 12,
+    "operacionesConcretadas": 180
+  },
+  "servicios": [
+    {
+      "id": "venta",
+      "titulo": "Compra & Venta de Inmuebles",
+      "descripcion": "Gestión integral de compraventa de residencias, lotes y chacras con auditoría de títulos y contratos garantizados.",
+      "activo": true
+    },
+    {
+      "id": "loteos",
+      "titulo": "Desarrollo & Loteos frente al Lago",
+      "descripcion": "Comercialización exclusiva de terrenos en Bahía de las Playas (Mari Menuco) con factibilidad de servicios y alta plusvalía.",
+      "activo": true
+    },
+    {
+      "id": "tasaciones",
+      "titulo": "Tasaciones Periciales Oficiales",
+      "descripcion": "Dictámenes de valuación con firma colegiada (Mat. 35 RP 2026) válidos para bancos, sucesiones, escrituraciones y compraventa.",
+      "activo": true
+    },
+    {
+      "id": "alquileres",
+      "titulo": "Alquiler Corporativo & Residencial",
+      "descripcion": "Administración llave en mano de propiedades para empresas petroleras y familias en Cipolletti y Catriel.",
+      "activo": true
+    },
+    {
+      "id": "consultoria",
+      "titulo": "Consultoría Legal & Notarial",
+      "descripcion": "Asesoramiento en cesiones de derechos, reglamentos de copropiedad y operaciones a distancia para no residentes.",
+      "activo": true
+    }
+  ],
+  "zonas": [
+    {
+      "id": "mari-menuco",
+      "nombre": "Mari Menuco (Neuquén)",
+      "destacado": "Barrio Privado Bahía de las Playas",
+      "activo": true
+    },
+    {
+      "id": "cipolletti",
+      "nombre": "Cipolletti (Río Negro)",
+      "destacado": "Residencial & Barrios Cerrados",
+      "activo": true
+    },
+    {
+      "id": "catriel",
+      "nombre": "Catriel & Vaca Muerta",
+      "destacado": "Alquileres Corporativos en USD",
+      "activo": true
+    },
+    {
+      "id": "general-roca",
+      "nombre": "General Roca (Alto Valle)",
+      "destacado": "Chacras & Lotes en Expansión",
+      "activo": true
+    }
+  ]
+}

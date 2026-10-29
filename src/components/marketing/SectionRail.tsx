@@ -16,6 +16,7 @@ const STOPS = [
 ];
 
 // Riel lateral (solo escritorio ancho): un punto dorado marca en qué parte de la página estás.
+// Solo se monta en la home, que va en tono claro.
 export default function SectionRail() {
   const [active, setActive] = useState(-1);
 
@@ -42,7 +43,7 @@ export default function SectionRail() {
       <ol className="relative grid gap-4">
         <span
           aria-hidden="true"
-          className="absolute bottom-1 left-[5px] top-1 w-px bg-crema/15"
+          className="absolute bottom-1 left-[5px] top-1 w-px bg-navy/15"
         />
         {STOPS.map((s, i) => (
           <li key={s.id}>
@@ -56,13 +57,13 @@ export default function SectionRail() {
                 aria-hidden="true"
                 className={`relative z-10 block size-[11px] rounded-full border transition-all duration-500 ${
                   i === active
-                    ? "scale-125 border-dorado bg-dorado shadow-[0_0_14px_3px_rgba(201,168,76,0.6)]"
+                    ? "scale-125 border-dorado bg-dorado shadow-[0_0_14px_3px_rgba(201,168,76,0.5)]"
                     : i < active
                       ? "border-dorado/60 bg-dorado/40"
-                      : "border-crema/30 bg-navy-950"
+                      : "border-navy/25 bg-white"
                 }`}
               />
-              <span className="whitespace-nowrap bg-navy-950/85 px-2.5 py-1 font-body text-[10px] uppercase tracking-[0.18em] text-crema opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="whitespace-nowrap rounded-full bg-white/90 px-3 py-1 font-body text-[10px] uppercase tracking-[0.18em] text-navy opacity-0 shadow-sm backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {s.label}
               </span>
             </a>

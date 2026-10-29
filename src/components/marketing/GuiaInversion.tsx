@@ -1,10 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, MotionConfig, useScroll, useTransform } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";
+
+const PUNTOS = [
+  "Análisis de plusvalía y precios por m² en Alto Valle.",
+  "Renta en USD en Catriel y zonas de influencia energética.",
+  "Procedimiento 100% legal y remoto para no residentes.",
+  "Supervisado por Martillera Colegiada (Mat. 35 RP 2026).",
+];
+
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+const rise = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+const FIELD =
+  "w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors";
+const LABEL =
+  "block font-body text-[10px] tracking-wider uppercase text-navy/55 mb-1.5 ml-1";
 
 export default function GuiaInversion() {
   const [solicitado, setSolicitado] = useState(false);
@@ -14,6 +36,15 @@ export default function GuiaInversion() {
 
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // La "portada" de la guía se endereza y sube mientras scrolleás.
+  const secRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: secRef,
+    offset: ["start end", "center center"],
+  });
+  const coverRotate = useTransform(scrollYProgress, [0, 1], [-9, 0]);
+  const coverY = useTransform(scrollYProgress, [0, 1], [70, 0]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,172 +77,196 @@ export default function GuiaInversion() {
   };
 
   return (
-    <section
-      className="py-24 bg-navy-950 text-crema relative overflow-hidden"
-      style={{ background: "#060A13" }}
-    >
-      <div
-        className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[300px] opacity-10 blur-[130px] pointer-events-none rounded-full"
-        style={{ background: "#C9A84C" }}
-      />
+    <MotionConfig reducedMotion="user">
+      <section
+        ref={secRef}
+        className="py-24 bg-[#F6F8FB] text-navy relative overflow-hidden"
+      >
+        <div
+          className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[300px] opacity-15 blur-[130px] pointer-events-none rounded-full"
+          style={{ background: "#C9A84C" }}
+          aria-hidden="true"
+        />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center p-8 lg:p-14 border border-dorado/30 bg-navy-900/60 backdrop-blur-xl">
-          {/* Left Info */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-3 text-dorado text-[11px] font-body tracking-[0.25em] uppercase font-semibold">
-              <span>✦</span>
-              <span>Informe Exclusivo para Inversores</span>
-            </div>
-
-            <h2
-              className="font-display text-3xl lg:text-4xl text-crema font-medium leading-tight"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Guía Estratégica de Inversión en{" "}
-              <em className="not-italic italic text-dorado font-normal">
-                Río Negro & Vaca Muerta 2026
-              </em>
-            </h2>
-
-            <p className="font-body text-crema/60 text-sm lg:text-base leading-relaxed">
-              Descubrí las zonas con mayor tasa de plusvalía, rendimientos en
-              alquiler corporativo y aspectos fiscales y notariales clave antes
-              de comprar en la Patagonia.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
-                <span className="text-dorado">✓</span>
-                <span>
-                  Análisis de plusvalía y precios por m² en Alto Valle.
-                </span>
-              </div>
-              <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
-                <span className="text-dorado">✓</span>
-                <span>
-                  Renta en USD en Catriel y zonas de influencia energética.
-                </span>
-              </div>
-              <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
-                <span className="text-dorado">✓</span>
-                <span>
-                  Procedimiento 100% legal y remoto para no residentes.
-                </span>
-              </div>
-              <div className="flex items-start gap-2.5 text-xs text-crema/80 font-body">
-                <span className="text-dorado">✓</span>
-                <span>
-                  Supervisado por Martillera Colegiada (Mat. 35 RP 2026).
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Lead Capture Box */}
-          <div
-            className="lg:col-span-5 p-6 lg:p-8 bg-navy-950 border border-dorado/40 shadow-2xl"
-            style={{ background: "#080E1A" }}
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center p-8 lg:p-14 rounded-[2.5rem] border border-white bg-white/80 backdrop-blur-xl shadow-[0_30px_70px_-34px_rgba(14,26,51,0.35)]"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            {solicitado ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8 space-y-4"
-              >
-                <div className="w-12 h-12 mx-auto rounded-full bg-dorado/20 text-dorado flex items-center justify-center text-xl font-bold">
-                  ✓
-                </div>
-                <h3 className="font-display text-2xl text-crema">
-                  ¡Solicitud enviada!
-                </h3>
-                <p className="font-body text-crema/60 text-xs leading-relaxed">
-                  Te hemos redirigido a WhatsApp para enviarte la guía de forma
-                  inmediata.
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <span className="font-body text-dorado text-[10px] tracking-[0.2em] uppercase block mb-1">
-                    Acceso Inmediato y Gratuito
-                  </span>
-                  <h3 className="font-display text-xl text-crema font-medium">
-                    Recibir la Guía por WhatsApp
-                  </h3>
-                </div>
-
-                <div>
-                  <label className="block font-body text-[10px] tracking-wider uppercase text-crema/50 mb-1">
-                    Nombre Completo
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    placeholder="Ej: Marcelo Fernández"
-                    className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-body text-[10px] tracking-wider uppercase text-crema/50 mb-1">
-                    Teléfono / WhatsApp
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
-                    placeholder="+54 9 11 0000 0000"
-                    className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-body text-[10px] tracking-wider uppercase text-crema/50 mb-1">
-                    Zona de Interés
-                  </label>
-                  <select
-                    value={ciudadInteres}
-                    onChange={(e) => setCiudadInteres(e.target.value)}
-                    className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
-                  >
-                    <option value="Cipolletti">Cipolletti (Alto Valle)</option>
-                    <option value="Catriel">Catriel (Renta Petrolera)</option>
-                    <option value="General Roca">
-                      General Roca (Lotes & Chacras)
-                    </option>
-                    <option value="Bariloche">
-                      Bariloche (Renta Turística)
-                    </option>
-                  </select>
-                </div>
-
-                {error && (
-                  <p role="alert" className="font-body text-xs text-red-400">
-                    {error}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={enviando}
-                  className="w-full py-3.5 px-6 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
+            {/* Left Info */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="flex items-center gap-5">
+                <motion.div
+                  aria-hidden="true"
+                  style={{ rotate: coverRotate, y: coverY }}
+                  className="hidden sm:flex shrink-0 w-20 h-28 rounded-2xl bg-navy text-white flex-col justify-between p-3 shadow-[0_18px_40px_-16px_rgba(14,26,51,0.6)]"
                 >
-                  {enviando ? "Enviando..." : "Solicitar Guía en PDF"}
-                </button>
+                  <span className="font-body text-[7px] tracking-[0.2em] uppercase text-dorado">
+                    Altum SCI
+                  </span>
+                  <span className="font-display text-lg leading-none">
+                    Guía
+                    <br />
+                    <span className="text-dorado">2026</span>
+                  </span>
+                </motion.div>
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#FBF0CF] text-[#7A5A12] text-[11px] font-body tracking-[0.2em] uppercase font-semibold px-4 py-2">
+                  <span>✦</span>
+                  <span>Informe Exclusivo para Inversores</span>
+                </span>
+              </div>
 
-                <p className="text-[10px] font-body text-crema/55 text-center">
-                  Sin spam. Estela te responde personalmente por WhatsApp o
-                  mail.
-                </p>
-              </form>
-            )}
-          </div>
+              <h2
+                className="font-display text-3xl lg:text-4xl text-navy font-medium leading-tight"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                Guía Estratégica de Inversión en{" "}
+                <em className="not-italic italic text-[#A47C1B] font-normal">
+                  Río Negro & Vaca Muerta 2026
+                </em>
+              </h2>
+
+              <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
+                Descubrí las zonas con mayor tasa de plusvalía, rendimientos en
+                alquiler corporativo y aspectos fiscales y notariales clave
+                antes de comprar en la Patagonia.
+              </p>
+
+              <motion.ul
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"
+                variants={stagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+              >
+                {PUNTOS.map((p) => (
+                  <motion.li
+                    key={p}
+                    variants={rise}
+                    className="flex items-start gap-2.5 rounded-2xl bg-[#F6F8FB] border border-navy/5 px-4 py-3 text-xs text-navy/80 font-body"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="w-4 h-4 mt-px rounded-full bg-[#DFF1EA] text-[#2F7D6B] flex items-center justify-center text-[9px] font-bold shrink-0"
+                    >
+                      ✓
+                    </span>
+                    <span>{p}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </div>
+
+            {/* Right Lead Capture Box */}
+            <div className="lg:col-span-5 p-6 lg:p-8 rounded-[2rem] bg-[#EAF0F7] border border-white">
+              {solicitado ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-8 space-y-4"
+                >
+                  <div className="w-12 h-12 mx-auto rounded-full bg-[#DFF1EA] text-[#2F7D6B] flex items-center justify-center text-xl font-bold">
+                    ✓
+                  </div>
+                  <h3 className="font-display text-2xl text-navy">
+                    ¡Solicitud enviada!
+                  </h3>
+                  <p className="font-body text-navy/60 text-xs leading-relaxed">
+                    Te hemos redirigido a WhatsApp para enviarte la guía de
+                    forma inmediata.
+                  </p>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <span className="font-body text-[#8A6A1B] text-[10px] tracking-[0.2em] uppercase block mb-1">
+                      Acceso Inmediato y Gratuito
+                    </span>
+                    <h3 className="font-display text-xl text-navy font-medium">
+                      Recibir la Guía por WhatsApp
+                    </h3>
+                  </div>
+
+                  <div>
+                    <label htmlFor="guia-nombre" className={LABEL}>
+                      Nombre Completo
+                    </label>
+                    <input
+                      id="guia-nombre"
+                      type="text"
+                      required
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                      placeholder="Ej: Marcelo Fernández"
+                      className={FIELD}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="guia-tel" className={LABEL}>
+                      Teléfono / WhatsApp
+                    </label>
+                    <input
+                      id="guia-tel"
+                      type="tel"
+                      required
+                      value={telefono}
+                      onChange={(e) => setTelefono(e.target.value)}
+                      placeholder="+54 9 11 0000 0000"
+                      className={FIELD}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="guia-zona" className={LABEL}>
+                      Zona de Interés
+                    </label>
+                    <select
+                      id="guia-zona"
+                      value={ciudadInteres}
+                      onChange={(e) => setCiudadInteres(e.target.value)}
+                      className={FIELD}
+                    >
+                      <option value="Cipolletti">
+                        Cipolletti (Alto Valle)
+                      </option>
+                      <option value="Catriel">Catriel (Renta Petrolera)</option>
+                      <option value="General Roca">
+                        General Roca (Lotes & Chacras)
+                      </option>
+                      <option value="Bariloche">
+                        Bariloche (Renta Turística)
+                      </option>
+                    </select>
+                  </div>
+
+                  {error && (
+                    <p role="alert" className="font-body text-xs text-red-600">
+                      {error}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={enviando}
+                    className="w-full py-3.5 px-6 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
+                  >
+                    {enviando ? "Enviando..." : "Solicitar Guía en PDF"}
+                  </button>
+
+                  <p className="text-[10px] font-body text-navy/55 text-center">
+                    Sin spam. Estela te responde personalmente por WhatsApp o
+                    mail.
+                  </p>
+                </form>
+              )}
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+    </MotionConfig>
   );
 }

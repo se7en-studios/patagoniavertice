@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { WHATSAPP_URL } from "@/lib/constants";
 
 const navLinks = [
@@ -24,8 +29,16 @@ const zonaLinks = [
 ];
 
 export default function Footer() {
+  const light = usePathname() === "/";
+  const t = (c: string) => tone(light, c);
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const markY = useTransform(scrollYProgress, [0, 1], reduced ? ["0%", "0%"] : ["45%", "0%"]);
+  const markOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+
   return (
-    <footer style={{ background: "#0D1628" }} className="text-crema">
+    <footer ref={ref} style={{ background: light ? "#EAF0F7" : "#0D1628" }} className={t("text-crema")}>
       {/* Top gold accent line */}
       <div
         className="h-px"
@@ -44,20 +57,20 @@ export default function Footer() {
                 src="/logoo.png"
                 alt="ALTUM SCI - Servicios & Consultoría Inmobiliaria"
                 className="h-16 md:h-24 w-auto object-contain"
-                style={{ mixBlendMode: "screen", filter: "brightness(1.05)" }}
+                style={light ? undefined : { mixBlendMode: "screen", filter: "brightness(1.05)" }}
               />
             </Link>
-            <p className="font-body text-crema/50 text-sm leading-relaxed mb-4">
+            <p className={t("font-body text-crema/50 text-sm leading-relaxed mb-4")}>
               <strong>ALTUM SCI</strong> · Servicios &amp; Consultoría Inmobiliaria. Liderado por <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora Colegiada Mat. 35 RP 2026). Operaciones con seguridad jurídica y notarial en Neuquén y Río Negro.
             </p>
-            <p className="font-body text-dorado/70 text-[11px] tracking-[0.18em] uppercase">
+            <p className={t("font-body text-dorado/70 text-[11px] tracking-[0.18em] uppercase")}>
               Neuquén · Río Negro · Patagonia
             </p>
           </div>
 
           {/* ── Navegación ── */}
           <div>
-            <h4 className="font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6">
+            <h4 className={t("font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6")}>
               Navegación
             </h4>
             <nav className="flex flex-col gap-3">
@@ -65,7 +78,7 @@ export default function Footer() {
                 <Link
                   key={l.href + l.label}
                   href={l.href}
-                  className="footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200"
+                  className={t("footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200")}
                 >
                   {l.label}
                 </Link>
@@ -75,7 +88,7 @@ export default function Footer() {
 
           {/* ── Servicios ── */}
           <div>
-            <h4 className="font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6">
+            <h4 className={t("font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6")}>
               Servicios
             </h4>
             <nav className="flex flex-col gap-3">
@@ -83,7 +96,7 @@ export default function Footer() {
                 <Link
                   key={l.label}
                   href={l.href}
-                  className="footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200"
+                  className={t("footer-link self-start font-body text-crema/65 text-sm hover:text-dorado transition-colors duration-200")}
                 >
                   {l.label}
                 </Link>
@@ -93,11 +106,11 @@ export default function Footer() {
 
           {/* ── Contacto ── */}
           <div>
-            <h4 className="font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6">
+            <h4 className={t("font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-6")}>
               Contacto
             </h4>
 
-            <div className="flex flex-col gap-4 font-body text-crema/65 text-sm mb-7">
+            <div className={t("flex flex-col gap-4 font-body text-crema/65 text-sm mb-7")}>
               {/* Dirección */}
               <div className="flex items-start gap-3">
                 <LocationIcon />
@@ -113,7 +126,7 @@ export default function Footer() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 hover:text-dorado transition-colors duration-200"
+                className={t("flex items-center gap-3 hover:text-dorado transition-colors duration-200")}
               >
                 <WaIcon />
                 +54 9 2996 09-5742
@@ -122,7 +135,7 @@ export default function Footer() {
               {/* Email */}
               <a
                 href="mailto:altumsci@gmail.com"
-                className="flex items-center gap-3 hover:text-dorado transition-colors duration-200"
+                className={t("flex items-center gap-3 hover:text-dorado transition-colors duration-200")}
               >
                 <EmailIcon />
                 altumsci@gmail.com
@@ -132,18 +145,21 @@ export default function Footer() {
             {/* Redes sociales */}
             <div className="flex items-center gap-2">
               <SocialLink
+                light={light}
                 href="https://instagram.com/altumsci"
                 label="Instagram Altum Inmobiliaria"
               >
                 <InstagramIcon />
               </SocialLink>
               <SocialLink
+                light={light}
                 href="https://linkedin.com/company/altum-sdi"
                 label="LinkedIn Altum Inmobiliaria"
               >
                 <LinkedInIcon />
               </SocialLink>
               <SocialLink
+                light={light}
                 href={WHATSAPP_URL}
                 label="WhatsApp Altum Inmobiliaria"
               >
@@ -154,8 +170,8 @@ export default function Footer() {
         </div>
 
         {/* ── Zonas que cubrimos ── */}
-        <div className="border-t border-crema/8 pt-10 pb-2 mb-6">
-          <h4 className="font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-4">
+        <div className={t("border-t border-crema/8 pt-10 pb-2 mb-6")}>
+          <h4 className={t("font-body text-dorado text-[11px] tracking-[0.25em] uppercase mb-4")}>
             Zonas que cubrimos
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -163,7 +179,7 @@ export default function Footer() {
               <Link
                 key={l.href + l.label}
                 href={l.href}
-                className="font-body text-crema/65 text-xs tracking-wide border border-crema/10 px-3.5 py-1.5 hover:border-dorado/50 hover:text-dorado transition-colors duration-200"
+                className={t("font-body text-crema/65 text-xs tracking-wide border border-crema/10 px-3.5 py-1.5 hover:border-dorado/50 hover:text-dorado transition-colors duration-200") + (light ? " rounded-full bg-white" : "")}
               >
                 {l.label}
               </Link>
@@ -172,12 +188,12 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="border-t border-crema/8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-crema/60 text-xs tracking-wider">
+        <div className={t("border-t border-crema/8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4")}>
+          <p className={t("font-body text-crema/60 text-xs tracking-wider")}>
             © 2026 ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Mat. 35 RP 2026. Todos los derechos reservados.
           </p>
 
-          <div className="flex items-center gap-2 font-body text-xs tracking-wider text-crema/55">
+          <div className={t("flex items-center gap-2 font-body text-xs tracking-wider text-crema/55")}>
             <span>Hecho por</span>
             <a
               href="https://se7endev.vercel.app/"
@@ -196,27 +212,49 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link
               href="/contacto"
-              className="footer-link font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200"
+              className={t("footer-link font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200")}
             >
               Contacto
             </Link>
-            <span className="text-crema/10 select-none">·</span>
+            <span className={t("text-crema/10 select-none")}>·</span>
             <Link
               href="/admin"
-              className="font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200 flex items-center gap-1.5"
+              className={t("font-body text-crema/55 text-xs tracking-wider hover:text-dorado transition-colors duration-200 flex items-center gap-1.5")}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-dorado/60 inline-block" />
+              <span className={t("w-1.5 h-1.5 rounded-full bg-dorado/60 inline-block")} />
               Acceso Propietaria
             </Link>
-            <span className="text-crema/10 select-none">·</span>
-            <span className="font-body text-crema/15 text-xs tracking-wider">
+            <span className={t("text-crema/10 select-none")}>·</span>
+            <span className={t("font-body text-crema/15 text-xs tracking-wider")}>
               Río Negro, Argentina
             </span>
           </div>
         </div>
       </div>
+
+      {light && (
+        <motion.div
+          aria-hidden="true"
+          style={{ y: markY, opacity: markOpacity }}
+          className="select-none overflow-hidden text-center font-display font-semibold leading-[0.8] tracking-tight text-navy/[0.06]"
+        >
+          <span style={{ fontSize: "clamp(4rem, 19vw, 16rem)" }}>ALTUM SCI</span>
+        </motion.div>
+      )}
     </footer>
   );
+}
+
+// Clases oscuras → claras. Solo se aplica en la home (light); el resto del sitio sigue oscuro.
+function tone(light: boolean, cls: string) {
+  if (!light) return cls;
+  return cls
+    .replace(/bg-navy-950\/\d+/g, "bg-white/95")
+    .replace(/bg-navy-900\/\d+/g, "bg-white")
+    .replace(/border-crema\/\d+/g, "border-navy/10")
+    .replace(/text-crema\/(\d+)/g, (_, n) => `text-navy/${Math.max(Number(n), 60)}`)
+    .replace(/text-crema(?![\w/])/g, "text-navy")
+    .replace(/(hover:)?text-dorado(\/\d+)?/g, "$1text-[#8A6A1B]");
 }
 
 /* ── Icon helpers ───────────────────────────────────────────────────────── */
@@ -224,9 +262,11 @@ export default function Footer() {
 function SocialLink({
   href,
   label,
+  light,
   children,
 }: {
   href: string;
+  light: boolean;
   label: string;
   children: React.ReactNode;
 }) {
@@ -236,7 +276,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-8 h-8 flex items-center justify-center border border-crema/10 text-crema/55 hover:border-dorado/50 hover:text-dorado transition-all duration-200"
+      className={tone(light, "w-8 h-8 flex items-center justify-center border border-crema/10 text-crema/55 hover:border-dorado/50 hover:text-dorado transition-all duration-200") + (light ? " rounded-full bg-white" : "")}
     >
       {children}
     </a>

@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  MotionConfig,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
@@ -32,7 +38,16 @@ const RANGOS_SUPERFICIE = [
   "Más de 800 m² / Fracción o Lote",
 ];
 
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
+const rise = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
+};
+
 export default function TasadorExpress() {
+  const secRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: secRef, offset: ["start end", "end start"] });
+  const blobY = useTransform(scrollYProgress, [0, 1], [90, -90]);
   const [tipo, setTipo] = useState("casa");
   const [localidad, setLocalidad] = useState("Cipolletti");
   const [superficie, setSuperficie] = useState("70 a 150 m²");
@@ -82,19 +97,18 @@ export default function TasadorExpress() {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <section
-      className="py-24 lg:py-36 relative overflow-hidden text-crema"
-      style={{ background: "#060A14" }}
+      ref={secRef}
+      className="py-24 lg:py-36 relative overflow-hidden text-navy bg-[#EAF0F7]"
       id="tasador-express"
     >
       {/* Background accents */}
-      <div
-        className="absolute top-0 right-0 w-[550px] h-[550px] pointer-events-none opacity-15 blur-[130px] rounded-full"
-        style={{ background: "#C9A84C" }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-[550px] h-[550px] pointer-events-none opacity-10 blur-[150px] rounded-full"
-        style={{ background: "#1A2752" }}
+      {/* Luz dorada que sube con el scroll */}
+      <motion.div
+        className="absolute top-0 right-0 w-[550px] h-[550px] pointer-events-none opacity-20 blur-[130px] rounded-full"
+        style={{ background: "#C9A84C", y: blobY }}
+        aria-hidden="true"
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
@@ -103,7 +117,7 @@ export default function TasadorExpress() {
           <div className="lg:col-span-5 space-y-6">
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] text-dorado">
+              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
                 ALTUM SCI · Tasación Oficial Certificada
               </span>
             </div>
@@ -116,77 +130,86 @@ export default function TasadorExpress() {
               }}
             >
               ¿Cuánto vale tu propiedad en{" "}
-              <em className="not-italic italic text-dorado">Patagonia?</em>
+              <em className="not-italic italic text-[#A47C1B]">Patagonia?</em>
             </h2>
 
-            <p className="font-body text-crema/60 text-sm lg:text-base leading-relaxed">
+            <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
               Tasaciones inmobiliarias con rigor técnico y legal a cargo de{" "}
               <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora
               Pública Colegiada Mat. 35 RP 2026).
             </p>
 
             {/* Checklist de Garantías */}
-            <div className="space-y-4 pt-4 border-t border-crema/10">
-              <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
+            <motion.div
+              className="space-y-4 pt-4 border-t border-navy/10"
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-80px" }}
+            >
+              <motion.div variants={rise} className="flex items-start gap-3.5">
+                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
                   ✓
                 </div>
                 <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
+                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
                     Análisis Comparativo de Mercado Real
                   </h4>
-                  <p className="font-body text-crema/45 text-xs">
+                  <p className="font-body text-navy/55 text-xs">
                     Basado en operaciones efectivas y escrituras cerradas en la
                     zona, sin sobrevaluaciones ficticias.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
+              <motion.div variants={rise} className="flex items-start gap-3.5">
+                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
                   ✓
                 </div>
                 <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
+                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
                     Validez Notarial, Judicial y Bancaria
                   </h4>
-                  <p className="font-body text-crema/45 text-xs">
+                  <p className="font-body text-navy/55 text-xs">
                     Revisión de títulos, planos y estado dominial para
                     garantizar una operación sin sorpresas.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
+              <motion.div variants={rise} className="flex items-start gap-3.5">
+                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
                   ✓
                 </div>
                 <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
+                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
                     Dictamen Rápido y Personalizado
                   </h4>
-                  <p className="font-body text-crema/45 text-xs">
+                  <p className="font-body text-navy/55 text-xs">
                     Coordinamos inspección in situ o relevamiento satelital y
                     virtual inmediato.
                   </p>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
 
           {/* Right Column: Interactive Card */}
           <div className="lg:col-span-7">
-            <div
-              className="p-8 lg:p-10 border border-dorado/30 relative backdrop-blur-xl shadow-[0_25px_60px_rgba(0,0,0,0.7)]"
-              style={{ background: "rgba(13,22,40,0.85)" }}
+            <motion.div
+              className="p-8 lg:p-10 rounded-[2rem] border border-white bg-white/80 relative backdrop-blur-xl shadow-[0_30px_70px_-30px_rgba(14,26,51,0.4)]"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Header Card */}
-              <div className="flex items-center justify-between border-b border-crema/10 pb-5 mb-8">
+              <div className="flex items-center justify-between pb-5 mb-4">
                 <div>
-                  <span className="font-body text-dorado text-[11px] tracking-[0.2em] uppercase">
+                  <span className="font-body text-[#8A6A1B] text-[11px] tracking-[0.2em] uppercase">
                     Paso {step} de 2
                   </span>
-                  <h3 className="font-display text-xl font-medium text-crema mt-0.5">
+                  <h3 className="font-display text-xl font-medium text-navy mt-0.5">
                     {step === 1
                       ? "Datos preliminares del inmueble"
                       : "Resumen y solicitud de tasación"}
@@ -194,28 +217,37 @@ export default function TasadorExpress() {
                 </div>
 
                 {/* Switch Operación */}
-                <div className="flex bg-navy-950 p-1 border border-crema/15">
+                <div className="flex bg-navy/5 p-1 rounded-full">
                   <button
                     onClick={() => setOperacion("vender")}
-                    className={`px-3.5 py-1.5 font-body text-[10px] tracking-widest uppercase transition-colors ${
+                    className={`px-3.5 py-1.5 rounded-full font-body text-[10px] tracking-widest uppercase transition-colors ${
                       operacion === "vender"
                         ? "bg-dorado text-tierra font-semibold"
-                        : "text-crema/50 hover:text-crema"
+                        : "text-navy/55 hover:text-navy"
                     }`}
                   >
                     Venta
                   </button>
                   <button
                     onClick={() => setOperacion("alquilar")}
-                    className={`px-3.5 py-1.5 font-body text-[10px] tracking-widest uppercase transition-colors ${
+                    className={`px-3.5 py-1.5 rounded-full font-body text-[10px] tracking-widest uppercase transition-colors ${
                       operacion === "alquilar"
                         ? "bg-dorado text-tierra font-semibold"
-                        : "text-crema/50 hover:text-crema"
+                        : "text-navy/55 hover:text-navy"
                     }`}
                   >
                     Alquiler
                   </button>
                 </div>
+              </div>
+
+              <div className="h-1.5 rounded-full bg-navy/10 mb-8 overflow-hidden" aria-hidden="true">
+                <motion.div
+                  className="h-full w-full rounded-full bg-dorado origin-left"
+                  initial={false}
+                  animate={{ scaleX: step / 2 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                />
               </div>
 
               <AnimatePresence mode="wait">
@@ -229,7 +261,7 @@ export default function TasadorExpress() {
                   >
                     {/* Selector de Tipo */}
                     <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-crema/60 mb-3">
+                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
                         1. Tipo de Propiedad
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -241,10 +273,10 @@ export default function TasadorExpress() {
                               marcarInicio();
                               setTipo(t.id);
                             }}
-                            className={`p-3 text-left border transition-all flex items-center gap-2.5 ${
+                            className={`p-3 text-left rounded-2xl border transition-all flex items-center gap-2.5 ${
                               tipo === t.id
-                                ? "border-dorado bg-dorado/15 text-dorado font-medium"
-                                : "border-crema/10 bg-navy-950/40 text-crema/60 hover:border-crema/30 hover:text-crema"
+                                ? "border-dorado bg-[#FBF0CF] text-[#7A5A12] font-medium"
+                                : "border-navy/10 bg-white text-navy/65 hover:border-navy/30 hover:text-navy"
                             }`}
                           >
                             <span className="text-base">{t.icon}</span>
@@ -258,7 +290,7 @@ export default function TasadorExpress() {
 
                     {/* Selector de Localidad */}
                     <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-crema/60 mb-3">
+                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
                         2. Localidad / Zona en Patagonia
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -270,10 +302,10 @@ export default function TasadorExpress() {
                               marcarInicio();
                               setLocalidad(loc);
                             }}
-                            className={`p-2.5 text-center border font-body text-xs transition-all ${
+                            className={`p-2.5 text-center rounded-full border font-body text-xs transition-all ${
                               localidad === loc
                                 ? "border-dorado bg-dorado text-tierra font-semibold"
-                                : "border-crema/10 bg-navy-950/40 text-crema/60 hover:border-crema/30 hover:text-crema"
+                                : "border-navy/10 bg-white text-navy/65 hover:border-navy/30 hover:text-navy"
                             }`}
                           >
                             {loc}
@@ -284,7 +316,7 @@ export default function TasadorExpress() {
 
                     {/* Selector de Superficie */}
                     <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-crema/60 mb-3">
+                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
                         3. Superficie estimada
                       </label>
                       <div className="flex flex-wrap gap-2">
@@ -296,10 +328,10 @@ export default function TasadorExpress() {
                               marcarInicio();
                               setSuperficie(sup);
                             }}
-                            className={`px-3 py-1.5 border font-body text-[11px] transition-all ${
+                            className={`px-4 py-2 rounded-full border font-body text-[11px] transition-all ${
                               superficie === sup
-                                ? "border-dorado text-dorado bg-dorado/15 font-medium"
-                                : "border-crema/10 text-crema/50 hover:text-crema/80"
+                                ? "border-dorado text-[#7A5A12] bg-[#FBF0CF] font-medium"
+                                : "border-navy/10 bg-white text-navy/55 hover:text-navy"
                             }`}
                           >
                             {sup}
@@ -316,7 +348,7 @@ export default function TasadorExpress() {
                           marcarInicio();
                           setStep(2);
                         }}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-md"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-md"
                       >
                         <span>Continuar</span>
                         <span>→</span>
@@ -332,40 +364,40 @@ export default function TasadorExpress() {
                     className="space-y-6"
                   >
                     {/* Resumen de Tasación */}
-                    <div className="p-6 bg-navy-950/70 border border-crema/10 space-y-3">
-                      <h4 className="font-body text-dorado text-[11px] tracking-[0.2em] uppercase">
+                    <div className="p-6 rounded-3xl bg-[#F6F8FB] border border-navy/10 space-y-3">
+                      <h4 className="font-body text-[#8A6A1B] text-[11px] tracking-[0.2em] uppercase">
                         Detalles seleccionados
                       </h4>
-                      <div className="grid grid-cols-2 gap-4 text-xs font-body text-crema/70 pt-2 border-t border-crema/10">
+                      <div className="grid grid-cols-2 gap-4 text-xs font-body text-navy/70 pt-2 border-t border-navy/10">
                         <div>
-                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
+                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
                             Inmueble
                           </span>
-                          <span className="font-medium text-crema">
+                          <span className="font-medium text-navy">
                             {TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
+                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
                             Ubicación
                           </span>
-                          <span className="font-medium text-crema">
+                          <span className="font-medium text-navy">
                             {localidad}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
+                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
                             Superficie
                           </span>
-                          <span className="font-medium text-crema">
+                          <span className="font-medium text-navy">
                             {superficie}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
+                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
                             Operación
                           </span>
-                          <span className="font-medium text-crema capitalize">
+                          <span className="font-medium text-navy capitalize">
                             {operacion}
                           </span>
                         </div>
@@ -381,7 +413,7 @@ export default function TasadorExpress() {
                         onChange={(e) => setNombre(e.target.value)}
                         placeholder="Tu nombre"
                         aria-label="Tu nombre"
-                        className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
+                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
                       />
                       <input
                         type="tel"
@@ -391,11 +423,11 @@ export default function TasadorExpress() {
                         onChange={(e) => setTelefono(e.target.value)}
                         placeholder="Tu WhatsApp o teléfono"
                         aria-label="Tu WhatsApp o teléfono"
-                        className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
+                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
                       />
                     </div>
 
-                    <p className="font-body text-crema/60 text-xs leading-relaxed">
+                    <p className="font-body text-navy/60 text-xs leading-relaxed">
                       Estela te responde personalmente por WhatsApp. Al
                       continuar se abrirá la conversación con los datos de tu
                       inmueble ya cargados.
@@ -404,7 +436,7 @@ export default function TasadorExpress() {
                     {error && (
                       <p
                         role="alert"
-                        className="font-body text-xs text-red-400"
+                        className="font-body text-xs text-red-600"
                       >
                         {error}
                       </p>
@@ -415,7 +447,7 @@ export default function TasadorExpress() {
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="px-5 py-3.5 border border-crema/20 font-body text-xs uppercase tracking-wider text-crema/60 hover:text-crema transition-colors"
+                        className="px-5 py-3.5 rounded-full border border-navy/20 font-body text-xs uppercase tracking-wider text-navy/60 hover:text-navy transition-colors"
                       >
                         ← Volver a editar
                       </button>
@@ -424,7 +456,7 @@ export default function TasadorExpress() {
                         type="button"
                         onClick={solicitarTasacion}
                         disabled={enviando}
-                        className="flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
+                        className="flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
                       >
                         <span>
                           {enviando
@@ -437,10 +469,11 @@ export default function TasadorExpress() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
     </section>
+    </MotionConfig>
   );
 }

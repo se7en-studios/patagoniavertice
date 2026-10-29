@@ -6,7 +6,6 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { SlideInLeft, SlideInRight } from "@/components/ui/AnimateOnScroll";
 import PatagoniaGallery from "@/components/marketing/PatagoniaGallery";
-import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const valores = [
   "Transparencia",
@@ -25,8 +24,6 @@ export interface PerfilProps {
 }
 
 export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
-  const titleRef = useScrollReveal<HTMLHeadingElement>({ y: 30 });
-  const estelaRef = useScrollReveal<HTMLHeadingElement>({ y: 24 });
   const reduced = useReducedMotion();
 
   // Foto de Estela: parallax suave dentro del círculo.
@@ -135,9 +132,12 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                 <span className="eyebrow !text-[#8A6A1B]">Quiénes somos</span>
               </div>
 
-              <h2
-                ref={titleRef}
-                className="font-display text-navy font-medium leading-[1.08] mb-8 opacity-0"
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="font-display text-navy font-medium leading-[1.08] mb-8"
                 style={{
                   fontSize: "clamp(2.4rem, 4.8vw, 3.8rem)",
                   letterSpacing: "0.015em",
@@ -147,7 +147,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                 <em className="not-italic italic text-[#A47C1B]">
                   visión de futuro
                 </em>
-              </h2>
+              </motion.h2>
 
               <div className="space-y-4 font-body text-navy/60 text-[15px] leading-relaxed mb-10">
                 <p>
@@ -271,9 +271,12 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
               <SlideInRight delay={0.15}>
                 {/* Nombre + título */}
                 <div className="mb-6">
-                  <h2
-                    ref={estelaRef}
-                    className="font-display text-navy font-medium leading-[1.05] mb-2 opacity-0"
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-display text-navy font-medium leading-[1.05] mb-2"
                     style={{
                       fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
                       letterSpacing: "-0.02em",
@@ -283,7 +286,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                     <em className="not-italic italic text-[#A47C1B]">
                       {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
                     </em>
-                  </h2>
+                  </motion.h2>
                   <p className="font-body text-navy/60 text-xs tracking-[0.2em] uppercase font-semibold">
                     Martillera y Corredora Pública Colegiada · ALTUM SCI
                   </p>

@@ -84,16 +84,27 @@ export default function FAQ() {
               )}
             </div>
 
-            {/* Direct Contact Button */}
-            <div className="pt-4">
+            {/* Direct Contact Card */}
+            <div className="pt-2">
               <a
-                href="https://wa.me/5492996095742?text=Hola%20Altum%2C%20tengo%20una%20consulta%20que%20no%20figura%20en%20las%20preguntas%20frecuentes."
+                href="https://wa.me/5492996095742?text=Hola%20Estela%20(ALTUM%20SCI)%2C%20tengo%20una%20consulta%20que%20no%20figura%20en%20las%20preguntas%20frecuentes."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 font-body text-[#8A6A1B] text-xs tracking-[0.18em] uppercase hover:underline"
+                className="group flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-dorado/30 hover:border-dorado shadow-sm transition-all"
               >
-                <span>¿Tenés una consulta específica? Hablá con nosotros</span>
-                <span>→</span>
+                <img
+                  src="/estela-avatar.jpg"
+                  alt="Estela Mari Rojas"
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-dorado/50 shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="block font-display text-sm font-semibold text-navy group-hover:text-[#8A6A1B] transition-colors">
+                    ¿Tenés una consulta específica?
+                  </span>
+                  <span className="block font-body text-[11px] text-navy/60">
+                    Hablá directo con Estela por WhatsApp →
+                  </span>
+                </div>
               </a>
             </div>
           </div>

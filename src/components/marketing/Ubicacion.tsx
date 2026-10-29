@@ -157,18 +157,52 @@ export default function Ubicacion() {
           </div>
 
           <div className="lg:col-span-7">
-            <div className="rounded-[2rem] border border-white bg-white/80 backdrop-blur-xl p-3 sm:p-5 shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]">
+            <div className="rounded-[2rem] border border-dorado/25 bg-white/90 backdrop-blur-xl p-3 sm:p-5 shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]">
               <svg
                 viewBox="0 0 520 380"
                 className="block w-full h-auto max-h-[42svh] lg:max-h-[58svh]"
                 role="img"
                 aria-label="Ruta de 65 km desde Neuquén Capital hasta el lago Mari Menuco"
               >
+                <defs>
+                  <linearGradient id="lagoGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#9EC9EB" />
+                    <stop offset="100%" stopColor="#CBE3F6" />
+                  </linearGradient>
+                  <pattern
+                    id="mapGrid"
+                    width="40"
+                    height="40"
+                    patternUnits="userSpaceOnUse"
+                  >
+                    <path
+                      d="M 40 0 L 0 0 0 40"
+                      fill="none"
+                      stroke="#1A2752"
+                      strokeOpacity="0.045"
+                      strokeWidth="1"
+                    />
+                  </pattern>
+                </defs>
                 <rect width="520" height="380" rx="24" fill="#EAF2F9" />
-                {/* Lago */}
+                <rect width="520" height="380" rx="24" fill="url(#mapGrid)" />
+
+                {/* Curvas topográficas sutiles */}
+                <path
+                  d="M280 40 C350 15 500 30 515 110 C525 165 460 205 390 190 C320 175 250 120 280 40 Z"
+                  fill="none"
+                  stroke="#9EC9EB"
+                  strokeOpacity="0.45"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 6"
+                />
+
+                {/* Lago Mari Menuco */}
                 <path
                   d="M330 70 C380 40 480 50 500 100 C515 140 470 170 410 160 C360 152 300 120 330 70 Z"
-                  fill="#BCD8F0"
+                  fill="url(#lagoGrad)"
+                  stroke="#7EB4E2"
+                  strokeWidth="1.5"
                 />
                 <path
                   d="M350 96 C385 80 440 82 470 104"
@@ -178,6 +212,64 @@ export default function Ubicacion() {
                   strokeWidth="3"
                   strokeLinecap="round"
                 />
+
+                {/* Etiquetas de ruta */}
+                <g opacity="0.65">
+                  <rect
+                    x="142"
+                    y="246"
+                    width="52"
+                    height="20"
+                    rx="10"
+                    fill="#fff"
+                    stroke="#C9D6E6"
+                  />
+                  <text
+                    x="168"
+                    y="260"
+                    textAnchor="middle"
+                    fontSize="10"
+                    fontWeight="700"
+                    fill="#1A2752"
+                  >
+                    RP 7
+                  </text>
+                  <rect
+                    x="275"
+                    y="150"
+                    width="56"
+                    height="20"
+                    rx="10"
+                    fill="#fff"
+                    stroke="#C9D6E6"
+                  />
+                  <text
+                    x="303"
+                    y="164"
+                    textAnchor="middle"
+                    fontSize="10"
+                    fontWeight="700"
+                    fill="#1A2752"
+                  >
+                    RP 51
+                  </text>
+                </g>
+
+                {/* Rosa de los vientos */}
+                <g transform="translate(46, 46)" opacity="0.45">
+                  <circle r="16" fill="#fff" stroke="#1A2752" strokeWidth="1" />
+                  <path d="M0 -11 L3 0 L0 -2 L-3 0 Z" fill="#1A2752" />
+                  <text
+                    y="-19"
+                    textAnchor="middle"
+                    fontSize="9"
+                    fontWeight="700"
+                    fill="#1A2752"
+                  >
+                    N
+                  </text>
+                </g>
+
                 {/* Ruta base + ruta que se dibuja */}
                 <path
                   ref={pathRef}
@@ -211,13 +303,23 @@ export default function Ubicacion() {
                 <circle cx="70" cy="320" r="4" fill="#fff" />
                 <text
                   x="70"
-                  y="354"
+                  y="350"
                   textAnchor="middle"
-                  fontSize="15"
+                  fontSize="14"
                   fontWeight="800"
                   fill="#0F1B33"
                 >
-                  Neuquén
+                  Neuquén Capital
+                </text>
+                <text
+                  x="70"
+                  y="364"
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="600"
+                  fill="#545D70"
+                >
+                  Km 0 · Punto de partida
                 </text>
                 {/* Mari Menuco */}
                 <motion.g style={{ opacity: labelOpacity }}>
@@ -230,14 +332,24 @@ export default function Ubicacion() {
                     strokeWidth="4"
                   />
                   <text
-                    x="440"
-                    y="196"
+                    x="435"
+                    y="192"
                     textAnchor="middle"
-                    fontSize="15"
+                    fontSize="14"
                     fontWeight="800"
                     fill="#0F1B33"
                   >
-                    Mari Menuco
+                    Bahía de las Playas
+                  </text>
+                  <text
+                    x="435"
+                    y="207"
+                    textAnchor="middle"
+                    fontSize="10"
+                    fontWeight="700"
+                    fill="#8A6A1B"
+                  >
+                    Lago Mari Menuco · Km 65
                   </text>
                 </motion.g>
                 {/* Marcador que avanza */}
@@ -247,9 +359,14 @@ export default function Ubicacion() {
                 </g>
               </svg>
               <div className="flex flex-wrap items-center justify-between gap-3 mt-3 px-1">
-                <span className="inline-flex items-center rounded-full bg-[#DCECF8] text-[#25587F] font-body text-[11px] font-semibold tracking-[0.1em] uppercase px-3.5 py-1.5">
-                  Mari Menuco · Neuquén
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full bg-[#DCECF8] text-[#25587F] font-body text-[11px] font-semibold tracking-[0.1em] uppercase px-3.5 py-1.5">
+                    Mari Menuco · Neuquén
+                  </span>
+                  <span className="inline-flex items-center rounded-full bg-[#FBF0CF] text-[#7A5A12] font-body text-[11px] font-semibold tracking-[0.1em] uppercase px-3.5 py-1.5">
+                    ~45 min por autopista
+                  </span>
+                </div>
                 <a
                   href={MAPS_URL}
                   target="_blank"

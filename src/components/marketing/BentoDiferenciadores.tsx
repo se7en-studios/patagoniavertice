@@ -158,10 +158,10 @@ function BentoCard({
     <motion.div style={{ y }} className={isWide ? "md:col-span-2" : ""}>
       <motion.div
         variants={cardVariants}
-        className={`relative h-full p-6 lg:p-8 rounded-3xl group cursor-default overflow-hidden transition-shadow duration-300 hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.4)] ${
+        className={`relative h-full p-6 lg:p-8 rounded-3xl group cursor-default overflow-hidden transition-all duration-300 hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.4)] ${
           isDorado
-            ? "border border-dorado/40 bg-gradient-to-br from-[#FBF0CF] to-white shadow-[0_18px_40px_-26px_rgba(201,168,76,0.6)]"
-            : "border border-white bg-white shadow-[0_18px_40px_-26px_rgba(14,26,51,0.3)]"
+            ? "border border-dorado/50 hover:border-dorado bg-gradient-to-br from-[#FBF0CF] to-white shadow-[0_18px_40px_-26px_rgba(201,168,76,0.6)]"
+            : "border border-dorado/20 hover:border-dorado/60 bg-white shadow-[0_18px_40px_-26px_rgba(14,26,51,0.3)]"
         }`}
         whileHover={reduced ? undefined : { y: -4 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}

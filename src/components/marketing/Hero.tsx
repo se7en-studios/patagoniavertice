@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   motion,
   useMotionTemplate,
@@ -42,9 +43,9 @@ const TITLE_LINES = [
   { text: "Patagonia.", cls: "text-[#A47C1B]" },
 ];
 
-// Cada selector se achica al texto elegido (field-sizing) y se subraya en dorado.
+// Cada selector se achica al texto elegido (field-sizing) y tiene pastilla dorada interactiva.
 const SELECT =
-  "appearance-none bg-transparent font-display font-semibold text-navy border-b-2 border-dorado/70 hover:border-dorado focus:outline-none focus:border-dorado cursor-pointer [field-sizing:content] max-w-full";
+  "appearance-none bg-[#FBF0CF]/65 hover:bg-[#FBF0CF] px-2.5 py-0.5 rounded-xl font-display font-semibold text-navy border border-dorado/45 hover:border-dorado focus:outline-none focus:border-dorado cursor-pointer [field-sizing:content] max-w-full transition-colors shadow-sm";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -212,43 +213,59 @@ export default function Hero() {
           style={{ "--d": "1.0s" } as React.CSSProperties}
           className="hero-rise mt-3.5 flex flex-wrap items-center gap-2 text-xs font-body"
         >
-          <span className="text-navy/45 text-[11px] uppercase tracking-wider font-semibold mr-1">
+          <span className="text-navy/55 text-[11px] uppercase tracking-wider font-semibold mr-1">
             Destacados:
           </span>
           {[
             { label: "Lotes en Mari Menuco", t: "lote", z: "Neuquén" },
             { label: "Residencias Cipolletti", t: "venta", z: "Cipolletti" },
             { label: "Oportunidades Catriel", t: "todos", z: "Catriel" },
-          ].map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={() => {
-                setTipo(item.t);
-                setZona(item.z);
-              }}
-              className="px-3 py-1 rounded-full bg-white/70 hover:bg-white border border-black/5 hover:border-dorado/50 text-navy/70 hover:text-navy text-[11px] transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
+          ].map((item) => {
+            const active = tipo === item.t && zona === item.z;
+            return (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  setTipo(item.t);
+                  setZona(item.z);
+                }}
+                className={`px-3.5 py-1.5 rounded-full border text-[11px] font-medium transition-all ${
+                  active
+                    ? "bg-dorado border-dorado text-tierra font-semibold shadow-sm"
+                    : "bg-white/80 hover:bg-white border-dorado/25 hover:border-dorado/60 text-navy/75 hover:text-navy"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Respaldo y contacto */}
         <div
           style={{ "--d": "1.15s" } as React.CSSProperties}
-          className="hero-rise mt-5 flex flex-wrap items-center justify-between gap-y-3 font-body text-[11px] tracking-[0.14em] uppercase text-navy/60 pt-3 border-t border-navy/10 max-w-4xl"
+          className="hero-rise mt-5 flex flex-wrap items-center justify-between gap-y-3 font-body text-[11px] tracking-[0.14em] uppercase text-navy/70 pt-3.5 border-t border-navy/10 max-w-4xl"
         >
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             Operaciones seguras con Martillera Matriculada (Mat. 35 RP 2026)
           </span>
           <a
             href={WA_HERO}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold text-navy hover:text-[#8A6A1B] border-b border-navy/30 hover:border-dorado transition-colors"
+            className="inline-flex items-center gap-2 font-semibold text-navy hover:text-[#8A6A1B] bg-white/80 hover:bg-white px-3.5 py-1.5 rounded-full border border-dorado/35 hover:border-dorado shadow-sm transition-all"
           >
+            <span className="relative w-5 h-5 rounded-full overflow-hidden ring-1 ring-dorado/60 shrink-0">
+              <Image
+                src="/estela-avatar.jpg"
+                alt="Estela Mari Rojas"
+                fill
+                sizes="20px"
+                className="object-cover"
+              />
+            </span>
             <span>Hablar directamente con Estela</span>
             <span>→</span>
           </a>

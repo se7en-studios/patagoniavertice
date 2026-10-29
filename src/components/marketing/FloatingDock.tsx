@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
@@ -57,20 +58,30 @@ export default function FloatingDock() {
               ? "Cerrar asistente"
               : "Abrir Asistente WhatsApp Concierge"
           }
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-3 px-5 py-3.5 rounded-full font-body text-[11px] tracking-[0.16em] uppercase font-semibold text-tierra shadow-2xl transition-all duration-300"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          className="flex items-center gap-3 pl-2.5 pr-5 py-2.5 rounded-full font-body text-[11px] tracking-[0.14em] uppercase font-semibold text-tierra shadow-2xl transition-all duration-300"
           style={{
             background: modalOpen ? (light ? "#FFFFFF" : "#F5EFE6") : "#C9A84C",
             border: "1px solid rgba(201,168,76,0.6)",
             boxShadow: light
-              ? "0 10px 30px -8px rgba(14,26,51,0.3), 0 0 20px rgba(201,168,76,0.35)"
+              ? "0 12px 32px -8px rgba(14,26,51,0.35), 0 0 20px rgba(201,168,76,0.35)"
               : "0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4)",
           }}
         >
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-700 animate-pulse shrink-0" />
-          <WaMiniIcon />
-          <span>{modalOpen ? "Cerrar" : "ALTUM SCI Concierge"}</span>
+          <div className="relative shrink-0">
+            <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/80">
+              <Image
+                src="/estela-avatar.jpg"
+                alt="Estela Mari Rojas"
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-600 ring-2 ring-white" />
+          </div>
+          <span>{modalOpen ? "Cerrar" : "Consultar a Estela"}</span>
         </motion.button>
       </div>
 
@@ -83,17 +94,28 @@ export default function FloatingDock() {
             exit={{ opacity: 0, y: 20, scale: 0.94 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className={t("hidden lg:block fixed bottom-24 right-6 z-50 w-[92vw] max-w-sm p-6 bg-navy-950/95 text-crema border border-dorado/40 shadow-2xl backdrop-blur-2xl") + (light ? " rounded-3xl" : "")}
-            style={{ background: light ? "rgba(255,255,255,0.92)" : "rgba(8,14,26,0.95)" }}
+            style={{ background: light ? "rgba(255,255,255,0.95)" : "rgba(8,14,26,0.95)" }}
           >
             {/* Header Concierge */}
-            <div className={t("flex items-start justify-between border-b border-crema/10 pb-4 mb-4")}>
-              <div>
-                <span className={t("font-body text-dorado text-[10px] tracking-[0.2em] uppercase font-medium")}>
-                  ALTUM SCI Concierge
-                </span>
-                <h3 className={t("font-display text-lg font-medium text-crema")}>
-                  ¿En qué podemos asesorarte?
-                </h3>
+            <div className={t("flex items-center justify-between border-b border-crema/10 pb-4 mb-4 gap-3")}>
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-dorado/60 shrink-0">
+                  <Image
+                    src="/estela-avatar.jpg"
+                    alt="Estela Mari Rojas"
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <span className={t("font-body text-dorado text-[10px] tracking-[0.18em] uppercase font-semibold block truncate")}>
+                    Estela Mari Rojas · Mat. 35 RP 2026
+                  </span>
+                  <h3 className={t("font-display text-base font-medium text-crema truncate")}>
+                    ¿En qué puedo asesorarte?
+                  </h3>
+                </div>
               </div>
               <button
                 onClick={() => setModalOpen(false)}

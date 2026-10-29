@@ -289,6 +289,11 @@ export default function PropiedadesDestacadasHome({
                 `Hola Altum SCI, quisiera recibir información y coordinar visita para la propiedad: ${p.titulo} (${p.ciudad} - ${precioLabel})`,
               )}`;
 
+              const isFallback = PROPIEDADES_SHOWCASE_FALLBACK.some(
+                (f) => f.id === p.id,
+              );
+              const detailHref = isFallback ? "/proyectos" : `/proyectos/${p.id}`;
+
               return (
                 <motion.article
                   key={p.id}
@@ -319,7 +324,10 @@ export default function PropiedadesDestacadasHome({
                     aria-hidden="true"
                   />
                   {/* Imagen & Badges */}
-                  <div className="relative aspect-[16/11] overflow-hidden">
+                  <Link
+                    href={detailHref}
+                    className="relative block aspect-[16/11] overflow-hidden"
+                  >
                     <FotoParallax src={coverImage(p.imagenes)} alt={p.titulo} />
 
                     {/* Gradient Overlay */}
@@ -351,7 +359,7 @@ export default function PropiedadesDestacadasHome({
                         {p.ciudad.split(",")[0]}
                       </span>
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Body Content */}
                   <div className="p-6 flex-1 flex flex-col justify-between">
@@ -359,9 +367,11 @@ export default function PropiedadesDestacadasHome({
                       <p className="font-body text-navy/55 text-[10px] tracking-widest uppercase mb-1.5">
                         {p.barrio ? `${p.barrio}` : p.ciudad}
                       </p>
-                      <h3 className="font-display text-navy text-lg font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
-                        {p.titulo}
-                      </h3>
+                      <Link href={detailHref}>
+                        <h3 className="font-display text-navy text-lg font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
+                          {p.titulo}
+                        </h3>
+                      </Link>
 
                       {/* Metadatos: Superficie & Seguridad */}
                       <div className="grid grid-cols-2 gap-2 py-3 border-y border-navy/10 mb-6 font-body text-xs text-navy/60">
@@ -373,7 +383,7 @@ export default function PropiedadesDestacadasHome({
                         </div>
                         <div className="flex items-center gap-1.5 text-[#8A6A1B] justify-end">
                           <span>✦</span>
-                          <span className="truncate text-[10px] uppercase tracking-wider">
+                          <span className="truncate text-[10px] uppercase tracking-wider font-medium">
                             Mat. Colegiada
                           </span>
                         </div>
@@ -381,7 +391,7 @@ export default function PropiedadesDestacadasHome({
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex items-center gap-3 pt-1">
+                    <div className="flex items-center gap-2.5 pt-1">
                       <a
                         href={waLink}
                         target="_blank"
@@ -393,11 +403,10 @@ export default function PropiedadesDestacadasHome({
                       </a>
 
                       <Link
-                        href={`/contacto?propiedad=${encodeURIComponent(p.titulo)}`}
-                        className="inline-flex items-center justify-center p-3 rounded-full border border-navy/15 text-navy/60 hover:text-[#8A6A1B] hover:border-dorado transition-colors"
-                        title="Agendar visita"
+                        href={detailHref}
+                        className="inline-flex items-center justify-center px-4 py-3 rounded-full border border-navy/15 text-navy/75 hover:text-[#8A6A1B] hover:border-dorado font-body text-[10px] font-semibold uppercase tracking-wider transition-colors"
                       >
-                        <CalendarIcon />
+                        Ver ficha
                       </Link>
                     </div>
                   </div>

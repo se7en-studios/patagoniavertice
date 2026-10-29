@@ -17,7 +17,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isAdminOrAuth) {
     return (
-      <main className="min-h-screen bg-[#060913] text-[#F5EFE6]">
+      <main className="min-h-screen bg-[#060913] text-[#F5EFE6] cursor-default">
+        <CustomCursor />
         {children}
       </main>
     );

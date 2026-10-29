@@ -189,21 +189,50 @@
 
 /* ── Cursor styles ─────────────────────────── */
 html,
-body {
+body,
+main,
+div,
+section {
   cursor: default;
 }
 a,
 button,
-[role="button"] {
-  cursor: pointer;
+[role="button"],
+summary,
+label[for],
+select {
+  cursor: pointer !important;
 }
 input,
-textarea,
-select {
-  cursor: text;
+textarea {
+  cursor: text !important;
 }
-select {
-  cursor: pointer;
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  cursor: pointer !important;
+}
+
+.cursor-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(201, 168, 76, 0.08);
+  border: 1.5px solid rgba(201, 168, 76, 0.55);
+  box-shadow: 0 0 16px rgba(201, 168, 76, 0.25);
+  transition:
+    width 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+.cursor-dot.is-hovered {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(201, 168, 76, 0.14);
+  border: 1.5px solid #c9a84c;
+  box-shadow: 0 0 24px rgba(201, 168, 76, 0.45);
 }
 
 /* ── Nav underline (gold, width 0 → 100%) ───── */

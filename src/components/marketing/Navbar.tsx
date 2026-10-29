@@ -135,18 +135,21 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className={`font-body ${
               light
-                ? "text-navy/80 border-navy/15 bg-white/75 shadow-sm"
-                : "text-crema/70 border-crema/10"
-            } text-[11px] tracking-wider hover:text-dorado transition-colors flex items-center gap-2 group px-3.5 py-1.5 border hover:border-dorado/60 rounded-full`}
+                ? "text-navy/85 border-dorado/30 bg-white/85 shadow-sm"
+                : "text-crema/80 border-crema/15 bg-white/5"
+            } text-[11px] tracking-wider hover:text-[#8A6A1B] transition-all flex items-center gap-2.5 group px-3.5 py-1.5 border hover:border-dorado rounded-full`}
           >
-            <div className="relative w-5 h-5 rounded-full overflow-hidden shrink-0 ring-1 ring-dorado/60">
-              <Image
-                src="/estela-avatar.jpg"
-                alt="Estela Mari Rojas"
-                fill
-                sizes="20px"
-                className="object-cover"
-              />
+            <div className="relative shrink-0">
+              <div className="relative w-6 h-6 rounded-full overflow-hidden ring-1 ring-dorado/70">
+                <Image
+                  src="/estela-avatar.jpg"
+                  alt="Estela Mari Rojas"
+                  fill
+                  sizes="24px"
+                  className="object-cover"
+                />
+              </div>
+              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
             </div>
             <span className="font-medium">WhatsApp con Estela</span>
           </a>
@@ -236,13 +239,34 @@ export default function Navbar() {
                   delay: links.length * 0.06 + 0.05,
                   duration: 0.25,
                 }}
-                className="pt-4 pb-2"
+                className="pt-4 pb-2 space-y-2.5"
               >
-                <Link
-                  href="/contacto"
-                  className="btn-shimmer block font-body text-tierra text-[11px] tracking-[0.12em] font-medium uppercase px-5 py-3 text-center"
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-center gap-2.5 rounded-full border py-3 px-5 font-body text-[11px] tracking-wider font-semibold ${
+                    light
+                      ? "border-dorado/40 bg-white text-navy"
+                      : "border-crema/20 bg-white/5 text-crema"
+                  }`}
                 >
-                  Consultar Ahora
+                  <div className="relative w-5 h-5 rounded-full overflow-hidden ring-1 ring-dorado">
+                    <Image
+                      src="/estela-avatar.jpg"
+                      alt="Estela Mari Rojas"
+                      fill
+                      sizes="20px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <span>Hablar con Estela por WhatsApp</span>
+                </a>
+                <Link
+                  href="/#tasador-express"
+                  className="btn-shimmer block rounded-full font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-3 text-center shadow-md"
+                >
+                  ✦ Tasar Inmueble
                 </Link>
               </motion.div>
             </nav>

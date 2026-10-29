@@ -286,8 +286,8 @@ export default function CTAFinal() {
             style={{ y: imgY }}
           >
             <Image
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
-              alt="Paisaje patagónico - Altum Inmobiliaria, propiedades en Río Negro"
+              src="/mari-menuco/bahia-playas-1.jpg"
+              alt="Costa del Lago Mari Menuco - Altum SCI Propiedades en Patagonia"
               fill
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="object-cover"
@@ -299,26 +299,42 @@ export default function CTAFinal() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to top, rgba(14,26,51,0.55) 0%, transparent 55%)",
+                "linear-gradient(to top, rgba(14,26,51,0.75) 0%, rgba(14,26,51,0.15) 55%, transparent 100%)",
             }}
           />
 
           <motion.div
-            className="absolute bottom-10 left-8 right-8"
+            className="absolute bottom-8 left-8 right-8 space-y-4"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.5 }}
           >
             <p
-              className="font-display text-white/90 font-medium italic leading-snug"
-              style={{ fontSize: "clamp(1rem, 1.8vw, 1.3rem)" }}
+              className="font-display text-white font-medium italic leading-snug drop-shadow-sm"
+              style={{ fontSize: "clamp(1.1rem, 1.9vw, 1.4rem)" }}
             >
-              &ldquo;Donde el paisaje define el valor.&rdquo;
+              &ldquo;Donde el paisaje patagónico define el valor de tu patrimonio.&rdquo;
             </p>
-            <p className="font-body text-white/70 text-[10px] tracking-[0.25em] uppercase mt-2">
-              - Altum Inmobiliaria
-            </p>
+            <div className="flex items-center gap-3 pt-2 border-t border-white/20">
+              <div className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-dorado shrink-0">
+                <Image
+                  src="/estela-avatar.jpg"
+                  alt="Estela Mari Rojas"
+                  fill
+                  sizes="36px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="font-display text-white text-xs font-semibold">
+                  Estela Mari Rojas
+                </p>
+                <p className="font-body text-dorado text-[10px] tracking-[0.2em] uppercase">
+                  Martillera Pública · Mat. 35 RP 2026
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </motion.div>

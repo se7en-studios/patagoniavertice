@@ -94,7 +94,7 @@ function ServiceCard({
       ref={ref}
       style={{ scale, opacity }}
       onMouseMove={handleMove}
-      className="group relative overflow-hidden rounded-3xl p-8 lg:p-10 bg-white border border-white shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] transition-shadow duration-500"
+      className="group relative overflow-hidden rounded-3xl p-8 lg:p-10 bg-white border border-dorado/20 hover:border-dorado/60 shadow-[0_18px_40px_-26px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] transition-all duration-500"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"

@@ -20,7 +20,7 @@ export default function CustomCursor() {
 
     const onOver = (e: MouseEvent) => {
       const target = e.target as Element;
-      if (target.closest("a, button")) {
+      if (target.closest("a, button, [role='button'], select, label")) {
         el.classList.add("is-hovered");
       } else {
         el.classList.remove("is-hovered");

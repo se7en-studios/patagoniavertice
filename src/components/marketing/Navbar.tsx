@@ -33,12 +33,22 @@ export default function Navbar() {
 
   // En la home el navbar arranca transparente sobre el hero; en el resto de las páginas siempre va sólido.
   const solid = scrolled || pathname !== "/";
+  // La home va en tema claro; el resto de las páginas sigue oscuro.
+  const light = pathname === "/";
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500`}
       style={
-        solid
+        solid && light
+          ? {
+              background: "rgba(246,248,251,0.82)",
+              backdropFilter: "blur(20px) saturate(180%)",
+              WebkitBackdropFilter: "blur(20px) saturate(180%)",
+              borderBottom: "1px solid rgba(14,26,51,0.08)",
+              boxShadow: "0 4px 30px rgba(14,26,51,0.08)",
+            }
+          : solid
           ? {
               background: "rgba(8,14,26,0.82)",
               backdropFilter: "blur(20px) saturate(180%)",
@@ -67,12 +77,12 @@ export default function Navbar() {
             src="/logoo.png"
             alt="ALTUM SCI - Servicios y Consultoría Inmobiliaria"
             className="h-11 md:h-14 w-auto object-contain"
-            style={{ mixBlendMode: "screen", filter: "brightness(1.08)" }}
+            style={light ? undefined : { mixBlendMode: "screen", filter: "brightness(1.08)" }}
             whileHover={{ filter: "brightness(1.2)" }}
             transition={{ duration: 0.2 }}
           />
           <div className="hidden 2xl:flex flex-col border-l border-dorado/25 pl-3 py-0.5">
-            <span className="font-display text-crema text-xs md:text-sm font-semibold tracking-[0.16em] uppercase group-hover:text-dorado transition-colors">
+            <span className={`font-display ${light ? "text-navy" : "text-crema"} text-xs md:text-sm font-semibold tracking-[0.16em] uppercase group-hover:text-dorado transition-colors`}>
               ALTUM <span className="text-dorado">SCI</span>
             </span>
             <span className="hidden font-body text-[9px] tracking-[0.22em] text-crema/45 uppercase">
@@ -97,10 +107,10 @@ export default function Navbar() {
                 className="relative font-body text-[11px] tracking-[0.22em] uppercase transition-colors duration-300 py-1"
                 style={{
                   color: active
-                    ? "#C9A84C"
+                    ? light ? "#8A6A1B" : "#C9A84C"
                     : activeHover === l.href
-                      ? "rgba(245,239,230,1)"
-                      : "rgba(245,239,230,0.65)",
+                      ? light ? "rgba(15,27,51,1)" : "rgba(245,239,230,1)"
+                      : light ? "rgba(15,27,51,0.65)" : "rgba(245,239,230,0.65)",
                 }}
               >
                 {l.label}
@@ -122,14 +132,14 @@ export default function Navbar() {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-body text-crema/70 text-[11px] tracking-wider hover:text-dorado transition-colors flex items-center gap-2 group px-3 py-2 border border-crema/10 hover:border-dorado/40 rounded-sm"
+            className={`font-body ${light ? "text-navy/70 border-navy/15 bg-white/60" : "text-crema/70 border-crema/10"} text-[11px] tracking-wider hover:text-dorado transition-colors flex items-center gap-2 group px-4 py-2 border hover:border-dorado/60 rounded-full`}
           >
             <WaIcon />
             <span className="font-medium">WhatsApp</span>
           </a>
           <Link
             href="/#tasador-express"
-            className="btn-shimmer font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-2.5 hover:scale-[1.02] transition-transform duration-200 shadow-md"
+            className="btn-shimmer rounded-full font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-2.5 hover:scale-[1.02] transition-transform duration-200 shadow-md"
           >
             ✦ Tasar Inmueble
           </Link>
@@ -143,17 +153,17 @@ export default function Navbar() {
           aria-expanded={open}
         >
           <motion.span
-            className="block w-6 h-px bg-crema origin-center"
+            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"} origin-center`}
             animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.25 }}
           />
           <motion.span
-            className="block w-6 h-px bg-crema"
+            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"}`}
             animate={open ? { opacity: 0, x: -8 } : { opacity: 1, x: 0 }}
             transition={{ duration: 0.2 }}
           />
           <motion.span
-            className="block w-6 h-px bg-crema origin-center"
+            className={`block w-6 h-px ${light ? "bg-navy" : "bg-crema"} origin-center`}
             animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.25 }}
           />
@@ -171,9 +181,11 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="lg:hidden overflow-hidden"
             style={{
-              background: "rgba(8,14,26,0.97)",
+              background: light ? "rgba(246,248,251,0.98)" : "rgba(8,14,26,0.97)",
               backdropFilter: "blur(20px)",
-              borderBottom: "1px solid rgba(201,168,76,0.1)",
+              borderBottom: light
+                ? "1px solid rgba(14,26,51,0.08)"
+                : "1px solid rgba(201,168,76,0.1)",
             }}
           >
             <nav
@@ -190,14 +202,14 @@ export default function Navbar() {
                     duration: 0.25,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className="border-b border-crema/[0.06] last:border-b-0"
+                  className={`border-b ${light ? "border-navy/[0.08]" : "border-crema/[0.06]"} last:border-b-0`}
                 >
                   <Link
                     href={l.href}
                     className={`block font-body text-[11px] tracking-[0.25em] uppercase py-4 transition-colors ${
                       pathname === l.href
-                        ? "text-dorado"
-                        : "text-crema/60 hover:text-dorado"
+                        ? light ? "text-[#8A6A1B]" : "text-dorado"
+                        : light ? "text-navy/70 hover:text-[#8A6A1B]" : "text-crema/60 hover:text-dorado"
                     }`}
                   >
                     {l.label}

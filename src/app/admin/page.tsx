@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Building2,
-  Ruler,
   Star,
   Inbox,
   ArrowUpRight,
@@ -14,8 +13,17 @@ import {
   UserCog,
   Globe,
   Sparkles,
+  Users,
+  CheckSquare,
+  CalendarDays,
+  Clock,
+  MapPin,
+  CheckCircle2,
+  Circle,
+  AlertTriangle,
 } from "lucide-react";
 import { Propiedad } from "@/lib/supabase/types";
+import { useCRM } from "@/lib/use-crm";
 
 interface LeadItem {
   id: string;
@@ -65,6 +73,14 @@ export default function AdminDashboardPage() {
   const [leads, setLeads] = useState<LeadItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const {
+    clientes,
+    tareas,
+    eventos,
+    loading: loadingCRM,
+    cambiarEstadoTarea,
+  } = useCRM();
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -92,8 +108,9 @@ export default function AdminDashboardPage() {
     loadData();
   }, []);
 
+  const hoyISO = new Date().toISOString().slice(0, 10);
+
   const totalPropiedades = propiedades.length;
-  const totalLotes = propiedades.filter((p) => p.tipo === "lote").length;
   const totalDestacadas = propiedades.filter((p) => p.destacado).length;
   const totalPublicadas = propiedades.filter((p) => p.publicado).length;
   const totalLeads = leads.length;
@@ -102,86 +119,129 @@ export default function AdminDashboardPage() {
     (l) => Date.now() - new Date(l.created_at).getTime() < 7 * 86400000,
   ).length;
 
+  // Métricas CRM
+  const totalClientes = clientes.length;
+  const clientesEnNegociacion = clientes.filter(
+    (c) =>
+      c.estado === "visita_programada" ||
+      c.estado === "reserva_firmada" ||
+      c.estado === "activo",
+  );
+  const volumenCarteraUSD = clientes.reduce(
+    (acc, c) => acc + (c.presupuesto_usd || 0),
+    0,
+  );
+
+  const tareasPendientes = tareas.filter((t) => t.estado !== "completada");
+  const tareasUrgentes = tareasPendientes.filter(
+    (t) => t.prioridad === "urgente" || t.prioridad === "alta",
+  );
+
+  const eventosFuturos = [...eventos]
+    .filter((ev) => ev.estado !== "cancelado" && ev.fecha >= hoyISO)
+    .sort((a, b) =>
+      `${a.fecha} ${a.hora_inicio}`.localeCompare(`${b.fecha} ${b.hora_inicio}`),
+    );
+  const eventosHoy = eventos.filter(
+    (ev) => ev.estado !== "cancelado" && ev.fecha === hoyISO,
+  );
+
   const kpis = [
     {
-      label: "Catálogo total",
-      value: totalPropiedades,
-      sub: `${totalPublicadas} publicadas en el sitio`,
-      icon: Building2,
+      label: "Cartera de Clientes",
+      value: totalClientes,
+      sub: `USD ${(volumenCarteraUSD / 1000).toFixed(0)}k demanda activa`,
+      icon: Users,
+      href: "/admin/clientes",
       accent: "from-dorado/25 to-dorado/0",
       iconCls: "bg-dorado/15 text-dorado",
     },
     {
-      label: "Lotes & terrenos",
-      value: totalLotes,
-      sub: "Mari Menuco y zonas clave",
-      icon: Ruler,
+      label: "Tareas & Pendientes",
+      value: tareasPendientes.length,
+      sub: `${tareasUrgentes.length} de prioridad alta / urgente`,
+      icon: CheckSquare,
+      href: "/admin/tareas",
+      accent: "from-amber-400/20 to-amber-400/0",
+      iconCls: "bg-amber-400/15 text-amber-300",
+    },
+    {
+      label: "Visitas & Agenda",
+      value: eventosFuturos.length,
+      sub:
+        eventosHoy.length > 0
+          ? `${eventosHoy.length} compromiso(s) para hoy`
+          : "Próximos recorridos agendados",
+      icon: CalendarDays,
+      href: "/admin/calendario",
       accent: "from-sky-400/20 to-sky-400/0",
       iconCls: "bg-sky-400/15 text-sky-300",
     },
     {
-      label: "En portada",
-      value: totalDestacadas,
-      sub: "Destacadas en la landing",
-      icon: Star,
-      accent: "from-amber-300/20 to-amber-300/0",
-      iconCls: "bg-amber-300/15 text-amber-200",
-    },
-    {
-      label: "Consultas",
+      label: "Consultas Web",
       value: totalLeads,
-      sub: `${leadsSemana} en los últimos 7 días`,
+      sub: `${leadsNuevos} nuevas · ${leadsSemana} esta semana`,
       icon: Inbox,
+      href: "/admin/leads",
       accent: "from-emerald-400/20 to-emerald-400/0",
       iconCls: "bg-emerald-400/15 text-emerald-300",
+    },
+    {
+      label: "Catálogo Activo",
+      value: totalPropiedades,
+      sub: `${totalPublicadas} publicadas · ${totalDestacadas} en portada`,
+      icon: Building2,
+      href: "/admin/propiedades",
+      accent: "from-violet-400/20 to-violet-400/0",
+      iconCls: "bg-violet-400/15 text-violet-300",
     },
   ];
 
   const accesos = [
-    { href: "/admin/propiedades?action=new", label: "Publicar inmueble", icon: Plus },
-    { href: "/admin/leads", label: "Responder consultas", icon: MessageCircle },
-    { href: "/admin/configuracion", label: "Editar perfil", icon: UserCog },
+    { href: "/admin/clientes?action=new", label: "Nuevo cliente", icon: Users },
+    { href: "/admin/tareas?action=new", label: "Crear tarea", icon: CheckSquare },
+    { href: "/admin/calendario?action=new", label: "Agendar visita", icon: CalendarDays },
+    { href: "/admin/propiedades?action=new", label: "Publicar lote", icon: Plus },
+    { href: "/admin/configuracion", label: "Editar Landing", icon: UserCog },
     { href: "/", label: "Ver sitio", icon: Globe, external: true },
   ];
 
   return (
-    <div className="space-y-8 max-w-[1400px]">
-      {/* Bienvenida */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-gradient-to-br from-[#121A33] via-[#0C1326] to-[#090E1C] p-7 lg:p-9">
+    <div className="space-y-8 max-w-[1440px]">
+      {/* Bienvenida 360 */}
+      <section className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-gradient-to-br from-[#121A33] via-[#0C1326] to-[#090E1C] p-6 lg:p-8">
         <div
           className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-dorado/20 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div className="relative flex flex-col xl:flex-row xl:items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-dorado/30 bg-dorado/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-dorado">
               <Sparkles className="h-3 w-3" />
-              Panel de control
+              Centro de Comando CRM &amp; CMS · ALTUM SCI
             </span>
-            <h1 className="mt-4 font-display text-3xl lg:text-4xl font-medium text-crema">
+            <h1 className="mt-3.5 font-display text-3xl lg:text-4xl font-medium text-crema">
               {saludo()}, <span className="italic text-dorado">Estela</span>
             </h1>
-            <p className="mt-2 text-sm text-crema/50 max-w-lg">
-              {loading
-                ? "Cargando el resumen de hoy…"
-                : leadsNuevos > 0
-                  ? `Tenés ${leadsNuevos} ${leadsNuevos === 1 ? "consulta nueva" : "consultas nuevas"} esperando respuesta.`
-                  : "Estás al día con todas las consultas. Buen momento para publicar algo nuevo."}
+            <p className="mt-2 text-sm text-crema/55 max-w-2xl">
+              {loading || loadingCRM
+                ? "Sincronizando tu agenda, clientes y catálogo inmobiliario…"
+                : `Tenés ${tareasPendientes.length} tareas activas, ${eventosFuturos.length} eventos próximos en agenda y ${clientesEnNegociacion.length} clientes en etapa de visita, negociación o reserva.`}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
             {accesos.map(({ href, label, icon: Icon, external }) => (
               <Link
                 key={href}
                 href={href}
                 target={external ? "_blank" : undefined}
-                className="group flex flex-col items-start gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-3.5 w-full sm:w-32 hover:border-dorado/40 hover:bg-white/[0.06] transition-all"
+                className="group flex flex-col items-start gap-2.5 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-3.5 hover:border-dorado/40 hover:bg-white/[0.06] transition-all"
               >
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-crema/70 group-hover:bg-dorado group-hover:text-tierra transition-colors">
                   <Icon className="h-4 w-4" strokeWidth={1.8} />
                 </span>
-                <span className="text-[12px] leading-tight text-crema/75 group-hover:text-crema">
+                <span className="text-[11px] font-medium leading-tight text-crema/80 group-hover:text-crema">
                   {label}
                 </span>
               </Link>
@@ -191,18 +251,19 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* KPIs */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {kpis.map(({ label, value, sub, icon: Icon, accent, iconCls }) => (
-          <div
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {kpis.map(({ label, value, sub, icon: Icon, href, accent, iconCls }) => (
+          <Link
             key={label}
-            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1020] p-5"
+            href={href}
+            className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1020] p-5 hover:border-dorado/35 transition-all"
           >
             <div
               className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b ${accent}`}
               aria-hidden="true"
             />
             <div className="relative flex items-start justify-between">
-              <span className="text-[11px] uppercase tracking-[0.16em] text-crema/45">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-crema/50 group-hover:text-dorado transition-colors">
                 {label}
               </span>
               <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${iconCls}`}>
@@ -210,15 +271,254 @@ export default function AdminDashboardPage() {
               </span>
             </div>
             <div className="relative mt-3 font-display text-4xl font-semibold text-crema tabular-nums">
-              {loading ? (
+              {loading && loadingCRM ? (
                 <span className="inline-block h-9 w-14 rounded-lg bg-white/[0.06] animate-pulse" />
               ) : (
                 value
               )}
             </div>
-            <p className="relative mt-1.5 text-xs text-crema/40">{sub}</p>
-          </div>
+            <p className="relative mt-1.5 text-[11px] text-crema/45 truncate">{sub}</p>
+          </Link>
         ))}
+      </section>
+
+      {/* FILA CRM OPERATIVO: TAREAS URGENTES + AGENDA DE VISITAS + CARTERA ACTIVA */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Tareas Pendientes con Check Directo */}
+        <div className="lg:col-span-4 rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-dorado font-semibold">
+                  Operaciones del día
+                </span>
+                <h2 className="font-display text-xl text-crema font-medium">
+                  Pendientes &amp; Tareas
+                </h2>
+              </div>
+              <Link
+                href="/admin/tareas"
+                className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-dorado hover:bg-dorado/10 transition-colors"
+              >
+                Tablero <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {tareasPendientes.length === 0 ? (
+              <div className="py-10 text-center rounded-2xl border border-dashed border-white/10">
+                <CheckCircle2 className="mx-auto h-7 w-7 text-emerald-400/60" />
+                <p className="mt-2 text-xs text-crema/50">
+                  ¡Todo al día! No tenés tareas pendientes.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {tareasPendientes.slice(0, 5).map((t) => {
+                  const esUrgente =
+                    t.prioridad === "urgente" || t.prioridad === "alta";
+                  return (
+                    <div
+                      key={t.id}
+                      className="group flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3 hover:border-dorado/30 transition-all"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => cambiarEstadoTarea(t.id, "completada")}
+                        title="Marcar como completada"
+                        className="mt-0.5 text-crema/35 hover:text-emerald-400 transition-colors shrink-0"
+                      >
+                        <Circle className="h-4 w-4" />
+                      </button>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          {esUrgente && (
+                            <AlertTriangle className="h-3 w-3 text-amber-400 shrink-0" />
+                          )}
+                          <p className="text-xs font-medium text-crema truncate">
+                            {t.titulo}
+                          </p>
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] text-crema/45">
+                          {t.cliente_nombre && (
+                            <span className="text-dorado/90">
+                              {t.cliente_nombre}
+                            </span>
+                          )}
+                          {t.fecha_vencimiento && (
+                            <span>
+                              · Vence{" "}
+                              {new Date(
+                                t.fecha_vencimiento + "T12:00:00",
+                              ).toLocaleDateString("es-AR", {
+                                day: "2-digit",
+                                month: "short",
+                              })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <Link
+            href="/admin/tareas?action=new"
+            className="mt-4 inline-flex items-center justify-center gap-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-xs font-medium text-crema/75 hover:border-dorado/40 hover:text-dorado transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" /> Agregar nuevo pendiente
+          </Link>
+        </div>
+
+        {/* Próximas Visitas & Calendario */}
+        <div className="lg:col-span-4 rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-sky-300 font-semibold">
+                  Recorridos &amp; Firmas
+                </span>
+                <h2 className="font-display text-xl text-crema font-medium">
+                  Próxima Agenda
+                </h2>
+              </div>
+              <Link
+                href="/admin/calendario"
+                className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-dorado hover:bg-dorado/10 transition-colors"
+              >
+                Calendario <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {eventosFuturos.length === 0 ? (
+              <div className="py-10 text-center rounded-2xl border border-dashed border-white/10">
+                <CalendarDays className="mx-auto h-7 w-7 text-crema/25" />
+                <p className="mt-2 text-xs text-crema/50">
+                  Sin visitas programadas próximamente.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {eventosFuturos.slice(0, 4).map((ev) => (
+                  <div
+                    key={ev.id}
+                    className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3 space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-crema truncate">
+                        {ev.titulo}
+                      </span>
+                      <span className="shrink-0 rounded-md bg-dorado/15 px-2 py-0.5 text-[10px] font-semibold text-dorado">
+                        {new Date(ev.fecha + "T12:00:00").toLocaleDateString(
+                          "es-AR",
+                          { day: "2-digit", month: "short" },
+                        )}{" "}
+                        · {ev.hora_inicio}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] text-crema/50">
+                      <span className="inline-flex items-center gap-1 truncate">
+                        <MapPin className="h-3 w-3 text-dorado/70 shrink-0" />
+                        {ev.ubicacion || "Mari Menuco / Neuquén"}
+                      </span>
+                      {ev.cliente_telefono && (
+                        <a
+                          href={`https://wa.me/${ev.cliente_telefono.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola ${ev.cliente_nombre || ""}, te escribo de ALTUM SCI para confirmar nuestro compromiso "${ev.titulo}" el día ${ev.fecha} a las ${ev.hora_inicio} hs.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-300 hover:underline shrink-0 ml-2"
+                        >
+                          Confirmar WA
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Link
+            href="/admin/calendario?action=new"
+            className="mt-4 inline-flex items-center justify-center gap-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-xs font-medium text-crema/75 hover:border-dorado/40 hover:text-dorado transition-colors"
+          >
+            <Clock className="h-3.5 w-3.5" /> Agendar visita o reunión
+          </Link>
+        </div>
+
+        {/* Clientes Calientes en Negociación / Reserva */}
+        <div className="lg:col-span-4 rounded-3xl border border-white/[0.07] bg-[#0A1020] p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300 font-semibold">
+                  Pipeline Comercial
+                </span>
+                <h2 className="font-display text-xl text-crema font-medium">
+                  Clientes en Cierre
+                </h2>
+              </div>
+              <Link
+                href="/admin/clientes"
+                className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-dorado hover:bg-dorado/10 transition-colors"
+              >
+                Cartera <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {clientes.length === 0 ? (
+              <div className="py-10 text-center rounded-2xl border border-dashed border-white/10">
+                <Users className="mx-auto h-7 w-7 text-crema/25" />
+                <p className="mt-2 text-xs text-crema/50">
+                  Sin clientes registrados en la cartera.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {clientes.slice(0, 4).map((c) => (
+                  <div
+                    key={c.id}
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-dorado/15 text-[11px] font-semibold text-dorado">
+                        {iniciales(c.nombre)}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-medium text-crema truncate">
+                          {c.nombre}
+                        </p>
+                        <p className="text-[10px] text-crema/45 truncate">
+                          {c.zona_interes} ·{" "}
+                          {c.presupuesto_usd
+                            ? `USD ${c.presupuesto_usd.toLocaleString("es-AR")}`
+                            : "A definir"}
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href={`https://wa.me/${c.telefono.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold text-emerald-300 hover:bg-emerald-500/25 transition-colors shrink-0"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Link
+            href="/admin/clientes"
+            className="mt-4 inline-flex items-center justify-center gap-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-xs font-medium text-crema/75 hover:border-dorado/40 hover:text-dorado transition-colors"
+          >
+            <Users className="h-3.5 w-3.5" /> Ver ficha 360° de clientes
+          </Link>
+        </div>
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -394,7 +694,7 @@ export default function AdminDashboardPage() {
               </div>
             ) : (
               <div className="space-y-1">
-                {leads.slice(0, 5).map((l) => (
+                {leads.slice(0, 4).map((l) => (
                   <div
                     key={l.id}
                     className="flex gap-3 rounded-2xl p-2.5 hover:bg-white/[0.03] transition-colors"

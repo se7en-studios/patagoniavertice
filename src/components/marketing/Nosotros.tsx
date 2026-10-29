@@ -37,14 +37,6 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
   });
   const fotoY = useTransform(fotoProgress, [0, 1], reduced ? ["0%", "0%"] : ["-9%", "9%"]);
 
-  // Frase firma: la barra dorada se dibuja con el scroll.
-  const quoteRef = useRef<HTMLQuoteElement>(null);
-  const { scrollYProgress: quoteProgress } = useScroll({
-    target: quoteRef,
-    offset: ["start 0.9", "end 0.6"],
-  });
-  const barScale = useTransform(quoteProgress, [0, 1], reduced ? [1, 1] : [0, 1]);
-
   const nombreEstela = perfil?.nombre || "Estela Mari Rojas";
   const matriculaEstela = perfil?.matricula || "Matrícula 35 RP 2026";
   const colegioEstela = perfil?.colegio || "Colegio de Martilleros y Corredores Públicos · Río Negro IV Circunscripción";
@@ -222,33 +214,63 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
             <span className="eyebrow !text-[#8A6A1B]">La profesional detrás de Altum</span>
           </motion.div>
 
-          <div className="max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            {/* Foto Real de Estela */}
-            <div className="md:col-span-4 flex justify-center md:justify-start">
-              <div
-                ref={fotoRef}
-                className="relative w-44 h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden border-4 border-white shadow-[0_24px_50px_-20px_rgba(14,26,51,0.45)] ring-2 ring-dorado/70"
+          <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Pieza Editorial / Foto Oficial de Estela */}
+            <div className="lg:col-span-5 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full max-w-[380px] sm:max-w-[420px]"
               >
-                <motion.div
-                  className="absolute inset-x-0 -inset-y-[12%]"
-                  style={{ y: fotoY }}
+                {/* Glow decorativo de fondo */}
+                <div className="absolute -inset-2 bg-gradient-to-tr from-dorado/20 via-dorado/5 to-transparent rounded-3xl blur-xl -z-10 opacity-70" />
+
+                {/* Card marco editorial */}
+                <div
+                  ref={fotoRef}
+                  className="relative aspect-square w-full rounded-2xl overflow-hidden bg-white shadow-[0_30px_70px_-20px_rgba(14,26,51,0.35)] border border-dorado/35 ring-1 ring-black/5"
                 >
-                  <Image
-                    src={fotoEstela}
-                    alt={`${nombreEstela} - Martillera Colegiada`}
-                    fill
-                    sizes="(max-width: 768px) 180px, 220px"
-                    className="object-cover"
-                  />
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{ y: fotoY }}
+                  >
+                    <Image
+                      src={fotoEstela}
+                      alt={`${nombreEstela} - Martillera Colegiada ALTUM`}
+                      fill
+                      sizes="(max-width: 768px) 380px, 420px"
+                      className="object-cover"
+                      priority
+                    />
+                  </motion.div>
+                </div>
+
+                {/* Badge flotante de matrícula */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="mt-3.5 flex items-center justify-between px-4 py-2.5 bg-white/90 backdrop-blur-md rounded-xl border border-dorado/25 shadow-sm text-xs"
+                >
+                  <span className="font-body font-semibold text-navy tracking-wide flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Martillera Matriculada
+                  </span>
+                  <span className="font-mono text-dorado-oscuro font-bold">
+                    {matriculaEstela}
+                  </span>
                 </motion.div>
-              </div>
+              </motion.div>
             </div>
 
-            {/* Contenido */}
-            <div className="md:col-span-8">
+            {/* Contenido Editorial & Respaldo */}
+            <div className="lg:col-span-7">
               <SlideInRight delay={0.15}>
                 {/* Nombre + título */}
-                <div className="mb-8">
+                <div className="mb-6">
                   <h2
                     ref={estelaRef}
                     className="font-display text-navy font-medium leading-[1.05] mb-2 opacity-0"
@@ -262,87 +284,78 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                       {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
                     </em>
                   </h2>
-                  <p className="font-body text-navy/55 text-xs tracking-[0.2em] uppercase font-semibold">
-                    Martillera y Corredora Pública Colegiada
+                  <p className="font-body text-navy/60 text-xs tracking-[0.2em] uppercase font-semibold">
+                    Martillera y Corredora Pública Colegiada · ALTUM SCI
                   </p>
                 </div>
 
-              {/* Credenciales */}
-              <div className="space-y-6 mb-10">
-                {credenciales.map((c, i) => (
-                  <motion.div
-                    key={c.label}
-                    className="flex gap-4 group"
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.55,
-                      delay: 0.2 + i * 0.1,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                  >
-                    {/* Icon */}
-                    <div
-                      className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center bg-white shadow-[0_10px_24px_-14px_rgba(14,26,51,0.4)] text-[#8A6A1B] group-hover:bg-dorado group-hover:text-tierra transition-colors duration-300"
+                {/* Cita de confianza */}
+                <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-[#F8F5EE] border border-dorado/20">
+                  <p className="font-display text-navy text-lg sm:text-xl font-medium leading-snug mb-1.5">
+                    &ldquo;Una operación clara empieza con información.&rdquo;
+                  </p>
+                  <p className="font-body text-navy/70 text-xs sm:text-sm leading-relaxed">
+                    Revisar la documentación, dejar los acuerdos por escrito y contar con asesoramiento profesional puede evitarte problemas después.
+                  </p>
+                  <p className="mt-2 font-display italic text-[#8A6A1B] text-sm font-medium">
+                    Tu confianza también es parte del trato.
+                  </p>
+                </div>
+
+                {/* Credenciales */}
+                <div className="space-y-4 mb-8">
+                  {credenciales.map((c, i) => (
+                    <motion.div
+                      key={c.label}
+                      className="flex gap-4 group p-2.5 rounded-xl transition-colors hover:bg-white/80"
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.55,
+                        delay: 0.2 + i * 0.1,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
                     >
-                      {c.icon}
-                    </div>
-                    {/* Text */}
-                    <div className="pt-0.5">
-                      <p className="font-body text-[10px] tracking-[0.2em] uppercase text-navy/35 mb-0.5">
-                        {c.label}
-                      </p>
-                      <p className="font-body text-navy font-semibold text-[14px] mb-0.5">
-                        {c.value}
-                      </p>
-                      <p className="font-body text-navy/40 text-[12px] leading-snug">
-                        {c.sub}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                      {/* Icon */}
+                      <div
+                        className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-white shadow-sm border border-dorado/20 text-[#8A6A1B] group-hover:bg-dorado group-hover:text-white transition-colors duration-300"
+                      >
+                        {c.icon}
+                      </div>
+                      {/* Text */}
+                      <div className="pt-0.5">
+                        <p className="font-body text-[10px] tracking-[0.2em] uppercase text-navy/40 mb-0.5">
+                          {c.label}
+                        </p>
+                        <p className="font-body text-navy font-semibold text-[14px] mb-0.5">
+                          {c.value}
+                        </p>
+                        <p className="font-body text-navy/55 text-[12px] leading-snug">
+                          {c.sub}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
 
-              {/* Separador */}
-              <motion.div
-                className="h-px gold-line mb-10"
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                style={{ transformOrigin: "left" }}
-              />
-
-              {/* Frase firma */}
-              <motion.blockquote
-                ref={quoteRef}
-                className="relative pl-6"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.55 }}
-              >
-                {/* Left accent */}
-                <motion.div
-                  className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full bg-dorado origin-top"
-                  style={{ scaleY: barScale }}
-                />
-                <p
-                  className="font-display text-navy font-medium italic leading-snug mb-2"
-                  style={{ fontSize: "clamp(1.2rem, 2vw, 1.45rem)" }}
-                >
-                  &ldquo;No vendemos propiedades.
-                  <br />
-                  Acompañamos decisiones patrimoniales.&rdquo;
-                </p>
-                <p className="font-body text-navy/35 text-[10px] tracking-[0.25em] uppercase">
-                  - Estela Mari Rojas · Altum Inmobiliaria
-                </p>
-              </motion.blockquote>
-            </SlideInRight>
+                {/* Botón CTA directo con Estela */}
+                <div className="pt-2">
+                  <a
+                    href="https://wa.me/5492996095742?text=Hola%20Estela%20Mari%20Rojas%20(ALTUM%20SCI)%2C%20quisiera%20solicitar%20asesoramiento%20personalizado."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 px-6 py-3.5 bg-navy hover:bg-navy-dark text-white rounded-xl font-body font-semibold text-sm shadow-[0_12px_28px_-10px_rgba(14,26,51,0.5)] hover:shadow-xl transition-all duration-300 group"
+                  >
+                    <span>Consultar directamente con Estela</span>
+                    <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                      →
+                    </span>
+                  </a>
+                </div>
+              </SlideInRight>
+            </div>
           </div>
-        </div>
       </div>
     </div>
 

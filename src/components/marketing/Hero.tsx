@@ -110,6 +110,22 @@ export default function Hero() {
         className="relative flex-1 flex flex-col justify-end max-w-7xl mx-auto px-6 lg:px-12 w-full pt-28 md:pt-32 pb-14 md:pb-20"
         style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
       >
+        {/* Eyebrow badge editorial */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-dorado/35 shadow-sm self-start mb-6"
+        >
+          <span className="w-2 h-2 rounded-full bg-dorado" />
+          <span className="font-body text-[11px] font-semibold tracking-[0.2em] uppercase text-navy/80">
+            ALTUM SCI · Servicios & Consultoría Inmobiliaria
+          </span>
+          <span className="hidden sm:inline font-body text-[11px] text-[#8A6A1B] font-medium">
+            · Neuquén & Río Negro
+          </span>
+        </motion.div>
+
         <h1
           className="font-display font-semibold leading-[1.02] mb-6 max-w-4xl"
           style={{
@@ -137,9 +153,9 @@ export default function Hero() {
         {/* Búsqueda en una frase */}
         <div
           style={{ "--d": "0.9s" } as React.CSSProperties}
-          className="hero-rise [--rise:30px] w-full max-w-4xl rounded-[2rem] border border-white/90 bg-white/75 backdrop-blur-xl shadow-[0_24px_60px_-28px_rgba(14,26,51,0.4)] p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-4"
+          className="hero-rise [--rise:30px] w-full max-w-4xl rounded-[2rem] border border-white/90 bg-white/80 backdrop-blur-xl shadow-[0_24px_60px_-28px_rgba(14,26,51,0.35)] p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-4 ring-1 ring-dorado/20"
         >
-          <p className="flex-1 font-display text-navy/80 text-lg md:text-2xl leading-[1.9] md:leading-[2]">
+          <p className="flex-1 font-display text-navy/85 text-lg md:text-2xl leading-[1.9] md:leading-[2]">
             Quiero{" "}
             <select
               aria-label="Operación"
@@ -184,25 +200,57 @@ export default function Hero() {
             type="button"
             onClick={handleSearch}
             aria-label="Buscar propiedades"
-            className="group shrink-0 inline-flex items-center justify-center gap-3 self-stretch md:self-auto rounded-full bg-dorado hover:bg-gold-400 text-tierra font-body text-[11px] font-semibold tracking-[0.18em] uppercase px-8 py-4 transition-colors"
+            className="group shrink-0 inline-flex items-center justify-center gap-3 self-stretch md:self-auto rounded-full bg-dorado hover:bg-gold-400 text-tierra font-body text-[11px] font-semibold tracking-[0.18em] uppercase px-8 py-4 transition-all duration-300 shadow-[0_10px_25px_-8px_rgba(184,150,90,0.6)]"
           >
             Buscar
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </div>
 
+        {/* Chips de filtro rápido */}
         <div
-          style={{ "--d": "1.1s" } as React.CSSProperties}
-          className="hero-rise mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 font-body text-[11px] tracking-[0.16em] uppercase text-navy/60"
+          style={{ "--d": "1.0s" } as React.CSSProperties}
+          className="hero-rise mt-3.5 flex flex-wrap items-center gap-2 text-xs font-body"
         >
-          <span>Martillera matriculada · Mat. 35 RP 2026</span>
+          <span className="text-navy/45 text-[11px] uppercase tracking-wider font-semibold mr-1">
+            Destacados:
+          </span>
+          {[
+            { label: "Lotes en Mari Menuco", t: "lote", z: "Neuquén" },
+            { label: "Residencias Cipolletti", t: "venta", z: "Cipolletti" },
+            { label: "Oportunidades Catriel", t: "todos", z: "Catriel" },
+          ].map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => {
+                setTipo(item.t);
+                setZona(item.z);
+              }}
+              className="px-3 py-1 rounded-full bg-white/70 hover:bg-white border border-black/5 hover:border-dorado/50 text-navy/70 hover:text-navy text-[11px] transition-colors"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Respaldo y contacto */}
+        <div
+          style={{ "--d": "1.15s" } as React.CSSProperties}
+          className="hero-rise mt-5 flex flex-wrap items-center justify-between gap-y-3 font-body text-[11px] tracking-[0.14em] uppercase text-navy/60 pt-3 border-t border-navy/10 max-w-4xl"
+        >
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            Operaciones seguras con Martillera Matriculada (Mat. 35 RP 2026)
+          </span>
           <a
             href={WA_HERO}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-navy hover:text-[#8A6A1B] border-b border-navy/30 hover:border-dorado transition-colors"
+            className="inline-flex items-center gap-1.5 font-semibold text-navy hover:text-[#8A6A1B] border-b border-navy/30 hover:border-dorado transition-colors"
           >
-            Hablar con Estela
+            <span>Hablar directamente con Estela</span>
+            <span>→</span>
           </a>
         </div>
       </motion.div>

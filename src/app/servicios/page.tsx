@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { VideoPlayer } from "@/components/ui/VideoPlayer";
 import { WHATSAPP_URL } from "@/lib/constants";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Servicios Inmobiliarios",
-  alternates: { canonical: `${siteUrl}/servicios` },
   description:
-    "Compra y venta de inmuebles, administración integral de alquileres, consultoría de inversión y contratos inmobiliarios en Río Negro y la Patagonia Argentina. Asesoría directa y profesional.",
+    "Compra y venta, tasaciones, administración de alquileres y consultoría de inversión en Río Negro, Neuquén y la Patagonia Argentina.",
+  path: "/servicios",
   keywords: [
     "servicios inmobiliarios Río Negro",
     "compra venta inmuebles Patagonia",
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
     "tasaciones Cipolletti",
     "Altum Inmobiliaria",
   ],
-};
+});
 
 const serviciosDetallados = [
   {

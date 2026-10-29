@@ -68,7 +68,7 @@ function PostulacionForm() {
         </div>
         <div>
           <h3 className="font-display text-crema text-3xl font-medium mb-3">¡Postulación recibida!</h3>
-          <p className="font-body text-crema/40 text-sm leading-relaxed max-w-sm">
+          <p className="font-body text-crema/65 text-sm leading-relaxed max-w-sm">
             Gracias por tu interés. Revisaremos tu perfil y te contactaremos a la brevedad.
           </p>
         </div>
@@ -80,26 +80,26 @@ function PostulacionForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div>
-          <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-2 block">
+          <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-2 block">
             Nombre <span className="text-dorado">*</span>
           </label>
           <input
             type="text"
             name="nombre"
             required
-            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/20"
+            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/45"
             placeholder="Tu nombre completo"
           />
         </div>
         <div>
-          <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-2 block">
+          <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-2 block">
             Email <span className="text-dorado">*</span>
           </label>
           <input
             type="email"
             name="email"
             required
-            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/20"
+            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/45"
             placeholder="tu@email.com"
           />
         </div>
@@ -107,16 +107,16 @@ function PostulacionForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div>
-          <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-2 block">Teléfono</label>
+          <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-2 block">Teléfono</label>
           <input
             type="tel"
             name="telefono"
-            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/20"
+            className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/45"
             placeholder="+54 299 000 0000"
           />
         </div>
         <div>
-          <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-2 block">
+          <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-2 block">
             Área de interés <span className="text-dorado">*</span>
           </label>
           <select
@@ -133,19 +133,19 @@ function PostulacionForm() {
       </div>
 
       <div>
-        <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-2 block">Mensaje / Experiencia</label>
+        <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-2 block">Mensaje / Experiencia</label>
         <textarea
           name="mensaje"
           rows={4}
-          className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/20 resize-none"
+          className="w-full bg-transparent border-b border-crema/15 py-3.5 font-body text-crema text-sm focus:outline-none focus:border-dorado transition-colors placeholder:text-crema/45 resize-none"
           placeholder="Contanos sobre tu experiencia y por qué querés sumarte..."
         />
       </div>
 
       <div>
-        <label className="font-body text-crema/40 text-[10px] tracking-[0.25em] uppercase mb-3 block">
+        <label className="font-body text-crema/65 text-[10px] tracking-[0.25em] uppercase mb-3 block">
           CV <span className="text-dorado">*</span>
-          <span className="text-crema/25 normal-case tracking-normal ml-2 text-[9px]">PDF, DOC, DOCX · máx. 5MB</span>
+          <span className="text-crema/50 normal-case tracking-normal ml-2 text-[9px]">PDF, DOC, DOCX · máx. 5MB</span>
         </label>
         <label className="inline-flex items-center gap-3 border border-crema/20 px-5 py-3 cursor-pointer hover:border-dorado transition-colors duration-200 group">
           <svg className="w-4 h-4 text-dorado" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +235,7 @@ export default function SumateContent() {
                 Mandanos tu{" "}
                 <span className="italic text-dorado">perfil</span>
               </h2>
-              <p className="font-body text-crema/40 text-sm leading-relaxed">
+              <p className="font-body text-crema/65 text-sm leading-relaxed">
                 Completá el formulario y adjuntá tu CV. Revisamos cada postulación
                 personalmente y respondemos a todos.
               </p>

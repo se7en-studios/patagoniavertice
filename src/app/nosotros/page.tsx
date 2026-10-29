@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, Handshake, Shield, Star, Lightbulb, Users } from "lucide-react";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Nosotros",
   description:
-    "Conocé la historia y valores de Altum Inmobiliaria, consultora especializada en operaciones de alto nivel en Río Negro y la Patagonia.",
-  alternates: { canonical: `${siteUrl}/nosotros` },
-};
+    "Conocé a ALTUM SCI y a la martillera Estela Mari Rojas (Mat. 35 RP 2026): consultoría inmobiliaria en Río Negro, Neuquén y la Patagonia.",
+  path: "/nosotros",
+});
 
 const valores = [
   {

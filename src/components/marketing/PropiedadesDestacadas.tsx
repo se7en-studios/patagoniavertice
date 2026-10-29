@@ -1,12 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import { coverImage } from "@/lib/property-images";
 import { createClient } from "@/lib/supabase/server";
 import type { Propiedad } from "@/lib/supabase/types";
 
 function PropiedadCard({ propiedad }: { propiedad: Propiedad }) {
-  const imagen =
-    propiedad.imagenes?.[0] ??
-    `https://placehold.co/600x400/1C1A17/B8965A?text=${encodeURIComponent(propiedad.titulo)}`;
+  const imagen = coverImage(propiedad.imagenes);
 
   const tipoLabel: Record<string, string> = {
     venta: "Venta",

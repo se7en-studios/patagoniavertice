@@ -20,6 +20,7 @@ const config: Config = {
         // ── Brand navy scale ──────────────────────
         navy: {
           DEFAULT: "#1A2752",
+          950: "#070D1C", // abyss — bandas, overlays y cintas
           900: "#0F1A30", // darkest — deep backgrounds
           800: "#15214A", // hover backgrounds
           700: "#1A2752", // brand base

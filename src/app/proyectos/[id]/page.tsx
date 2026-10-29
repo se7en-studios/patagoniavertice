@@ -1,8 +1,36 @@
 import Link from "next/link";
+import { coverImage, galleryImages } from "@/lib/property-images";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import FavoriteButton from "@/components/catalogo/FavoriteButton";
+import ShareButton from "@/components/catalogo/ShareButton";
+import PrintButton from "@/components/catalogo/PrintButton";
+import WhatsAppLink from "@/components/catalogo/WhatsAppLink";
+import PropiedadesSimilares, {
+  type SimilarItem,
+} from "@/components/catalogo/PropiedadesSimilares";
+
+const SIMILARES_MAX = 3;
+
+// Estilos de impresión para "Descargar ficha en PDF" (window.print()).
+const PRINT_CSS = `
+@media print {
+  @page { margin: 14mm; }
+  nav, footer, .fixed, .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .print-hero { height: 220px !important; }
+  .sticky { position: static !important; }
+  main, section { background: #fff !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  article, .print-avoid { break-inside: avoid; }
+}
+.print-only { display: none; }
+`;
+
+// Evita que valores con comas/paréntesis rompan el filtro .or() de PostgREST.
+const sanitizeFilter = (v: string) => v.replace(/[,()"\\]/g, " ").trim();
 
 const tipoLabel: Record<string, string> = {
   venta: "Venta",
@@ -53,6 +81,30 @@ async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
   }
 }
 
+async function fetchSimilares(p: DemoPropiedad): Promise<SimilarItem[]> {
+  try {
+    const supabase = await createClient();
+    const conds = [`ciudad.eq.${sanitizeFilter(p.ciudad)}`];
+    if (p.tipo) conds.push(`tipo.eq.${sanitizeFilter(p.tipo)}`);
+    const { data } = await supabase
+      .from("propiedades")
+      .select("id,titulo,ciudad,barrio,tipo,imagenes,precio,moneda")
+      .eq("publicado", true)
+      .neq("id", p.id)
+      .or(conds.join(","))
+      .limit(24);
+    const score = (x: SimilarItem) =>
+      (x.ciudad === p.ciudad ? 2 : 0) +
+      (x.tipo === p.tipo ? 1 : 0) +
+      (p.barrio && x.barrio === p.barrio ? 1 : 0);
+    return ((data ?? []) as unknown as SimilarItem[])
+      .sort((a, b) => score(b) - score(a))
+      .slice(0, SIMILARES_MAX);
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const item = await fetchPropiedad(id);
@@ -80,9 +132,14 @@ export default async function PropiedadDetailPage({
 
   if (!propiedad) notFound();
 
+  const similares = await fetchSimilares(propiedad);
+
   const imagenes = propiedad.imagenes?.length
     ? propiedad.imagenes
     : ["/mari-menuco/bahia-playas-1.jpg"];
+
+  const cover = coverImage(propiedad.imagenes);
+  const galeria = galleryImages(propiedad.imagenes, cover);
 
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `Hola Altum Inmobiliaria, quisiera consultar información detallada y coordinar una visita para la propiedad: ${propiedad.titulo} (${propiedad.ciudad} - USD ${propiedad.precio?.toLocaleString("es-AR") || "Consultar"})`,
@@ -127,16 +184,31 @@ export default async function PropiedadDetailPage({
       : {}),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Propiedades", item: `${siteUrl}/proyectos` },
+      { "@type": "ListItem", position: 3, name: propiedad.titulo },
+    ],
+  };
+
   return (
     <main className="bg-crema min-h-screen">
+      <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(listingSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* ── Hero Gallery ─────────────────────────────────────────────────── */}
-      <section className="relative h-[65vh] md:h-[75vh] bg-navy-950 overflow-hidden">
+      <section className="print-hero relative h-[65vh] md:h-[75vh] bg-navy-950 overflow-hidden">
         <Image
-          src={imagenes[0]}
+          src={cover}
           alt={propiedad.titulo}
           fill
           priority
@@ -148,13 +220,28 @@ export default async function PropiedadDetailPage({
         {/* Back link & Top Badge */}
         <div className="absolute top-32 left-0 right-0 z-10">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
-            <Link
-              href="/proyectos"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-navy-950/80 backdrop-blur-md border border-crema/20 text-crema font-body text-[11px] tracking-[0.18em] uppercase hover:border-dorado hover:text-dorado transition-colors"
+            <nav
+              aria-label="Breadcrumb"
+              className="px-4 py-2 bg-navy-950/80 backdrop-blur-md border border-crema/20 text-crema font-body text-[11px] tracking-[0.14em] uppercase"
             >
-              <span>←</span>
-              <span>Volver al Catálogo</span>
-            </Link>
+              <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <li>
+                  <Link href="/" className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado">
+                    Inicio
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li>
+                  <Link href="/proyectos" className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado">
+                    Propiedades
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li aria-current="page" className="text-dorado max-w-[40vw] truncate">
+                  {propiedad.titulo}
+                </li>
+              </ol>
+            </nav>
 
             <span className="px-3.5 py-1.5 bg-dorado text-tierra font-body text-[10px] font-semibold tracking-[0.2em] uppercase shadow-md">
               {propiedad.tipo ? tipoLabel[propiedad.tipo] : "Propiedad"}
@@ -264,13 +351,13 @@ export default async function PropiedadDetailPage({
                 )}
 
               {/* Galería adicional de fotos */}
-              {imagenes.length > 1 && (
+              {galeria.length > 0 && (
                 <div className="space-y-6 pt-6 border-t border-tierra/10">
                   <h3 className="font-display text-tierra text-xl lg:text-2xl font-medium">
                     Galería de Imágenes
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {imagenes.slice(1).map((img, i) => (
+                    {galeria.map((img, i) => (
                       <div
                         key={i}
                         className="relative aspect-[4/3] overflow-hidden border border-tierra/10 shadow-sm"
@@ -315,15 +402,14 @@ export default async function PropiedadDetailPage({
 
                   {/* Actions */}
                   <div className="space-y-3.5">
-                    <a
+                    <WhatsAppLink
                       href={waLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-3 py-4 px-6 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center"
+                      origen="ficha"
+                      className="w-full inline-flex items-center justify-center gap-3 py-4 px-6 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crema"
                     >
                       <span>Consultar por WhatsApp</span>
-                      <span>→</span>
-                    </a>
+                      <span aria-hidden="true">→</span>
+                    </WhatsAppLink>
 
                     <Link
                       href={`/contacto?propiedad=${encodeURIComponent(propiedad.titulo)}`}
@@ -331,6 +417,21 @@ export default async function PropiedadDetailPage({
                     >
                       Agendar Visita Presencial
                     </Link>
+                  </div>
+
+                  {/* Favorito / compartir / PDF */}
+                  <div className="no-print grid grid-cols-2 gap-2 pt-2">
+                    <FavoriteButton
+                      id={propiedad.id}
+                      titulo={propiedad.titulo}
+                      showLabel
+                      className="py-3 px-3 border border-crema/20 text-crema/80 font-body text-[10px] tracking-[0.14em] uppercase hover:border-dorado hover:text-dorado"
+                    />
+                    <ShareButton
+                      titulo={propiedad.titulo}
+                      className="py-3 px-3 border border-crema/20 text-crema/80 font-body text-[10px] tracking-[0.14em] uppercase hover:border-dorado hover:text-dorado"
+                    />
+                    <PrintButton className="col-span-2 py-3 px-3 border border-crema/20 text-crema/80 font-body text-[10px] tracking-[0.14em] uppercase hover:border-dorado hover:text-dorado" />
                   </div>
 
                   {/* Trust badge */}
@@ -351,6 +452,12 @@ export default async function PropiedadDetailPage({
           </div>
         </div>
       </section>
+
+      <PropiedadesSimilares items={similares} />
+
+      <p className="print-only px-6 py-4 font-body text-xs text-tierra/70">
+        Ficha generada desde {siteUrl}/proyectos/{propiedad.id} · Altum Inmobiliaria · WhatsApp +{WHATSAPP_NUMBER}
+      </p>
     </main>
   );
 }

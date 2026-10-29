@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
-  title: "Inmobiliaria en Catriel: Propiedades & Renta Petrolera en Río Negro",
+export const metadata: Metadata = pageMeta({
+  title: "Inmobiliaria en Catriel | Venta y Alquiler",
   description:
-    "Altum Inmobiliaria en Catriel, Río Negro. Compra, venta y administración de propiedades y departamentos para renta corporativa petrolera en la Patagonia.",
+    "Comprá, vendé o alquilá propiedades en Catriel, Río Negro. Casas, departamentos y alquiler corporativo con martillera matriculada (Mat. 35 RP 2026).",
+  path: "/inmobiliaria-catriel",
   keywords: [
     "inmobiliaria Catriel",
     "propiedades en Catriel",
@@ -19,15 +20,7 @@ export const metadata: Metadata = {
     "terrenos Catriel",
     "Altum Catriel",
   ],
-  alternates: { canonical: `${siteUrl}/inmobiliaria-catriel` },
-  openGraph: {
-    title: "Inmobiliaria en Catriel - Altum Inmobiliaria",
-    description:
-      "Propiedades en Catriel, polo energético de Río Negro. Alta rentabilidad en alquiler corporativo y residencial.",
-    url: `${siteUrl}/inmobiliaria-catriel`,
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
-  },
-};
+});
 
 const serviciosCatriel = [
   {
@@ -60,29 +53,7 @@ export default function InmobiliariaCatrielPage() {
   return (
     <main className="bg-crema min-h-screen">
       {/* Breadcrumb Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Inicio",
-                item: siteUrl,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Inmobiliaria Catriel",
-                item: `${siteUrl}/inmobiliaria-catriel`,
-              },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbJsonLd([{ name: "Inmobiliaria Catriel", path: "/inmobiliaria-catriel" }])} />
 
       {/* Hero */}
       <section

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/marketing/Hero";
 import Manifiesto from "@/components/marketing/Manifiesto";
+import BandaLago from "@/components/marketing/BandaLago";
+import CintaMarquee from "@/components/marketing/CintaMarquee";
+import Ubicacion from "@/components/marketing/Ubicacion";
+import SectionRail from "@/components/marketing/SectionRail";
+import DecodeText from "@/components/ui/DecodeText";
+import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { createClient } from "@/lib/supabase/server";
 import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
 
@@ -9,28 +15,25 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
 // ── Metadata específica de la home ──────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
+  title:
+    "ALTUM SCI · Servicios & Consultoría Inmobiliaria - Neuquén & Patagonia",
   description:
-    "Terrenos frente al lago Mari Menuco, en el Barrio Privado Bahía de las Playas, Neuquén. Asesoría directa y matriculada.",
+    "Lotes exclusivos frente al lago Mari Menuco, residencias en Cipolletti y oportunidades de inversión en Río Negro y Neuquén. Asesoría directa y martillera matriculada Estela Mari Rojas (Mat. 35 RP 2026).",
   alternates: {
     canonical: siteUrl,
   },
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: "Altum Inmobiliaria - Lotes en Mari Menuco, Neuquén",
+    title:
+      "ALTUM SCI · Servicios & Consultoría Inmobiliaria - Neuquén & Patagonia",
     description:
-      "Terrenos frente al lago Mari Menuco, Neuquén. Trato directo, transparencia total en cada operación.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Altum Inmobiliaria - Lotes frente al lago Mari Menuco, Neuquén",
-      },
-    ],
+      "Terrenos frente al lago Mari Menuco, loteos y residencias en Neuquén y Río Negro. Seguridad jurídica, confidencialidad y transparencia total.",
   },
 };
+
+const CINTA_UBICACIONES = ["Mari Menuco", "Cipolletti", "Catriel", "General Roca", "Vaca Muerta"];
+const CINTA_SERVICIOS = ["Compra & Venta", "Tasaciones", "Loteos", "Consultoría", "Contratos"];
 
 // ── Lazy loading de secciones below-fold ────────────────────────────────────
 const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
@@ -59,8 +62,11 @@ const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
 // Next 15 no permite ssr:false en Server Components; el canvas solo usa window dentro de useEffect.
 const SpotlightCursor = dynamic(() => import("@/components/ui/SpotlightCursor"));
 
+import { getSiteConfig } from "@/lib/site-config";
+
 export default async function HomePage() {
   let propiedadesDestacadas: PropiedadDestacada[] = [];
+  const siteConfig = getSiteConfig();
 
   try {
     const supabase = await createClient();
@@ -83,41 +89,63 @@ export default async function HomePage() {
   return (
     <>
       <SpotlightCursor />
-      {/* Hero + Manifiesto: above-fold, no lazy */}
-      <Hero />
+      <DecodeText />
+      <SectionRail />
+
+      <div id="sec-inicio">
+        <Hero />
+      </div>
       <Manifiesto />
 
-      {/* Propiedades destacadas (Portfolio de primer nivel) */}
-      <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
+      {/* Cinta de texto que reacciona a la velocidad del scroll */}
+      <CintaMarquee items={CINTA_UBICACIONES} />
 
-      {/* Tasador Express & Valuación Certificada */}
-      <TasadorExpress />
+      {/* Banda full-bleed con parallax: Mari Menuco */}
+      <div id="sec-lago">
+        <BandaLago />
+      </div>
 
-      {/* Quiénes somos */}
-      <Nosotros />
+      <div id="sec-propiedades">
+        <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
+      </div>
 
-      {/* Exploración territorial y análisis de mercado por zona */}
-      <ZonasInteractivas />
+      <Ubicacion />
 
-      {/* Lead Magnet - Guía Estratégica de Inversión */}
+      <div id="sec-tasador">
+        <TasadorExpress />
+      </div>
+
+      <div id="sec-nosotros">
+        <Nosotros perfil={siteConfig.perfil} />
+      </div>
+
+      <div id="sec-zonas">
+        <ZonasInteractivas />
+      </div>
+
       <GuiaInversion />
 
-      {/* Calculadora interactiva de rentabilidad & inversión */}
-      <CalculadoraRentabilidad />
+      <div id="sec-calculadora">
+        <CalculadoraRentabilidad />
+      </div>
 
-      {/* Servicios + video institucional */}
-      <Servicios />
+      <CintaMarquee items={CINTA_SERVICIOS} direction={-1} />
 
-      {/* Proceso de trabajo */}
-      <Proceso />
+      <div id="sec-servicios">
+        <Servicios serviciosCustom={siteConfig.servicios} />
+      </div>
 
-      {/* Diferenciadores "Por qué elegirnos" (Bento Grid) */}
+      <div id="sec-proceso">
+        <Proceso />
+      </div>
+
       <PorQueElegirnos />
 
-      {/* FAQ - preguntas frecuentes (rich snippet) */}
-      <FAQ />
+      <div id="sec-faq">
+        <FAQ />
+        <FaqJsonLd />
+      </div>
 
-      {/* CTA final */}
       <CTAFinal />
     </>
   );

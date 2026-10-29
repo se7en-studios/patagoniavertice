@@ -31,11 +31,14 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
+  // En la home el navbar arranca transparente sobre el hero; en el resto de las páginas siempre va sólido.
+  const solid = scrolled || pathname !== "/";
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500`}
       style={
-        scrolled
+        solid
           ? {
               background: "rgba(8,14,26,0.82)",
               backdropFilter: "blur(20px) saturate(180%)",
@@ -58,21 +61,29 @@ export default function Navbar() {
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 md:h-20">
-        {/* ── Logo ── */}
-        <Link href="/" className="flex items-center shrink-0 group">
+        {/* ── Logo & Brand ── */}
+        <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
           <motion.img
             src="/logoo.png"
-            alt="Altum Inmobiliaria - Lotes en Neuquén"
-            className="h-12 md:h-16 w-auto object-contain"
-            style={{ mixBlendMode: "screen", filter: "brightness(1.05)" }}
+            alt="ALTUM SCI - Servicios y Consultoría Inmobiliaria"
+            className="h-11 md:h-14 w-auto object-contain"
+            style={{ mixBlendMode: "screen", filter: "brightness(1.08)" }}
             whileHover={{ filter: "brightness(1.2)" }}
             transition={{ duration: 0.2 }}
           />
+          <div className="hidden 2xl:flex flex-col border-l border-dorado/25 pl-3 py-0.5">
+            <span className="font-display text-crema text-xs md:text-sm font-semibold tracking-[0.16em] uppercase group-hover:text-dorado transition-colors">
+              ALTUM <span className="text-dorado">SCI</span>
+            </span>
+            <span className="hidden font-body text-[9px] tracking-[0.22em] text-crema/45 uppercase">
+              Servicios &amp; Consultoría Inmobiliaria
+            </span>
+          </div>
         </Link>
 
         {/* ── Desktop nav ── */}
         <nav
-          className="hidden lg:flex items-center gap-8"
+          className="hidden lg:flex items-center gap-5 xl:gap-7"
           aria-label="Navegación principal"
         >
           {links.map((l) => {
@@ -83,13 +94,13 @@ export default function Navbar() {
                 href={l.href}
                 onMouseEnter={() => setActiveHover(l.href)}
                 onMouseLeave={() => setActiveHover(null)}
-                className="relative font-body text-[11px] tracking-[0.25em] uppercase transition-colors duration-300 py-1"
+                className="relative font-body text-[11px] tracking-[0.22em] uppercase transition-colors duration-300 py-1"
                 style={{
                   color: active
                     ? "#C9A84C"
                     : activeHover === l.href
                       ? "rgba(245,239,230,1)"
-                      : "rgba(245,239,230,0.6)",
+                      : "rgba(245,239,230,0.65)",
                 }}
               >
                 {l.label}
@@ -106,21 +117,21 @@ export default function Navbar() {
         </nav>
 
         {/* ── Right: CTA ── */}
-        <div className="hidden lg:flex items-center gap-5">
+        <div className="hidden lg:flex items-center gap-4">
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-body text-crema/50 text-[11px] tracking-wider hover:text-[#25D366] transition-colors flex items-center gap-2 group"
+            className="font-body text-crema/70 text-[11px] tracking-wider hover:text-dorado transition-colors flex items-center gap-2 group px-3 py-2 border border-crema/10 hover:border-dorado/40 rounded-sm"
           >
             <WaIcon />
-            <span>WhatsApp</span>
+            <span className="font-medium">WhatsApp</span>
           </a>
           <Link
-            href="/contacto"
-            className="btn-shimmer font-body text-tierra text-[11px] tracking-[0.12em] font-medium uppercase px-5 py-2.5 hover:scale-[1.03] transition-transform duration-200"
+            href="/#tasador-express"
+            className="btn-shimmer font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-2.5 hover:scale-[1.02] transition-transform duration-200 shadow-md"
           >
-            Consultar Ahora
+            ✦ Tasar Inmueble
           </Link>
         </div>
 

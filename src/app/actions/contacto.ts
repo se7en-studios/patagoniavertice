@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { notificarLead } from "@/lib/notify-lead";
 import {
   emailSchema,
   esEnvioSospechoso,
@@ -90,6 +91,13 @@ export async function enviarConsulta(
     console.error("Error inserting lead:", error);
     return { error: "Hubo un error al enviar tu consulta. Intentá de nuevo." };
   }
+
+  await notificarLead("Nuevo lead ALTUM SCI (contacto)", {
+    Nombre: nombre,
+    Email: email,
+    Teléfono: telefono ?? undefined,
+    Mensaje: mensajeFinal,
+  });
 
   return { success: true };
 }

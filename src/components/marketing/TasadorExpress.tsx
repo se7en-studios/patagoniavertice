@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { guardarLeadAltum } from "@/app/actions/leads-altum";
+import { track } from "@/lib/analytics";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const TIPOS_INMUEBLE = [
   { id: "casa", label: "Casa / Residencia", icon: "🏡" },
@@ -13,11 +16,12 @@ const TIPOS_INMUEBLE = [
 
 const LOCALIDADES = [
   "Cipolletti",
-  "Catriel",
+  "Mari Menuco / Lagos",
+  "Catriel (Polo Energético)",
   "General Roca",
   "Neuquén Capital",
-  "Bariloche",
-  "Otras zonas de Río Negro",
+  "Bariloche & Cordillera",
+  "Otras zonas de Río Negro & Neuquén",
 ];
 
 const RANGOS_SUPERFICIE = [
@@ -25,7 +29,7 @@ const RANGOS_SUPERFICIE = [
   "70 a 150 m²",
   "150 a 300 m²",
   "300 a 800 m²",
-  "Más de 800 m² / Fracción",
+  "Más de 800 m² / Fracción o Lote",
 ];
 
 export default function TasadorExpress() {
@@ -34,31 +38,62 @@ export default function TasadorExpress() {
   const [superficie, setSuperficie] = useState("70 a 150 m²");
   const [operacion, setOperacion] = useState<"vender" | "alquilar">("vender");
   const [step, setStep] = useState<1 | 2>(1);
+  const [nombre, setNombre] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const iniciado = useRef(false);
+
+  const marcarInicio = () => {
+    if (iniciado.current) return;
+    iniciado.current = true;
+    track("tasador_start");
+  };
+
+  const solicitarTasacion = async () => {
+    setError(null);
+    setEnviando(true);
+    const tipoLabel = TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label || tipo;
+    const result = await guardarLeadAltum({
+      nombre,
+      telefono,
+      tipo_consulta: "tasacion",
+      origen: "tasador",
+      mensaje: `Solicitud de tasación (${operacion}): ${tipoLabel}, ${localidad}, ${superficie}.`,
+      detalle: { tipo: tipoLabel, localidad, superficie, operacion },
+    });
+    setEnviando(false);
+    // Si el guardado falla igual abrimos WhatsApp: la consulta llega por ahí y no se pierde.
+    track("tasador_complete", { tipo, localidad, operacion });
+    if (result.success) track("lead_submit", { origen: "tasador" });
+    track("whatsapp_click", { origen: "tasador" });
+    window.open(generarMensajeWhatsApp(), "_blank", "noopener,noreferrer");
+  };
 
   const generarMensajeWhatsApp = () => {
-    const texto = `Hola Estela Mari Rojas (Altum Inmobiliaria). Quisiera solicitar la tasación profesional de mi inmueble:
+    const texto = `Hola Estela Mari Rojas (ALTUM SCI - Servicios & Consultoría Inmobiliaria). Quisiera solicitar la tasación profesional de mi inmueble:
 • Tipo: ${TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label || tipo}
 • Localidad: ${localidad}
 • Superficie aprox: ${superficie}
-• Intención: ${operacion === "vender" ? "Venta" : "Alquiler / Administración"}
-¿Cuándo podríamos coordinar una tasación o visita?`;
+• Intención: ${operacion === "vender" ? "Venta Inmobiliaria" : "Alquiler / Administración"}
+¿Cuándo podríamos coordinar la visita técnica o peritaje preliminar?`;
 
-    return `https://wa.me/5492996095742?text=${encodeURIComponent(texto)}`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
   };
 
   return (
     <section
       className="py-24 lg:py-36 relative overflow-hidden text-crema"
-      style={{ background: "#080E1A" }}
+      style={{ background: "#060A14" }}
       id="tasador-express"
     >
       {/* Background accents */}
       <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none opacity-15 blur-[120px] rounded-full"
+        className="absolute top-0 right-0 w-[550px] h-[550px] pointer-events-none opacity-15 blur-[130px] rounded-full"
         style={{ background: "#C9A84C" }}
       />
       <div
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] pointer-events-none opacity-10 blur-[140px] rounded-full"
+        className="absolute bottom-0 left-0 w-[550px] h-[550px] pointer-events-none opacity-10 blur-[150px] rounded-full"
         style={{ background: "#1A2752" }}
       />
 
@@ -68,7 +103,9 @@ export default function TasadorExpress() {
           <div className="lg:col-span-5 space-y-6">
             <div className="flex items-center gap-4">
               <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow">Valuación Certificada</span>
+              <span className="eyebrow tracking-[0.25em] text-dorado">
+                ALTUM SCI · Tasación Oficial Certificada
+              </span>
             </div>
 
             <h2
@@ -79,53 +116,58 @@ export default function TasadorExpress() {
               }}
             >
               ¿Cuánto vale tu propiedad en{" "}
-              <em className="not-italic italic text-dorado">Río Negro?</em>
+              <em className="not-italic italic text-dorado">Patagonia?</em>
             </h2>
 
-            <p className="font-body text-crema/55 text-sm lg:text-base leading-relaxed">
-              Tasaciones inmobiliarias con respaldo legal de <strong>Estela Mari Rojas</strong> (Martillera & Corredora Pública Mat. 35 RP 2026).
+            <p className="font-body text-crema/60 text-sm lg:text-base leading-relaxed">
+              Tasaciones inmobiliarias con rigor técnico y legal a cargo de{" "}
+              <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora
+              Pública Colegiada Mat. 35 RP 2026).
             </p>
 
             {/* Checklist de Garantías */}
             <div className="space-y-4 pt-4 border-t border-crema/10">
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Análisis de Mercado Real
+                    Análisis Comparativo de Mercado Real
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Basado en operaciones efectivas cerradas en la zona, sin sobrevaluaciones ficticias.
+                  <p className="font-body text-crema/45 text-xs">
+                    Basado en operaciones efectivas y escrituras cerradas en la
+                    zona, sin sobrevaluaciones ficticias.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Seguridad Jurídica y Notarial
+                    Validez Notarial, Judicial y Bancaria
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Revisión de títulos, planos y estado dominial para una venta sin contratiempos.
+                  <p className="font-body text-crema/45 text-xs">
+                    Revisión de títulos, planos y estado dominial para
+                    garantizar una operación sin sorpresas.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-dorado/15 flex items-center justify-center shrink-0 mt-0.5 text-dorado">
+                <div className="w-5 h-5 rounded-full bg-dorado/20 flex items-center justify-center shrink-0 mt-0.5 text-dorado font-bold text-xs">
                   ✓
                 </div>
                 <div>
                   <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-crema/90">
-                    Respuesta en 24/48 Horas
+                    Dictamen Rápido y Personalizado
                   </h4>
-                  <p className="font-body text-crema/40 text-xs">
-                    Coordinamos inspección física o virtual de inmediato.
+                  <p className="font-body text-crema/45 text-xs">
+                    Coordinamos inspección in situ o relevamiento satelital y
+                    virtual inmediato.
                   </p>
                 </div>
               </div>
@@ -195,7 +237,10 @@ export default function TasadorExpress() {
                           <button
                             key={t.id}
                             type="button"
-                            onClick={() => setTipo(t.id)}
+                            onClick={() => {
+                              marcarInicio();
+                              setTipo(t.id);
+                            }}
                             className={`p-3 text-left border transition-all flex items-center gap-2.5 ${
                               tipo === t.id
                                 ? "border-dorado bg-dorado/15 text-dorado font-medium"
@@ -221,7 +266,10 @@ export default function TasadorExpress() {
                           <button
                             key={loc}
                             type="button"
-                            onClick={() => setLocalidad(loc)}
+                            onClick={() => {
+                              marcarInicio();
+                              setLocalidad(loc);
+                            }}
                             className={`p-2.5 text-center border font-body text-xs transition-all ${
                               localidad === loc
                                 ? "border-dorado bg-dorado text-tierra font-semibold"
@@ -244,7 +292,10 @@ export default function TasadorExpress() {
                           <button
                             key={sup}
                             type="button"
-                            onClick={() => setSuperficie(sup)}
+                            onClick={() => {
+                              marcarInicio();
+                              setSuperficie(sup);
+                            }}
                             className={`px-3 py-1.5 border font-body text-[11px] transition-all ${
                               superficie === sup
                                 ? "border-dorado text-dorado bg-dorado/15 font-medium"
@@ -261,7 +312,10 @@ export default function TasadorExpress() {
                     <div className="pt-4 flex justify-end">
                       <button
                         type="button"
-                        onClick={() => setStep(2)}
+                        onClick={() => {
+                          marcarInicio();
+                          setStep(2);
+                        }}
                         className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-md"
                       >
                         <span>Continuar</span>
@@ -284,7 +338,7 @@ export default function TasadorExpress() {
                       </h4>
                       <div className="grid grid-cols-2 gap-4 text-xs font-body text-crema/70 pt-2 border-t border-crema/10">
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Inmueble
                           </span>
                           <span className="font-medium text-crema">
@@ -292,19 +346,23 @@ export default function TasadorExpress() {
                           </span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Ubicación
                           </span>
-                          <span className="font-medium text-crema">{localidad}</span>
+                          <span className="font-medium text-crema">
+                            {localidad}
+                          </span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Superficie
                           </span>
-                          <span className="font-medium text-crema">{superficie}</span>
+                          <span className="font-medium text-crema">
+                            {superficie}
+                          </span>
                         </div>
                         <div>
-                          <span className="block text-crema/40 text-[10px] uppercase tracking-wider">
+                          <span className="block text-crema/65 text-[10px] uppercase tracking-wider">
                             Operación
                           </span>
                           <span className="font-medium text-crema capitalize">
@@ -314,9 +372,43 @@ export default function TasadorExpress() {
                       </div>
                     </div>
 
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        required
+                        autoComplete="name"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        placeholder="Tu nombre"
+                        aria-label="Tu nombre"
+                        className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
+                      />
+                      <input
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        value={telefono}
+                        onChange={(e) => setTelefono(e.target.value)}
+                        placeholder="Tu WhatsApp o teléfono"
+                        aria-label="Tu WhatsApp o teléfono"
+                        className="w-full bg-navy-900/80 border border-crema/15 px-3.5 py-2.5 text-xs font-body text-crema focus:outline-none focus:border-dorado transition-colors"
+                      />
+                    </div>
+
                     <p className="font-body text-crema/60 text-xs leading-relaxed">
-                      Al presionar el botón a continuación, se abrirá una conversación directa por WhatsApp con <strong>Estela Mari Rojas</strong> con los datos de tu inmueble ya listos para coordinar la tasación profesional.
+                      Estela te responde personalmente por WhatsApp. Al
+                      continuar se abrirá la conversación con los datos de tu
+                      inmueble ya cargados.
                     </p>
+
+                    {error && (
+                      <p
+                        role="alert"
+                        className="font-body text-xs text-red-400"
+                      >
+                        {error}
+                      </p>
+                    )}
 
                     {/* Botones Finales */}
                     <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -328,15 +420,19 @@ export default function TasadorExpress() {
                         ← Volver a editar
                       </button>
 
-                      <a
-                        href={generarMensajeWhatsApp()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center"
+                      <button
+                        type="button"
+                        onClick={solicitarTasacion}
+                        disabled={enviando}
+                        className="flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
                       >
-                        <span>Solicitar Tasación por WhatsApp</span>
+                        <span>
+                          {enviando
+                            ? "Enviando..."
+                            : "Solicitar Tasación por WhatsApp"}
+                        </span>
                         <span>→</span>
-                      </a>
+                      </button>
                     </div>
                   </motion.div>
                 )}

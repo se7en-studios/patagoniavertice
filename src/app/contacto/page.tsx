@@ -1,17 +1,16 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import FormularioContacto from "@/components/marketing/FormularioContacto";
 import { WHATSAPP_URL } from "@/lib/constants";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Contacto",
   description:
-    "Contactate con Altum Inmobiliaria. Asesores inmobiliarios en Cipoletti, Catriel y toda la región de Río Negro.",
-  alternates: { canonical: `${siteUrl}/contacto` },
-};
+    "Escribinos por WhatsApp o email. Asesores inmobiliarios para Cipolletti, Catriel, Mari Menuco y toda la región de Río Negro.",
+  path: "/contacto",
+});
 
 /* ── Datos de contacto ───────────────────────────────────────────────────── */
 
@@ -21,9 +20,9 @@ const WA_HREF =
 const contactInfo = [
   {
     icon: <LocationIcon />,
-    label: "Cipoletti",
-    value: "Cipoletti, Río Negro\nPatagonia Argentina",
-    href: "https://maps.google.com/?q=Cipoletti,+Rio+Negro,+Argentina",
+    label: "Cipolletti",
+    value: "Cipolletti, Río Negro\nPatagonia Argentina",
+    href: "https://maps.google.com/?q=Cipolletti,+Rio+Negro,+Argentina",
   },
   {
     icon: <LocationIcon />,

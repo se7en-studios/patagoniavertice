@@ -61,7 +61,7 @@ export default function PorQueElegirnos() {
             Lo que nos hace{" "}
             <em className="not-italic italic text-dorado">diferentes</em>
           </h2>
-          <p className="font-body text-crema/35 text-[15px] leading-relaxed max-w-2xl">
+          <p className="font-body text-crema/60 text-[15px] leading-relaxed max-w-2xl">
             No somos la única inmobiliaria en Río Negro y la Patagonia. Pero sí
             la que más te acompaña.
           </p>
@@ -115,7 +115,7 @@ export default function PorQueElegirnos() {
               >
                 {d.titulo}
               </h3>
-              <p className="font-body text-crema/40 text-[15px] leading-relaxed relative z-10">
+              <p className="font-body text-crema/65 text-[15px] leading-relaxed relative z-10">
                 {d.descripcion}
               </p>
             </motion.div>

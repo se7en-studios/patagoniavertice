@@ -3,35 +3,40 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { track } from "@/lib/analytics";
 
 const CONCIERGE_OPTIONS = [
   {
     id: "comprar",
     icon: "🏡",
     label: "Quiero Comprar o Invertir",
-    sub: "Casas, lotes y proyectos en Patagonia",
-    query: "Hola Altum, busco asesoramiento para comprar o invertir en una propiedad.",
+    sub: "Lotes en Mari Menuco y propiedades en Río Negro",
+    query:
+      "Hola ALTUM SCI, busco asesoramiento para comprar o invertir en un lote o propiedad.",
   },
   {
     id: "tasar",
     icon: "🔑",
     label: "Quiero Vender o Tasar",
-    sub: "Tasación profesional con Estela Mari Rojas",
-    query: "Hola Altum, quisiera solicitar la tasación profesional de mi inmueble.",
+    sub: "Tasación oficial con Estela Mari Rojas (Mat. 35 RP 2026)",
+    query:
+      "Hola Estela Mari Rojas (ALTUM SCI), quisiera solicitar la tasación profesional de mi inmueble.",
   },
   {
     id: "alquilar",
     icon: "🏢",
-    label: "Alquiler & Administración",
-    sub: "Renta segura y gestión integral",
-    query: "Hola Altum, me interesa consultar por alquiler o administración de mi propiedad.",
+    label: "Alquiler Corporativo & Renta",
+    sub: "Gestión segura en Cipolletti, Catriel y Neuquén",
+    query:
+      "Hola ALTUM SCI, me interesa consultar por alquiler o administración corporativa.",
   },
   {
     id: "legal",
     icon: "⚖️",
-    label: "Asesoría Legal & Contratos",
-    sub: "Revisión notarial y seguridad jurídica",
-    query: "Hola Altum, necesito asesoramiento para contratos o trámites notariales.",
+    label: "Asesoría Notarial & Contratos",
+    sub: "Supervisión legal colegiada y títulos",
+    query:
+      "Hola ALTUM SCI, necesito asesoramiento notarial y legal para una operación inmobiliaria.",
   },
 ];
 
@@ -41,22 +46,27 @@ export default function FloatingDock() {
   return (
     <>
       {/* Botón flotante Luxury Concierge */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="hidden lg:block fixed bottom-6 right-6 z-50">
         <motion.button
           onClick={() => setModalOpen((prev) => !prev)}
-          aria-label={modalOpen ? "Cerrar asistente" : "Abrir Asistente WhatsApp Concierge"}
+          aria-label={
+            modalOpen
+              ? "Cerrar asistente"
+              : "Abrir Asistente WhatsApp Concierge"
+          }
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-3 px-5 py-3.5 rounded-full font-body text-[11px] tracking-[0.16em] uppercase font-semibold text-tierra shadow-2xl transition-all duration-300"
           style={{
             background: modalOpen ? "#F5EFE6" : "#C9A84C",
             border: "1px solid rgba(201,168,76,0.6)",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4)",
+            boxShadow:
+              "0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.4)",
           }}
         >
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-700 animate-pulse shrink-0" />
           <WaMiniIcon />
-          <span>{modalOpen ? "Cerrar" : "WhatsApp Concierge"}</span>
+          <span>{modalOpen ? "Cerrar" : "ALTUM SCI Concierge"}</span>
         </motion.button>
       </div>
 
@@ -68,22 +78,22 @@ export default function FloatingDock() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.94 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-6 z-50 w-[92vw] max-w-sm p-6 bg-navy-950/95 text-crema border border-dorado/40 shadow-2xl backdrop-blur-2xl"
+            className="hidden lg:block fixed bottom-24 right-6 z-50 w-[92vw] max-w-sm p-6 bg-navy-950/95 text-crema border border-dorado/40 shadow-2xl backdrop-blur-2xl"
             style={{ background: "rgba(8,14,26,0.95)" }}
           >
             {/* Header Concierge */}
             <div className="flex items-start justify-between border-b border-crema/10 pb-4 mb-4">
               <div>
                 <span className="font-body text-dorado text-[10px] tracking-[0.2em] uppercase font-medium">
-                  Altum Concierge
+                  ALTUM SCI Concierge
                 </span>
                 <h3 className="font-display text-lg font-medium text-crema">
-                  ¿En qué podemos ayudarte?
+                  ¿En qué podemos asesorarte?
                 </h3>
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-crema/40 hover:text-crema p-1 text-sm"
+                className="text-crema/65 hover:text-crema p-1 text-sm"
                 aria-label="Cerrar"
               >
                 ✕
@@ -98,7 +108,10 @@ export default function FloatingDock() {
                   href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(opt.query)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setModalOpen(false)}
+                  onClick={() => {
+                    track("whatsapp_click", { origen: `concierge_${opt.id}` });
+                    setModalOpen(false);
+                  }}
                   className="flex items-center gap-3.5 p-3 border border-crema/10 bg-navy-900/50 hover:border-dorado/60 hover:bg-dorado/10 transition-all group"
                 >
                   <span className="text-xl shrink-0">{opt.icon}</span>
@@ -106,7 +119,7 @@ export default function FloatingDock() {
                     <span className="font-display text-xs font-semibold text-crema group-hover:text-dorado transition-colors block truncate">
                       {opt.label}
                     </span>
-                    <span className="font-body text-[10px] text-crema/40 block truncate">
+                    <span className="font-body text-[10px] text-crema/65 block truncate">
                       {opt.sub}
                     </span>
                   </div>
@@ -118,10 +131,13 @@ export default function FloatingDock() {
             </div>
 
             {/* Footer con llamada directa */}
-            <div className="pt-3 border-t border-crema/10 flex items-center justify-between text-[11px] font-body text-crema/40">
+            <div className="pt-3 border-t border-crema/10 flex items-center justify-between text-[11px] font-body text-crema/65">
               <span>¿Preferís llamar?</span>
               <a
                 href={`tel:+${WHATSAPP_NUMBER}`}
+                onClick={() =>
+                  track("cta_click", { origen: "concierge", accion: "llamar" })
+                }
                 className="text-dorado hover:underline font-medium flex items-center gap-1"
               >
                 <span>+54 9 299 609-5742</span>

@@ -4,8 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST() {
   try {
-    cookies().delete("altum_admin_session");
-    const supabase = createClient();
+    (await cookies()).delete("altum_admin_session");
+    const supabase = await createClient();
     await supabase.auth.signOut();
 
     return NextResponse.json({ success: true });

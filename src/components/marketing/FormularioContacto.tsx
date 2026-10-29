@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";
 
@@ -135,6 +135,9 @@ import { useSearchParams } from "next/navigation";
 
 export default function FormularioContacto() {
   const [toast, setToast] = useState<ToastState>(null);
+  // Anti-spam: momento de render + honeypot (los valida el servidor).
+  const [renderedAt] = useState(() => Date.now());
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
 
   const {
@@ -174,6 +177,8 @@ export default function FormularioContacto() {
       tipo_consulta: data.tipo_consulta,
       mensaje: data.mensaje,
       origen: propiedadQuery ? "contacto_propiedad" : "contacto",
+      empresa_web: honeypotRef.current?.value,
+      renderedAt,
     });
 
     if (result.success) {
@@ -212,6 +217,24 @@ export default function FormularioContacto() {
         noValidate
         className="flex flex-col gap-8"
       >
+        {/* Honeypot: invisible para personas, los bots lo completan */}
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}
+        >
+          <label>
+            Empresa web
+            <input
+              ref={honeypotRef}
+              type="text"
+              name="empresa_web"
+              tabIndex={-1}
+              autoComplete="off"
+              defaultValue=""
+            />
+          </label>
+        </div>
+
         {/* Nombre + Email */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div>

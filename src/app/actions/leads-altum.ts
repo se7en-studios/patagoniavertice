@@ -3,6 +3,13 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { notificarLead } from "@/lib/notify-lead";
+import {
+  emailSchema,
+  esEnvioSospechoso,
+  mensajeSchema,
+  nombreSchema,
+  telefonoSchema,
+} from "@/lib/validacion-leads";
 
 export type TipoConsulta =
   | "venta"
@@ -23,6 +30,10 @@ export interface LeadAltumInput {
   origen?: string;
   /** Datos estructurados extra (inmueble, monto, etc.) */
   detalle?: Record<string, string | number>;
+  /** Honeypot: debe llegar vacío. */
+  empresa_web?: string;
+  /** Date.now() del momento en que se renderizó el formulario. */
+  renderedAt?: number;
 }
 
 export interface LeadAltumResult {
@@ -30,37 +41,25 @@ export interface LeadAltumResult {
   error?: string;
 }
 
-const schema = z
+const leadAltumSchema = z
   .object({
-    nombre: z.string().trim().min(2, "Ingresá tu nombre.").max(100),
-    email: z
-      .string()
-      .trim()
-      .toLowerCase()
-      .email("El email no es válido.")
-      .max(150)
-      .optional()
-      .or(z.literal("")),
-    telefono: z
-      .string()
-      .trim()
-      .regex(/^[+\d\s()-]{6,30}$/, "El teléfono no es válido.")
-      .optional()
-      .or(z.literal("")),
-    tipo_consulta: z.enum([
-      "venta",
-      "alquiler",
-      "consultoria",
-      "contratos",
-      "tasacion",
-      "inversion",
-      "guia",
-    ]),
-    mensaje: z
-      .string()
-      .trim()
-      .min(1, "Completá los campos obligatorios.")
-      .max(3000),
+    nombre: nombreSchema,
+    // Tasador/guía/calculadora solo piden teléfono: el email es opcional.
+    email: emailSchema.optional().or(z.literal("")),
+    telefono: telefonoSchema,
+    tipo_consulta: z.enum(
+      [
+        "venta",
+        "alquiler",
+        "consultoria",
+        "contratos",
+        "tasacion",
+        "inversion",
+        "guia",
+      ],
+      { message: "Seleccioná el tipo de consulta." },
+    ),
+    mensaje: mensajeSchema,
     origen: z.string().trim().max(40).optional(),
     detalle: z
       .record(z.string(), z.union([z.string().max(200), z.number()]))
@@ -73,20 +72,26 @@ const schema = z
 export async function guardarLeadAltum(
   data: LeadAltumInput,
 ): Promise<LeadAltumResult> {
-  const parsed = schema.safeParse(data);
+  // Bots: éxito falso, sin insertar, para que no aprendan a evitarlo.
+  if (esEnvioSospechoso(data?.empresa_web, data?.renderedAt)) {
+    return { success: true };
+  }
+
+  const parsed = leadAltumSchema.safeParse(data);
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.issues[0]?.message ?? "Datos inválidos.",
+      error:
+        parsed.error.issues[0]?.message ?? "Completá los campos obligatorios.",
     };
   }
   const d = parsed.data;
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("leads_altum").insert({
     nombre: d.nombre,
     email: d.email || null,
-    telefono: d.telefono || null,
+    telefono: d.telefono,
     tipo_consulta: d.tipo_consulta,
     mensaje: d.mensaje,
     origen: d.origen ?? null,
@@ -106,7 +111,7 @@ export async function guardarLeadAltum(
   await notificarLead(`Nuevo lead ALTUM SCI (${d.origen ?? d.tipo_consulta})`, {
     Nombre: d.nombre,
     Email: d.email,
-    Teléfono: d.telefono,
+    Teléfono: d.telefono ?? undefined,
     Origen: d.origen,
     Tipo: d.tipo_consulta,
     Mensaje: d.mensaje,

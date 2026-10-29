@@ -41,17 +41,23 @@ function formatPrice(precio: number | null, moneda: string | null) {
   return `${moneda ?? "USD"} ${precio.toLocaleString("es-AR")}`;
 }
 
-export default async function Image({ params }: { params: { id: string } }) {
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   let titulo = "Propiedad en Neuquén y Río Negro";
   let ciudad = "";
   let precio = "";
   let photo: string | null = null;
 
   try {
-    const { data } = await createClient()
+    const supabase = await createClient();
+    const { data } = await supabase
       .from("propiedades")
       .select("titulo, ciudad, precio, moneda, imagenes")
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("publicado", true)
       .single();
     if (data) {

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { WHATSAPP_URL } from "@/lib/constants";
 import { track } from "@/lib/analytics";
 
@@ -34,7 +35,7 @@ export default function MobileCtaBar() {
       >
         WhatsApp
       </a>
-      <a
+      <Link
         href="/#tasador-express"
         onClick={() =>
           track("cta_click", { origen: "mobile_bar", accion: "tasar" })
@@ -42,7 +43,7 @@ export default function MobileCtaBar() {
         className={`${itemCls} bg-dorado text-tierra`}
       >
         Tasar
-      </a>
+      </Link>
     </nav>
   );
 }

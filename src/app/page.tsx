@@ -59,10 +59,8 @@ const PorQueElegirnos = dynamic(
 );
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
 const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
-const SpotlightCursor = dynamic(
-  () => import("@/components/ui/SpotlightCursor"),
-  { ssr: false },
-);
+// Next 15 no permite ssr:false en Server Components; el canvas solo usa window dentro de useEffect.
+const SpotlightCursor = dynamic(() => import("@/components/ui/SpotlightCursor"));
 
 import { getSiteConfig } from "@/lib/site-config";
 
@@ -71,7 +69,7 @@ export default async function HomePage() {
   const siteConfig = getSiteConfig();
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("propiedades")
       .select(

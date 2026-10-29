@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
     // 1. Verificación por Master PIN / Clave Maestra de Estela
     if (password && password.trim() === MASTER_PIN) {
-      cookies().set("altum_admin_session", "authenticated", {
+      (await cookies()).set("altum_admin_session", "authenticated", {
         path: "/",
         httpOnly: true,
         sameSite: "lax",
@@ -22,14 +22,14 @@ export async function POST(request: Request) {
 
     // 2. Verificación por Supabase Auth si se ingresó email y contraseña
     if (email && password) {
-      const supabase = createClient();
+      const supabase = await createClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (!error && data?.user) {
-        cookies().set("altum_admin_session", "authenticated", {
+        (await cookies()).set("altum_admin_session", "authenticated", {
           path: "/",
           httpOnly: true,
           sameSite: "lax",

@@ -3,48 +3,87 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { notificarLead } from "@/lib/notify-lead";
+import {
+  emailSchema,
+  esEnvioSospechoso,
+  mensajeSchema,
+  nombreSchema,
+  telefonoSchema,
+} from "@/lib/validacion-leads";
 
 export type ContactoState = {
   success?: boolean;
   error?: string;
 };
 
-const schema = z.object({
-  nombre: z.string().trim().min(1).max(100),
-  email: z.string().trim().min(1).max(150),
-  telefono: z.string().trim().max(30).optional(),
-  asunto: z.string().trim().max(150).optional(),
-  mensaje: z.string().trim().min(1).max(3000),
+const contactoSchema = z.object({
+  nombre: nombreSchema,
+  email: emailSchema,
+  telefono: telefonoSchema,
+  asunto: z
+    .string()
+    .trim()
+    .max(200, "El asunto es demasiado largo.")
+    .optional(),
+  mensaje: mensajeSchema,
+  propiedad_id: z
+    .string()
+    .trim()
+    .optional()
+    .transform((v) => v || undefined)
+    .pipe(z.uuid("Propiedad inválida.").optional()),
 });
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** FormData.get devuelve File | string | null; solo aceptamos strings. */
+function campo(formData: FormData, key: string): string | undefined {
+  const v = formData.get(key);
+  return typeof v === "string" ? v : undefined;
+}
 
 export async function enviarConsulta(
   _prev: ContactoState,
   formData: FormData,
 ): Promise<ContactoState> {
-  const parsed = schema.safeParse({
-    nombre: formData.get("nombre") ?? "",
-    email: formData.get("email") ?? "",
-    telefono: formData.get("telefono") ?? undefined,
-    asunto: formData.get("asunto") ?? undefined,
-    mensaje: formData.get("mensaje") ?? "",
+  // Bots: éxito falso, sin insertar, para que no aprendan a evitarlo.
+  if (
+    esEnvioSospechoso(
+      campo(formData, "empresa_web"),
+      campo(formData, "rendered_at"),
+    )
+  ) {
+    return { success: true };
+  }
+
+  const parsed = contactoSchema.safeParse({
+    nombre: campo(formData, "nombre") ?? "",
+    email: campo(formData, "email") ?? "",
+    telefono: campo(formData, "telefono"),
+    asunto: campo(formData, "asunto"),
+    mensaje: campo(formData, "mensaje") ?? "",
+    propiedad_id: campo(formData, "propiedad_id"),
   });
   if (!parsed.success) {
-    return { error: "Por favor completá los campos obligatorios." };
+    return {
+      error:
+        parsed.error.issues[0]?.message ??
+        "Por favor completá los campos obligatorios.",
+    };
   }
-  const d = parsed.data;
-  if (!EMAIL_REGEX.test(d.email)) {
-    return { error: "El email ingresado no es válido." };
-  }
-  const mensaje = d.asunto ? `Asunto: ${d.asunto}\n\n${d.mensaje}` : d.mensaje;
 
-  const supabase = createClient();
+  const { nombre, email, telefono, asunto, mensaje, propiedad_id } =
+    parsed.data;
+  const mensajeFinal = asunto ? `Asunto: ${asunto}\n\n${mensaje}` : mensaje;
+  if (mensajeFinal.length > 5000) {
+    return { error: "El mensaje es demasiado largo." };
+  }
+
+  const supabase = await createClient();
   const { error } = await supabase.from("leads").insert({
-    nombre: d.nombre,
-    email: d.email,
-    telefono: d.telefono || null,
-    mensaje,
+    nombre,
+    email,
+    telefono,
+    mensaje: mensajeFinal,
+    propiedad_id: propiedad_id ?? null,
     estado: "nuevo",
   });
 
@@ -54,10 +93,10 @@ export async function enviarConsulta(
   }
 
   await notificarLead("Nuevo lead ALTUM SCI (contacto)", {
-    Nombre: d.nombre,
-    Email: d.email,
-    Teléfono: d.telefono,
-    Mensaje: mensaje,
+    Nombre: nombre,
+    Email: email,
+    Teléfono: telefono ?? undefined,
+    Mensaje: mensajeFinal,
   });
 
   return { success: true };

@@ -307,7 +307,7 @@ export default function PropiedadesDestacadasHome({
                     e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
                     e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
                   }}
-                  className="group relative flex flex-col w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] rounded-3xl bg-white border border-white overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.35)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.45)] hover:-translate-y-1 transition-all duration-500"
+                  className="group relative flex flex-col w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] rounded-3xl bg-white border border-dorado/20 hover:border-dorado/60 overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.25)] hover:shadow-[0_28px_60px_-28px_rgba(14,26,51,0.35)] hover:-translate-y-1 transition-all duration-500"
                 >
                   {/* Brillo dorado que sigue al cursor */}
                   <div
@@ -323,7 +323,7 @@ export default function PropiedadesDestacadasHome({
                     <FotoParallax src={coverImage(p.imagenes)} alt={p.titulo} />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/10 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/20 to-transparent" />
 
                     {/* Badge Superior Izquierdo: Tipo */}
                     <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
@@ -338,16 +338,16 @@ export default function PropiedadesDestacadasHome({
                     </div>
 
                     {/* Categoría Badge Superior Derecho */}
-                    <span className="absolute top-3.5 right-3.5 font-body text-[9px] tracking-[0.15em] uppercase rounded-full text-navy/80 bg-white/80 backdrop-blur-md px-2.5 py-1 border border-white">
+                    <span className="absolute top-3.5 right-3.5 font-body text-[9px] tracking-[0.15em] uppercase rounded-full text-navy/80 bg-white/85 backdrop-blur-md px-2.5 py-1 border border-white/80">
                       {categoriaLabel[p.tipo] ?? p.tipo}
                     </span>
 
-                    {/* Precio flotante sobre la foto */}
+                    {/* Precio flotante sobre la foto con alto contraste */}
                     <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
-                      <p className="font-display text-dorado text-2xl font-bold tracking-tight drop-shadow-sm">
+                      <p className="font-display text-white text-2xl font-bold tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                         {precioLabel}
                       </p>
-                      <span className="font-body text-[10px] tracking-wider text-crema/80 uppercase font-medium">
+                      <span className="font-body text-[10px] tracking-wider text-white/95 bg-black/45 backdrop-blur-md px-2.5 py-0.5 rounded-full uppercase font-medium">
                         {p.ciudad.split(",")[0]}
                       </span>
                     </div>

@@ -187,31 +187,23 @@
     transform 0.7s ease;
 }
 
-/* ── Custom cursor ─────────────────────────── */
-@media (pointer: fine) {
-  html,
-  body,
-  a,
-  button {
-    cursor: none !important;
-  }
+/* ── Cursor styles ─────────────────────────── */
+html,
+body {
+  cursor: default;
 }
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #c9a84c;
-  transition:
-    width 0.2s ease,
-    height 0.2s ease,
-    background-color 0.2s ease,
-    border 0.2s ease;
+a,
+button,
+[role="button"] {
+  cursor: pointer;
 }
-.cursor-dot.is-hovered {
-  width: 32px;
-  height: 32px;
-  background-color: transparent;
-  border: 1.5px solid #c9a84c;
+input,
+textarea,
+select {
+  cursor: text;
+}
+select {
+  cursor: pointer;
 }
 
 /* ── Nav underline (gold, width 0 → 100%) ───── */

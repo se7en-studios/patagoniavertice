@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
-import Hero from "@/components/marketing/Hero";
-import Ubicacion from "@/components/marketing/Ubicacion";
-import DecodeText from "@/components/ui/DecodeText";
-import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { createClient } from "@/lib/supabase/server";
 import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
+import HomeClara from "@/components/home/HomeClara";
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
@@ -28,17 +24,6 @@ export const metadata: Metadata = {
   },
 };
 
-
-// ── Lazy loading de secciones below-fold ────────────────────────────────────
-const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
-const PropiedadesDestacadasHome = dynamic(
-  () => import("@/components/marketing/PropiedadesDestacadasHome"),
-);
-const TasadorExpress = dynamic(
-  () => import("@/components/marketing/TasadorExpress"),
-);
-const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
-const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
 
 import { getSiteConfig } from "@/lib/site-config";
 
@@ -64,34 +49,5 @@ export default async function HomePage() {
     /* Supabase not configured yet */
   }
 
-  return (
-    <>
-      <DecodeText />
-
-      <div id="sec-inicio">
-        <Hero />
-      </div>
-
-      <div id="sec-propiedades">
-        <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
-      </div>
-
-      <Ubicacion />
-
-      <div id="sec-tasador">
-        <TasadorExpress />
-      </div>
-
-      <div id="sec-nosotros">
-        <Nosotros perfil={siteConfig.perfil} />
-      </div>
-
-      <div id="sec-faq">
-        <FAQ />
-        <FaqJsonLd />
-      </div>
-
-      <CTAFinal />
-    </>
-  );
+  return <HomeClara propiedades={propiedadesDestacadas} perfil={siteConfig.perfil} />;
 }

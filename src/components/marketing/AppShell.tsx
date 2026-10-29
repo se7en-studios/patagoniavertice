@@ -8,6 +8,7 @@ import MobileCtaBar from "@/components/marketing/MobileCtaBar";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import CustomCursor from "@/components/ui/CustomCursor";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import HomeShell from "@/components/home/HomeShell";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -21,6 +22,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
     );
+  }
+
+  if (pathname === "/") {
+    return <HomeShell>{children}</HomeShell>;
   }
 
   return (

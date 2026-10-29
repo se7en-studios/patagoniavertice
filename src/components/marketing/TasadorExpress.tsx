@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import {
   motion,
   AnimatePresence,
@@ -191,6 +192,36 @@ export default function TasadorExpress() {
                   </p>
                 </div>
               </motion.div>
+            </motion.div>
+
+            {/* Sello de confianza de Estela */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="mt-6 flex items-center gap-3.5 rounded-2xl border border-dorado/30 bg-white/90 backdrop-blur-md p-3.5 shadow-sm"
+            >
+              <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-dorado/50 shrink-0">
+                <Image
+                  src="/estela-avatar.jpg"
+                  alt="Estela Mari Rojas"
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-sm font-semibold text-navy truncate">
+                  Estela Mari Rojas
+                </p>
+                <p className="font-body text-[10px] text-[#8A6A1B] uppercase tracking-wider font-semibold truncate">
+                  Martillera Colegiada · Mat. 35 RP 2026
+                </p>
+                <p className="font-body text-[10px] text-navy/50 truncate">
+                  Colegio de Martilleros de Río Negro · Validez legal
+                </p>
+              </div>
             </motion.div>
           </div>
 

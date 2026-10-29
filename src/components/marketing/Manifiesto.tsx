@@ -70,8 +70,21 @@ export default function Manifiesto() {
   });
 
   return (
-    <section className="relative bg-[#F6F8FB] py-28 lg:py-40 overflow-hidden">
-      <div className="relative max-w-4xl mx-auto px-8 lg:px-16 text-center">
+    <section className="relative bg-[#F6F8FB] py-28 lg:py-36 overflow-hidden">
+      {/* Glow ambiental dorado suave */}
+      <div
+        className="pointer-events-none absolute inset-0 flex items-center justify-center -z-0 opacity-40"
+        aria-hidden="true"
+      >
+        <div className="h-[450px] w-[600px] rounded-full bg-gradient-to-tr from-dorado/25 via-dorado/10 to-transparent blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-8 lg:px-16 text-center">
+        {/* Comilla ornamental */}
+        <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center text-dorado/60 text-2xl font-serif">
+          &ldquo;
+        </div>
+
         <blockquote
           ref={quoteRef}
           className="font-display font-medium text-navy text-3xl sm:text-4xl lg:text-6xl leading-[1.12]"
@@ -89,14 +102,14 @@ export default function Manifiesto() {
           ))}
         </blockquote>
 
-        <p className="mt-10 font-body text-navy/45 text-[10px] tracking-[0.35em] uppercase font-semibold">
+        <p className="mt-8 font-body text-navy/45 text-[10px] tracking-[0.35em] uppercase font-semibold">
           ALTUM SCI · Servicios &amp; Consultoría Inmobiliaria · Patagonia
         </p>
       </div>
 
       {/* Datos verificables ya publicados en el resto del sitio */}
       <motion.dl
-        className="relative max-w-5xl mx-auto mt-20 px-6 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
+        className="relative z-10 max-w-5xl mx-auto mt-16 px-6 lg:px-16 grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
@@ -109,12 +122,13 @@ export default function Manifiesto() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-3xl bg-white/80 border border-white shadow-[0_18px_40px_-24px_rgba(14,26,51,0.3)] px-5 py-7 text-center"
+            className="group rounded-3xl bg-white/90 backdrop-blur-md border border-dorado/20 hover:border-dorado/60 shadow-[0_18px_40px_-24px_rgba(14,26,51,0.25)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 px-5 py-7 text-center relative overflow-hidden"
           >
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-dorado/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <dd className="font-display text-navy text-4xl lg:text-5xl font-semibold tracking-tight">
               <AnimatedNumber value={s.value} suffix={s.suffix} />
             </dd>
-            <dt className="font-body text-navy/55 text-[10px] tracking-[0.2em] uppercase mt-2">
+            <dt className="font-body text-navy/60 text-[10px] tracking-[0.2em] uppercase mt-2 font-medium">
               {s.label}
             </dt>
           </motion.div>

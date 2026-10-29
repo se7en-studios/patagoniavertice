@@ -9,7 +9,7 @@ const fallback: ProyectoCard[] = [
   {
     id: "demo-1",
     titulo: "Altos del Limay",
-    ubicacion: "Cipoletti, Río Negro",
+    ubicacion: "Cipolletti, Río Negro",
     descripcion:
       "Complejo residencial en altura con vistas panorámicas al río Limay. Unidades de 2 y 3 ambientes con amenities de primer nivel.",
     estado: "en_construccion",

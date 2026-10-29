@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
-  title: "Inmobiliaria en Cipolletti: Propiedades & Inversión en Río Negro",
+export const metadata: Metadata = pageMeta({
+  title: "Inmobiliaria en Cipolletti | Casas y Lotes",
   description:
-    "Altum Inmobiliaria en Cipolletti, Río Negro. Casas en venta, alquileres, loteos residenciales y asesoramiento legal con martillera matriculada.",
+    "Casas, lotes y alquileres en Cipolletti, Río Negro. Tasaciones y operaciones con martillera matriculada Estela Mari Rojas (Mat. 35 RP 2026).",
+  path: "/inmobiliaria-cipoletti",
   keywords: [
     "inmobiliaria Cipolletti",
-    "inmobiliaria Cipoletti",
+    "inmobiliaria Cipolletti",
     "propiedades en Cipolletti",
     "casas en venta Cipolletti",
     "alquiler Cipolletti Río Negro",
@@ -19,15 +20,7 @@ export const metadata: Metadata = {
     "martillero Cipolletti",
     "Alto Valle inmobiliaria",
   ],
-  alternates: { canonical: `${siteUrl}/inmobiliaria-cipoletti` },
-  openGraph: {
-    title: "Inmobiliaria en Cipolletti - Altum Inmobiliaria",
-    description:
-      "La inmobiliaria de referencia en Cipolletti. Propiedades residenciales, loteos y comerciales en el Alto Valle de Río Negro.",
-    url: `${siteUrl}/inmobiliaria-cipoletti`,
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
-  },
-};
+});
 
 const serviciosCipolletti = [
   {
@@ -71,29 +64,7 @@ export default function InmobiliariaCipollettiPage() {
   return (
     <main className="bg-crema min-h-screen">
       {/* Breadcrumb Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Inicio",
-                item: siteUrl,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Inmobiliaria Cipolletti",
-                item: `${siteUrl}/inmobiliaria-cipoletti`,
-              },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbJsonLd([{ name: "Inmobiliaria Cipolletti", path: "/inmobiliaria-cipoletti" }])} />
 
       {/* Hero */}
       <section

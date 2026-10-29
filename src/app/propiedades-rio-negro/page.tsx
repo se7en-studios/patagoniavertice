@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
-
-export const metadata: Metadata = {
-  title: "Propiedades en Río Negro: Compra y Venta",
+export const metadata: Metadata = pageMeta({
+  title: "Propiedades en Río Negro | Venta y Alquiler",
   description:
-    "Encontrá propiedades en Río Negro con Altum Inmobiliaria. Casas, departamentos, terrenos y locales en venta y alquiler en Cipoletti, Catriel, General Roca, Viedma y toda la Patagonia Argentina.",
+    "Casas, terrenos y departamentos en Cipolletti, Catriel, General Roca y toda Río Negro. Asesoría directa con martillera matriculada.",
+  path: "/propiedades-rio-negro",
   keywords: [
     "propiedades Río Negro",
     "inmuebles Río Negro",
@@ -22,19 +23,11 @@ export const metadata: Metadata = {
     "General Roca propiedades",
     "Viedma inmobiliaria",
   ],
-  alternates: { canonical: `${siteUrl}/propiedades-rio-negro` },
-  openGraph: {
-    title: "Propiedades en Río Negro - Altum Inmobiliaria",
-    description:
-      "El mercado inmobiliario de mayor crecimiento en Argentina. Propiedades en Cipoletti, Catriel, General Roca, Viedma y toda la Patagonia. Altum Inmobiliaria.",
-    url: `${siteUrl}/propiedades-rio-negro`,
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
-  },
-};
+});
 
 const ciudades = [
   {
-    nombre: "Cipoletti",
+    nombre: "Cipolletti",
     descripcion:
       "Capital del Alto Valle. Mercado residencial activo con alta demanda de alquileres.",
     link: "/inmobiliaria-cipoletti",
@@ -114,29 +107,7 @@ const tiposPropiedad = [
 export default function PropiedadesRioNegro() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Inicio",
-                item: siteUrl,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Propiedades Río Negro",
-                item: `${siteUrl}/propiedades-rio-negro`,
-              },
-            ],
-          }),
-        }}
-      />
+      <JsonLd data={breadcrumbJsonLd([{ name: "Propiedades Río Negro", path: "/propiedades-rio-negro" }])} />
 
       <main className="min-h-screen">
         {/* Hero */}

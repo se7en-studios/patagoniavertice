@@ -7,6 +7,7 @@ import CintaMarquee from "@/components/marketing/CintaMarquee";
 import Ubicacion from "@/components/marketing/Ubicacion";
 import SectionRail from "@/components/marketing/SectionRail";
 import DecodeText from "@/components/ui/DecodeText";
+import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { createClient } from "@/lib/supabase/server";
 import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
 
@@ -28,14 +29,6 @@ export const metadata: Metadata = {
       "ALTUM SCI · Servicios & Consultoría Inmobiliaria - Neuquén & Patagonia",
     description:
       "Terrenos frente al lago Mari Menuco, loteos y residencias en Neuquén y Río Negro. Seguridad jurídica, confidencialidad y transparencia total.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "ALTUM SCI · Servicios y Consultoría Inmobiliaria",
-      },
-    ],
   },
 };
 
@@ -152,6 +145,7 @@ export default async function HomePage() {
 
       <div id="sec-faq">
         <FAQ />
+        <FaqJsonLd />
       </div>
 
       <CTAFinal />

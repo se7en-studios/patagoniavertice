@@ -17,7 +17,7 @@ const serviceLinks = [
 ];
 
 const zonaLinks = [
-  { href: "/inmobiliaria-cipoletti", label: "Cipoletti" },
+  { href: "/inmobiliaria-cipoletti", label: "Cipolletti" },
   { href: "/inmobiliaria-catriel", label: "Catriel" },
   { href: "/propiedades-rio-negro", label: "General Roca" },
   { href: "/propiedades-rio-negro", label: "Río Negro" },
@@ -102,7 +102,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <LocationIcon />
                 <span>
-                  Cipoletti,
+                  Cipolletti,
                   <br />
                   Patagonia Argentina
                 </span>

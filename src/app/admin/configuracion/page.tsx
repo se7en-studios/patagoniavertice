@@ -24,7 +24,7 @@ import {
   FaqLandingItem,
   StatManifiesto,
   DEFAULT_SITE_CONFIG,
-} from "@/lib/site-config";
+} from "@/lib/site-config-types";
 
 type TabConfig = "portada" | "lago" | "perfil" | "servicios" | "faq";
 

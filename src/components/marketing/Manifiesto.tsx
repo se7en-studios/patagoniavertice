@@ -89,15 +89,22 @@ export default function Manifiesto({
 
   return (
     <section className="relative bg-[#F6F8FB] pb-16 lg:pb-24 overflow-hidden">
-      {/* Cinta Continua PropTech de Indicadores de Mercado (GPU Marquee) */}
-      <div className="relative bg-[#0B1528] border-y border-dorado/25 py-3 overflow-hidden select-none mb-16 lg:mb-20">
+      {/* Cinta Continua PropTech de Indicadores de Mercado (Estilo se7endev.vercel.app: .rd-condensed + estrella 4 puntas) */}
+      <div className="relative bg-[#0B1528] border-y border-dorado/25 py-3.5 overflow-hidden select-none mb-16 lg:mb-20">
         <div className="marquee-track-slow">
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((text, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-6 px-6 font-mono text-[10.5px] tracking-[0.2em] uppercase text-white/85 whitespace-nowrap"
+              className="flex items-center gap-6 px-6 rd-condensed text-xl sm:text-2xl text-white/90 whitespace-nowrap"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="h-3.5 w-3.5 text-dorado shrink-0"
+                fill="currentColor"
+              >
+                <path d="M12 0c.6 5.2 1.6 8 3.3 9.1 1.4.9 4.2 1.4 8.7 2.9-4.5 1.5-7.3 2-8.7 2.9C13.6 16 12.6 18.8 12 24c-.6-5.2-1.6-8-3.3-9.1C7.3 14 4.5 13.5 0 12c4.5-1.5 7.3-2 8.7-2.9C10.4 8 11.4 5.2 12 0Z" />
+              </svg>
               <span>{text}</span>
             </div>
           ))}
@@ -174,7 +181,7 @@ export default function Manifiesto({
                 </div>
 
                 <div>
-                  <dd className="font-display text-navy text-4xl lg:text-[2.85rem] font-semibold tracking-tight leading-none">
+                  <dd className="rd-condensed tabular-nums text-navy text-5xl lg:text-[4rem] leading-none">
                     {item.value !== null ? (
                       <AnimatedNumber
                         value={item.value}

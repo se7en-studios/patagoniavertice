@@ -1,90 +1,261 @@
-/* ── Sistema Tipográfico Arquitectónico & Editorial (ALTUM SCI) ────────
-   1. Display / Headings: Outfit (--font-outfit) — geométrica, precisa, tracking -0.03em
-   2. Editorial Accent:   Playfair Display Italic (--font-playfair) — lujo patrimonial en palabras clave
-   3. Body / UI:          Plus Jakarta Sans (--font-plus-jakarta) — lectura cristalina, OpenType activo
-   4. Technical / Mono:   Geist Mono (--font-geist-mono) — cifras tabulares, matrículas y códigos
-──────────────────────────────────────────────────────────────────────── */
+/* ── Sistema Tipográfico & Interacciones (Referencia: se7endev.vercel.app) ──
+   1. Display Wide:     Archivo Variable ("wdth" 118–125, weight 800, tracking -0.035em)
+   2. Condensed Metric: Archivo Variable ("wdth" 62, weight 800, tracking -0.01em)
+   3. Editorial Serif:  Instrument Serif Italic (400 italic, 1.12em, tracking -0.02em)
+   4. Technical Label:  Chivo Mono (uppercase, tracking 0.14em, tabular-nums)
+──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+}
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
 }
 
-/* Balance óptico de titulares y párrafos */
+/* Balance óptico */
 h1,
 h2,
 h3,
 h4,
 blockquote {
   text-wrap: balance;
-  font-feature-settings: "ss01" 1, "liga" 1;
 }
 
 p {
   text-wrap: pretty;
 }
 
-/* Contraste Editorial: toda palabra enfatizada en titulares usa Playfair Display Italic real */
+/* Titulares Arquitectónicos con eje variable de ancho ("wdth" 115) */
+.font-display,
+h1,
+h2 {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 114;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+
+.rd-display {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 122;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  line-height: 0.88;
+}
+
+/* Cifras y Marquee Ultra-Condensados ("wdth" 62) como en se7endev.vercel.app */
+.rd-condensed {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 62;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-weight: 800;
+  line-height: 0.86;
+}
+
+/* Contraste Editorial: Instrument Serif Italic 400 dentro de titulares */
+.rd-serif,
+.font-editorial,
 h1 em,
 h2 em,
 h3 em,
 blockquote em,
 blockquote span.italic,
-.hero-line.italic,
-.font-editorial {
-  font-family: var(--font-playfair), Georgia, serif !important;
+.hero-line.italic {
+  font-family: var(--font-playfair), "Times New Roman", serif !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+  font-variation-settings: normal !important;
   font-style: italic !important;
-  font-weight: 500;
-  letter-spacing: -0.012em;
-  font-size: 1.03em;
+  font-weight: 400 !important;
+  font-size: 1.12em;
+  line-height: 0.82;
 }
 
-/* Precisión Tabular en Monospace y Cifras */
-.font-mono {
-  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+/* Cuerpo de lectura */
+.font-body,
+.rd-body {
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: -0.005em;
+}
+
+/* Etiquetas Técnicas en Chivo Mono */
+.font-mono,
+.rd-label,
+.eyebrow {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* ── Micro-interacciones de se7endev.vercel.app ─────────────────────────── */
+
+/* Rolling Text (.rd-roll): doble capa vertical con ease-io */
+.rd-roll {
+  line-height: 1.2;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+.rd-roll > span {
+  transition: transform 0.52s var(--ease-io);
+  display: block;
+}
+.rd-roll > span + span {
+  position: absolute;
+  inset: 0;
+  transform: translateY(108%);
+}
+a:hover .rd-roll > span:first-child,
+button:hover .rd-roll > span:first-child,
+a:focus-visible .rd-roll > span:first-child,
+button:focus-visible .rd-roll > span:first-child {
+  transform: translateY(-108%);
+}
+a:hover .rd-roll > span + span,
+button:hover .rd-roll > span + span,
+a:focus-visible .rd-roll > span + span,
+button:focus-visible .rd-roll > span + span {
+  transform: translateY(0);
+}
+
+/* Botón Píldora con Cortina Ascendente y Círculo Rotatorio (.rd-btn) */
+.rd-btn {
+  --btn-bg: #0b1528;
+  --btn-fg: #f6f8fb;
+  --btn-hover-bg: #c9a84c;
+  --btn-hover-fg: #0b1528;
+  background: var(--btn-bg);
+  height: 3.15rem;
+  color: var(--btn-fg);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 110;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  isolation: isolate;
+  transition:
+    transform 0.45s var(--ease-out),
+    color 0.4s var(--ease-out);
+  border-radius: 999px;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.45rem 0 1.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  position: relative;
+  overflow: hidden;
+}
+.rd-btn::before {
+  content: "";
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--btn-hover-bg);
+  transition: transform 0.52s var(--ease-io);
+  position: absolute;
+  inset: 0;
+  transform: translateY(102%);
+}
+.rd-btn:hover::before,
+.rd-btn:focus-visible::before {
+  transform: translateY(0);
+}
+.rd-btn:hover,
+.rd-btn:focus-visible {
+  color: var(--btn-hover-fg);
+}
+.rd-btn__icon {
+  background: #c9a84c;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #0b1528;
+  transition:
+    transform 0.52s var(--ease-io),
+    background-color 0.4s var(--ease-out),
+    color 0.4s var(--ease-out);
+  border-radius: 999px;
+  place-items: center;
+  display: grid;
+  flex-shrink: 0;
+}
+.rd-btn:hover .rd-btn__icon {
+  background: #0b1528;
+  color: #f6f8fb;
+  transform: rotate(-45deg);
+}
+
+/* Sello Circular Giratorio (.rd-spin) y Pulso (.rd-ping) */
+@keyframes rd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rd-ping {
+  0% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  80%,
+  to {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+.rd-spin {
+  animation: 16s linear infinite rd-spin;
+}
+.rd-ping {
+  animation: rd-ping 1.8s var(--ease-out) infinite;
 }
 
 .type-h1 {
   font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 118;
   font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 600;
-  letter-spacing: -0.032em;
-  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
 }
 
 .type-h2 {
   font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 116;
   font-size: clamp(1.95rem, 3.6vw, 3.2rem);
-  font-weight: 600;
-  letter-spacing: -0.028em;
-  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  line-height: 0.98;
 }
 
 .type-h3 {
   font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 110;
   font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.18;
+  line-height: 1.12;
 }
 
 .type-body {
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  letter-spacing: -0.003em;
-  line-height: 1.68;
+  letter-spacing: -0.005em;
+  line-height: 1.65;
 }
 
 .type-small {
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
-  letter-spacing: 0.005em;
+  letter-spacing: 0;
   line-height: 1.6;
 }
 
@@ -97,15 +268,16 @@ blockquote span.italic,
 .type-quote {
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-size: clamp(1.4rem, 2.2vw, 1.9rem);
-  font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: -0.018em;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 
 .type-display {
   font-family: var(--font-outfit), system-ui, sans-serif;
+  font-variation-settings: "wdth" 122;
   font-size: clamp(2.8rem, 6.5vw, 5.5rem);
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: -0.035em;
-  line-height: 1.01;
+  line-height: 0.9;
 }

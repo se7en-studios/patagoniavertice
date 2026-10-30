@@ -145,36 +145,64 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col justify-end max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 w-full pt-28 md:pt-36 pb-12 md:pb-20">
+        {/* Top Metadata Bar estilo se7endev.vercel.app */}
+        <div
+          style={{ "--d": "0.08s" } as React.CSSProperties}
+          className="hero-rise rd-label flex items-center justify-between gap-4 text-navy/65 mb-5 border-b border-navy/[0.08] pb-3"
+        >
+          <span>( {eyebrowText} )</span>
+          <span className="hidden sm:inline">
+            Mat. 35 RP 2026 · Patagonia, AR
+          </span>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-8">
-          {/* Columna Izquierda: Titular y Propuesta */}
-          <div className="lg:col-span-8">
-            {/* Eyebrow minimalista estilo PropTech */}
+          {/* Columna Izquierda: Titular .rd-display + Sello Giratorio .rd-spin */}
+          <div className="lg:col-span-8 relative">
+            {/* Sello Circular Giratorio estilo se7endev.vercel.app */}
             <div
-              style={{ "--d": "0.12s" } as React.CSSProperties}
-              className="hero-rise inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-navy/10 shadow-[0_2px_10px_rgba(14,26,51,0.04)] self-start mb-6 backdrop-blur-md"
+              aria-hidden="true"
+              className="hidden sm:grid absolute right-2 -top-4 h-[108px] w-[108px] place-items-center rounded-full bg-[#0B1528] text-white shadow-[0_18px_45px_-15px_rgba(11,21,40,0.45)] border border-dorado/40 z-20"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-dorado animate-pulse" />
-              <span className="font-mono text-[10px] font-semibold tracking-[0.16em] uppercase text-navy">
-                {eyebrowText}
-              </span>
-              <span className="hidden sm:inline font-mono text-[10px] text-[#8A6A1B] font-semibold">
-                · NEUQUÉN &amp; RÍO NEGRO
-              </span>
+              <svg
+                viewBox="0 0 200 200"
+                className="rd-spin absolute inset-0 h-full w-full"
+              >
+                <defs>
+                  <path
+                    id="altum-seal-path"
+                    d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"
+                  />
+                </defs>
+                <text
+                  className="rd-label"
+                  style={{
+                    fontSize: "14px",
+                    letterSpacing: "0.18em",
+                    fontWeight: 700,
+                  }}
+                  fill="#F6F8FB"
+                >
+                  <textPath href="#altum-seal-path">
+                    ESTELA ROJAS ✦ MAT. 35 RP 2026 ✦ ALTUM ✦{" "}
+                  </textPath>
+                </text>
+              </svg>
+              <span className="rd-display text-xl text-dorado">✦</span>
             </div>
 
-            {/* Titular Principal */}
+            {/* Titular Principal con Archivo Wide ("wdth" 122) + Instrument Serif Italic */}
             <h1
-              className="font-display font-medium leading-[1.01] mb-5 max-w-4xl"
+              className="rd-display leading-[0.9] mb-5 max-w-4xl"
               style={{
-                fontSize: "clamp(2.6rem, min(6.2vw, 9.2vh), 5.4rem)",
-                letterSpacing: "-0.035em",
+                fontSize: "clamp(2.5rem, min(6.2vw, 9.2vh), 5.3rem)",
               }}
               aria-label={lines.map((l) => l.text).join(" ")}
             >
               {lines.map((line, i) => (
                 <span
                   key={line.text}
-                  className="block overflow-hidden pb-[0.06em]"
+                  className="block overflow-hidden pb-[0.08em]"
                   aria-hidden="true"
                 >
                   <span
@@ -191,7 +219,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
 
             <p
               style={{ "--d": "0.5s" } as React.CSSProperties}
-              className="hero-rise font-body text-navy/65 text-sm sm:text-base max-w-xl leading-relaxed"
+              className="hero-rise rd-body text-navy/70 text-sm sm:text-base max-w-xl leading-relaxed"
             >
               {subtituloText}
             </p>

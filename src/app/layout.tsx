@@ -6,42 +6,31 @@ import AppShell from "@/components/marketing/AppShell";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { contact, siteName, siteTagline, siteUrl } from "@/lib/seo";
 
-// ── Tipografías Ultra-Modern Luxury Minimalist ──────────────────────────────
-// Self-hosted (fontsource, variable 300-800): el build no depende de bajar las fuentes de Google,
-// que en Vercel falló con Next 15 ("Cannot read properties of null" en el loader de next/font/google).
-const outfit = localFont({
-  src: "../../node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2",
-  weight: "300 800",
+// ── Tipografías inspiradas en se7endev.vercel.app (Archivo Variable wdth + Instrument Serif Italic + Chivo Mono) ──
+const archivoWide = localFont({
+  src: "./fonts/archivo-wdth-latin.woff2",
+  weight: "100 900",
   variable: "--font-outfit",
   display: "swap",
 });
 
-const plusJakarta = localFont({
-  src: "../../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2",
-  weight: "300 800",
+const archivoBody = localFont({
+  src: "./fonts/archivo-latin.woff2",
+  weight: "100 900",
   variable: "--font-plus-jakarta",
   display: "swap",
 });
 
-const playfair = localFont({
-  src: [
-    {
-      path: "../../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2",
-      weight: "400 800",
-      style: "normal",
-    },
-    {
-      path: "../../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-italic.woff2",
-      weight: "400 800",
-      style: "italic",
-    },
-  ],
+const instrumentSerif = localFont({
+  src: "./fonts/instrument-serif-italic.woff2",
+  weight: "400",
+  style: "italic",
   variable: "--font-playfair",
   display: "swap",
 });
 
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+const chivoMono = localFont({
+  src: "./fonts/chivo-mono-latin.woff2",
   weight: "100 900",
   variable: "--font-geist-mono",
   display: "swap",
@@ -146,7 +135,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${outfit.variable} ${plusJakarta.variable} ${playfair.variable} ${geistMono.variable}`}
+      className={`${archivoWide.variable} ${archivoBody.variable} ${instrumentSerif.variable} ${chivoMono.variable}`}
     >
       <head>
         {/* Preconnect a dominios externos para mejorar LCP */}

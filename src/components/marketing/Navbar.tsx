@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -19,7 +18,6 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [activeHover, setActiveHover] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -94,9 +92,13 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* ── Desktop nav ── */}
+        {/* ── Desktop nav (Estilo se7endev.vercel.app: Floating Pill + Rolling Text .rd-roll) ── */}
         <nav
-          className="hidden lg:flex items-center gap-5 xl:gap-7"
+          className={`hidden lg:flex items-center gap-1 rounded-full border p-1.5 backdrop-blur-xl ${
+            light
+              ? "border-navy/10 bg-white/80 shadow-[0_8px_24px_-12px_rgba(14,26,51,0.12)]"
+              : "border-crema/15 bg-navy-950/65"
+          }`}
           aria-label="Navegación principal"
         >
           {links.map((l) => {
@@ -105,69 +107,64 @@ export default function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                onMouseEnter={() => setActiveHover(l.href)}
-                onMouseLeave={() => setActiveHover(null)}
-                className="relative font-body text-[11px] font-medium tracking-[0.2em] uppercase transition-colors duration-200 py-1.5"
-                style={{
-                  color: active
+                className={`rd-body rounded-full px-4 py-2 text-[12.5px] font-medium transition-colors duration-300 ${
+                  active
                     ? light
-                      ? "#8A6A1B"
-                      : "#C9A84C"
-                    : activeHover === l.href
-                      ? light
-                        ? "rgba(15,27,51,1)"
-                        : "rgba(245,239,230,1)"
-                      : light
-                        ? "rgba(15,27,51,0.72)"
-                        : "rgba(245,239,230,0.72)",
-                }}
+                      ? "bg-[#0B1528] text-white"
+                      : "bg-dorado text-tierra"
+                    : light
+                      ? "text-navy/80 hover:bg-[#0B1528] hover:text-white"
+                      : "text-crema/80 hover:bg-crema hover:text-navy"
+                }`}
               >
-                {l.label}
-                <motion.span
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px]"
-                  style={{ background: "#C9A84C", transformOrigin: "left" }}
-                  animate={{
-                    scaleX: active || activeHover === l.href ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                />
+                <span className="rd-roll">
+                  <span>{l.label}</span>
+                  <span aria-hidden="true">{l.label}</span>
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        {/* ── Right: CTA ── */}
-        <div className="hidden lg:flex items-center gap-3">
+        {/* ── Right: Status Pill + .rd-btn CTA ── */}
+        <div className="hidden lg:flex items-center gap-2.5">
+          <span
+            className={`rd-label hidden xl:inline-flex items-center gap-2 rounded-full border px-3.5 py-2.5 text-[10px] backdrop-blur-xl ${
+              light
+                ? "border-navy/10 bg-white/80 text-navy/80"
+                : "border-crema/15 bg-navy-950/60 text-crema/80"
+            }`}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="rd-ping absolute inset-0 rounded-full bg-dorado" />
+              <span className="relative h-2 w-2 rounded-full bg-dorado" />
+            </span>
+            Mat. 35 RP 2026
+          </span>
+
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`font-body ${
-              light
-                ? "text-navy border-dorado/35 bg-white hover:bg-[#FBF0CF]/40 shadow-sm"
-                : "text-crema border-crema/20 bg-white/5 hover:bg-white/10"
-            } text-[11px] tracking-wider hover:border-dorado transition-all flex items-center gap-2.5 px-3.5 py-1.5 border rounded-full`}
+            className="rd-btn !h-11 !pl-5 !text-[11.5px]"
           >
-            <div className="relative shrink-0">
-              <div className="relative w-6 h-6 rounded-full overflow-hidden ring-1 ring-dorado">
-                <Image
-                  src="/estela-avatar.jpg"
-                  alt="Estela Mari Rojas"
-                  fill
-                  sizes="24px"
-                  className="object-cover"
-                />
-              </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
-            </div>
-            <span className="font-semibold">WhatsApp con Estela</span>
+            <span className="rd-roll">
+              <span>Hablemos</span>
+              <span aria-hidden="true">Hablemos</span>
+            </span>
+            <span className="rd-btn__icon !h-8 !w-8" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M7 17 17 7M8 7h9v9" />
+              </svg>
+            </span>
           </a>
-          <Link
-            href="/#tasador-express"
-            className="btn-shimmer rounded-full font-body text-tierra text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-2.5 hover:scale-[1.02] transition-transform duration-200 shadow-md"
-          >
-            ✦ Tasar Inmueble
-          </Link>
         </div>
 
         {/* ── Mobile toggle ── */}

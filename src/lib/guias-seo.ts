@@ -406,6 +406,179 @@ export const GUIAS_SEO: GuiaSeoArticle[] = [
       },
     ],
   },
+  {
+    slug: "neuquen-capital-vs-cipolletti-donde-conviene-vivir-invertir",
+    tipo: "Comparativa",
+    titulo:
+      "Neuquén Capital vs. Cipolletti: ¿Dónde conviene comprar una casa o departamento en 2026?",
+    subtitulo:
+      "Comparativa de precios por metro cuadrado en USD, calidad de vida en barrios cerrados, impuestos municipales y tiempos de acceso al polo financiero.",
+    fechaPublicacion: "2026-10-29",
+    fechaActualizacion: "2026-10-30",
+    tiempoLectura: "4 min",
+    respuestaDirecta:
+      "Comprar una propiedad en Cipolletti permite ahorrar entre un 18% y un 25% por metro cuadrado frente a Neuquén Capital (USD 1.380–1.850/m² vs. USD 1.750–2.400/m²) estando a solo 10 minutos del centro financiero neuquino por el puente carretero o Tercer Puente. Neuquén Capital lidera en oficinas corporativas y torres en altura, mientras que Cipolletti gana en calidad residencial, barrios privados consolidados y relación precio-superficie.",
+    keywords: [
+      "neuquen capital vs cipolletti vivir",
+      "comprar casa en cipolletti o neuquen",
+      "precio m2 cipolletti vs neuquen 2026",
+      "barrios privados cipolletti",
+    ],
+    tablaHeaders: {
+      colA: "Cipolletti (Alto Valle, Río Negro)",
+      colB: "Neuquén Capital",
+    },
+    tablaComparativa: [
+      {
+        criterio: "Valor m² cubierto promedio (2026)",
+        opcionA: "USD 1.380 – 1.850 / m²",
+        opcionB: "USD 1.750 – 2.400 / m²",
+      },
+      {
+        criterio: "Distancia al centro de Neuquén",
+        opcionA: "10 a 15 minutos (Puente / Ruta 151)",
+        opcionB: "0 a 10 minutos",
+      },
+      {
+        criterio: "Tipología estrella",
+        opcionA: "Casas en barrios cerrados, quintas y semipisos",
+        opcionB: "Departamentos de 1 y 2 dormitorios y oficinas",
+      },
+      {
+        criterio: "Tasa de vacancia en alquiler",
+        opcionA: "Menor al 3% anual",
+        opcionB: "Menor al 4% anual",
+      },
+    ],
+    secciones: [
+      {
+        titulo: "1. ¿Por qué las familias y gerentes eligen Cipolletti para residir?",
+        contenido: [
+          "Cipolletti ofrece un entorno arbóreo, calles tranquilas y barrios residenciales como El Manzanar, Los Tilos y Rincón Lindo con lotes de 600 a 1.200 m² a valores que en Neuquén Capital solo alcanzan para un departamento de dos ambientes.",
+        ],
+      },
+      {
+        titulo: "2. ¿En qué casos conviene Neuquén Capital?",
+        contenido: [
+          "Si buscás una unidad pequeña para renta temporaria o un consultorio/oficina a pasos de los organismos provinciales y sedes bancarias, el microcentro de Neuquén ofrece máxima rotación.",
+        ],
+      },
+    ],
+    ctaTexto: "Ver Propiedades Disponibles en Cipolletti y Neuquén",
+    ctaHref: "/inmobiliaria-cipoletti",
+    faqs: [
+      {
+        pregunta: "¿Cuánto se tarda en ir de Cipolletti al centro de Neuquén?",
+        respuesta:
+          "Entre 10 y 15 minutos utilizando los puentes carreteros sobre la Ruta Nacional 22 o el Tercer Puente (Autovía Norte), lo que convierte a ambas ciudades en un único conglomerado metropolitano.",
+      },
+    ],
+  },
+  {
+    slug: "gastos-escrituracion-impuestos-compraventa-inmueble-rio-negro-neuquen",
+    tipo: "Guía Práctica",
+    titulo:
+      "Gastos de Escrituración e Impuestos al Comprar un Inmueble en Río Negro y Neuquén (2026)",
+    subtitulo:
+      "Desglose real de honorarios de escribanía, Impuesto de Sellos, tasas registrales y honorarios de corretaje matriculado para presupuestar tu compra sin sorpresas.",
+    fechaPublicacion: "2026-10-29",
+    fechaActualizacion: "2026-10-30",
+    tiempoLectura: "4 min",
+    respuestaDirecta:
+      "Al comprar un inmueble o lote en Río Negro o Neuquén en 2026, los gastos totales de escrituración y cierre para el comprador representan entre el 6% y el 8,5% del valor de la operación. Este porcentaje incluye honorarios de corretaje inmobiliario matriculado (3% al 4%), Impuesto de Sellos (compartido 50/50 según usos notariales), tasas del Registro de la Propiedad Inmueble y honorarios de escribanía.",
+    keywords: [
+      "gastos de escrituracion rio negro neuquen",
+      "cuanto sale escriturar un terreno en neuquen",
+      "honorarios inmobiliaria rio negro ley",
+      "impuesto de sellos compraventa inmueble patagonia",
+    ],
+    secciones: [
+      {
+        titulo: "1. ¿Qué paga el comprador y qué paga el vendedor?",
+        contenido: [
+          "Por usos y costumbres notariales en Río Negro y Neuquén, el vendedor abona los gastos de estudio de títulos y certificados previos (libre deuda municipal, provincial e inhibiciones) y el 50% del Impuesto de Sellos. El comprador abona los honorarios del escribano interviniente, la inscripción en el Registro de la Propiedad y el 50% restante de Sellos.",
+        ],
+      },
+      {
+        titulo: "2. La importancia de operar con Martillero Público Matriculado",
+        contenido: [
+          "En ALTUM SCI (Estela Mari Rojas · Mat. 35 RP 2026), antes de que entregues un solo dólar de reserva emitimos una liquidación proforma detallada con todos los costos notariales e impositivos para que conozcas el número final exacto.",
+        ],
+      },
+    ],
+    ctaTexto: "Solicitar liquidación de gastos para tu operación",
+    ctaHref: "/contacto",
+    faqs: [
+      {
+        pregunta: "¿Puedo elegir mi propio escribano al comprar un lote o casa?",
+        respuesta:
+          "En las compraventas de inmuebles terminados con pago al contado, el comprador tiene derecho a designar la escribanía. En loteos en primera escrituración suele intervenir la escribanía matriz del fideicomiso o desarrollador para abaratar costos de certificados.",
+      },
+    ],
+  },
+  {
+    slug: "lote-preventa-vs-escritura-inmediata-lago-mari-menuco",
+    tipo: "Comparativa",
+    titulo:
+      "Lote en Preventa vs. Lote con Posesión Inmediata en Lago Mari Menuco: ¿Cuál rinde más?",
+    subtitulo:
+      "Análisis de curva de valorización en USD entre ingresar en etapa de preventa (Sector Club House) o adquirir primera línea consolidada en Bahía de las Playas.",
+    fechaPublicacion: "2026-10-30",
+    fechaActualizacion: "2026-10-30",
+    tiempoLectura: "4 min",
+    respuestaDirecta:
+      "En el Lago Mari Menuco (Bahía de las Playas), ingresar en un lote de preventa (desde USD 32.000) genera la mayor ganancia porcentual de capital (35% a 45% de apreciación acumulada en 24–36 meses a medida que avanzan las obras del Club House y WakePark). En cambio, adquirir un lote de primera línea de costa o terrazas con posesión inmediata (USD 36.000 a USD 48.000) permite construir de inmediato y capturar un activo irrepetible frente al agua.",
+    keywords: [
+      "preventa lotes mari menuco",
+      "bahia de las playas precios lotes",
+      "invertir en pozo o posesion mari menuco",
+      "terrenos frente al lago neuquen",
+    ],
+    tablaHeaders: {
+      colA: "Sector Preventa Activa (USD 32.000)",
+      colB: "Costa / Terrazas Posesión (USD 36.000 – 48.000)",
+    },
+    tablaComparativa: [
+      {
+        criterio: "Ticket de ingreso 2026",
+        opcionA: "Desde USD 32.000 (750–850 m²)",
+        opcionB: "USD 36.000 a USD 48.000 (850–1.000 m²)",
+      },
+      {
+        criterio: "Objetivo principal",
+        opcionA: "Multiplicación de capital a 2–3 años",
+        opcionB: "Construcción inmediata y resguardo premium",
+      },
+      {
+        criterio: "Escasez del activo",
+        opcionA: "Media (14 unidades disponibles)",
+        opcionB: "Extrema (solo 4 lotes en primera línea de costa)",
+      },
+    ],
+    secciones: [
+      {
+        titulo: "1. ¿Cuándo elegir Preventa (Sector D · Rincón Club House)?",
+        contenido: [
+          "Es la opción predilecta de inversores puros que buscan entrar con el menor ticket en dólares del lago y revender cuando el barrio consolide sus amenities deportivos y sociales.",
+        ],
+      },
+      {
+        titulo: "2. ¿Cuándo elegir Primera Línea de Costa o Terrazas (Sectores A y B)?",
+        contenido: [
+          "La costa directa de lago con bajada náutica es finita: una vez vendidos los últimos 4 lotes del Sector A, solo se podrá acceder por reventa secundaria a valores significativamente superiores.",
+        ],
+      },
+    ],
+    ctaTexto: "Ver disponibilidad por sector en el Masterplan",
+    ctaHref: "/#sec-lago",
+    faqs: [
+      {
+        pregunta: "¿Todos los sectores tienen acceso a la playa y al futuro WakePark?",
+        respuesta:
+          "Sí. Tanto los lotes de primera línea como los de terrazas y el sector Club House cuentan con pleno uso de la costa común, bajada náutica y áreas deportivas proyectadas de Bahía de las Playas.",
+      },
+    ],
+  },
 ];
 
 export function getGuiaBySlug(slug: string): GuiaSeoArticle | undefined {

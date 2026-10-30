@@ -132,35 +132,36 @@ export default async function ProyectosPage() {
 
   return (
     <main className="bg-[#F6F8FB] min-h-screen">
-      {/* ── Hero Minimalista PropTech ────────────────────────────────────── */}
-      <section className="pt-36 pb-20 bg-[#0B1528] text-white border-b border-white/10">
+      {/* ── Hero Minimalista PropTech (Estilo se7endev) ─────────────────── */}
+      <section className="pt-36 pb-20 bg-[#070E1B] text-white border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
-            <span className="font-mono text-dorado text-[10px] tracking-[0.22em] uppercase font-semibold">
-              Portfolio Activo · Neuquén &amp; Río Negro
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/15 mb-5">
+            <span className="rd-ping" />
+            <span className="rd-label !text-[10px] !tracking-[0.22em] text-dorado">
+              [PORTFOLIO ACTIVO · NEUQUÉN &amp; RÍO NEGRO]
             </span>
           </div>
 
           <h1
-            className="font-display text-white font-medium leading-[1.03] mb-5 max-w-4xl"
+            className="rd-display text-white mb-5 max-w-4xl"
             style={{
-              fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-              letterSpacing: "-0.03em",
+              fontSize: "clamp(2.5rem, 5.4vw, 4.4rem)",
             }}
           >
             Activos inmobiliarios en{" "}
-            <em className="not-italic italic text-dorado font-normal">
+            <em className="rd-serif text-dorado">
               Patagonia Norte.
             </em>
           </h1>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 border-t border-white/10">
-            <p className="font-body text-white/65 text-sm lg:text-base max-w-2xl">
-              Lotes frente al lago en Mari Menuco, residencias en Cipolletti y
-              fracciones de renta en Catriel y General Roca.
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-5 border-t border-white/10">
+            <p className="font-body text-white/70 text-sm lg:text-base max-w-2xl leading-relaxed">
+              <strong>ALTUM SCI</strong> comercializa lotes frente al Lago Mari
+              Menuco (desde USD 32.000), residencias en Cipolletti y fracciones
+              logísticas en Catriel (Vaca Muerta) con títulos auditados y
+              escrituración supervisada por la Martillera Estela Mari Rojas.
             </p>
-            <span className="font-mono text-[11px] uppercase tracking-wider text-dorado shrink-0">
+            <span className="rd-label !text-[10.5px] !tracking-[0.18em] text-dorado shrink-0">
               Martillera Estela Mari Rojas · Mat. 35 RP 2026
             </span>
           </div>

@@ -55,7 +55,7 @@ export default function FloatingDock() {
 
   return (
     <>
-      {/* Botón flotante PropTech Concierge */}
+      {/* Botón flotante PropTech Concierge estilo se7endev */}
       <div className="hidden lg:block fixed bottom-6 right-6 z-50">
         <motion.button
           onClick={() => setModalOpen((prev) => !prev)}
@@ -66,7 +66,7 @@ export default function FloatingDock() {
           }
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="flex items-center gap-3 pl-2 pr-5 py-2 rounded-full font-body text-[11px] tracking-[0.14em] uppercase font-semibold bg-[#0B1528] text-white border border-dorado/45 shadow-[0_16px_38px_-10px_rgba(11,21,40,0.55)] hover:border-dorado transition-colors"
+          className="rd-btn flex items-center gap-3 pl-2 pr-4 py-2 rounded-full bg-[#070E1B] text-white border border-dorado/45 shadow-[0_16px_38px_-10px_rgba(7,14,27,0.65)] hover:border-dorado transition-colors"
         >
           <div className="relative shrink-0">
             <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-dorado/75">
@@ -78,10 +78,16 @@ export default function FloatingDock() {
                 className="object-cover"
               />
             </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0B1528]" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#070E1B]" />
           </div>
-          <span className="text-white/95">
-            {modalOpen ? "Cerrar" : "Hablar con Estela"}
+          <span
+            className="rd-roll rd-label !text-[10px] !tracking-[0.16em] text-white/95"
+            data-text={modalOpen ? "Cerrar Concierge" : "Hablar con Estela"}
+          >
+            <span>{modalOpen ? "Cerrar Concierge" : "Hablar con Estela"}</span>
+          </span>
+          <span className="rd-btn__icon w-6 h-6 bg-dorado text-tierra text-[11px]">
+            {modalOpen ? "✕" : "↗"}
           </span>
         </motion.button>
       </div>
@@ -97,7 +103,7 @@ export default function FloatingDock() {
             className="hidden lg:block fixed bottom-20 right-6 z-50 w-[92vw] max-w-sm p-6 rounded-3xl bg-white text-navy border border-navy/10 shadow-[0_30px_70px_-20px_rgba(11,21,40,0.35)] backdrop-blur-2xl"
           >
             {/* Header Concierge */}
-            <div className="flex items-center justify-between border-b border-navy/[0.08] pb-4 mb-4 gap-3">
+            <div className="flex items-center justify-between border-b border-navy/10 pb-4 mb-4 gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-dorado/60 shrink-0">
                   <Image
@@ -109,10 +115,11 @@ export default function FloatingDock() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <span className="font-mono text-[#8A6A1B] text-[9.5px] tracking-[0.16em] uppercase font-semibold block truncate">
-                    Estela Mari Rojas · Mat. 35 RP 2026
+                  <span className="inline-flex items-center gap-1.5 rd-label !text-[9px] !tracking-[0.16em] text-[#8A6A1B] truncate">
+                    <span className="rd-ping" />
+                    Respuesta &lt; 15 min · Mat. 35 RP
                   </span>
-                  <h3 className="font-display text-base font-semibold text-navy truncate">
+                  <h3 className="font-display text-base font-semibold tracking-tight text-navy truncate">
                     ¿En qué puedo asesorarte hoy?
                   </h3>
                 </div>

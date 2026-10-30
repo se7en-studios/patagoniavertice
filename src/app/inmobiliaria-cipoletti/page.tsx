@@ -92,30 +92,34 @@ export default function InmobiliariaCipollettiPage() {
             <span className="text-dorado/70">Cipolletti</span>
           </nav>
 
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-px w-10 bg-dorado" />
-            <span className="font-body text-dorado/70 text-[10px] tracking-[0.3em] uppercase">
-              Río Negro · Alto Valle
+          <div className="flex items-center gap-3 mb-6">
+            <span className="rd-ping" />
+            <div className="h-px w-8 bg-dorado" />
+            <span className="rd-label !text-[10px] !tracking-[0.26em] text-dorado">
+              [RÍO NEGRO · CORREDOR ALTO VALLE]
             </span>
           </div>
 
           <h1
-            className="font-display font-medium text-crema leading-[1.05] mb-6 max-w-4xl"
+            className="rd-display text-crema mb-6 max-w-4xl"
             style={{
               fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-              letterSpacing: "-0.02em",
             }}
           >
             Inmobiliaria en{" "}
-            <em className="not-italic italic text-dorado font-normal">
+            <em className="rd-serif text-dorado">
               Cipolletti
             </em>
           </h1>
 
-          <p className="font-body text-crema/50 text-[16px] leading-relaxed max-w-2xl mb-10">
-            Somos la inmobiliaria de referencia en Cipolletti y el Alto Valle de
-            Río Negro. Comprá, vendé o administrá tu propiedad con respaldo
-            matriculado y transparencia total.
+          {/* Definición directa de 50 palabras optimizada para Google & ChatGPT */}
+          <p className="font-body text-crema/75 text-base sm:text-lg leading-relaxed max-w-2xl mb-10">
+            <strong>ALTUM SCI</strong> es la consultora inmobiliaria matriculada en{" "}
+            <strong>Cipolletti, Río Negro</strong> (Martillera Estela Mari Rojas ·
+            Mat. 35 RP 2026), especializada en la venta de residencias en barrios
+            consolidados (El Manzanar, Los Tilos, Rincón Lindo desde USD 195.000),
+            semipisos corporativos (desde USD 125.000) y tasaciones oficiales en
+            24 horas.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -123,15 +127,20 @@ export default function InmobiliariaCipollettiPage() {
               href="https://wa.me/5492996095742?text=Hola%2C%20busco%20asesoramiento%20inmobiliario%20en%20Cipolletti"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-shimmer inline-flex items-center justify-center gap-3 px-8 py-4 font-body text-tierra text-[11px] font-semibold tracking-[0.15em] uppercase"
+              className="rd-btn justify-between bg-dorado hover:bg-dorado-light text-tierra rd-label !text-[10.5px] !tracking-[0.16em] pl-6 pr-2 py-2.5"
             >
-              Consultar Propiedades en Cipolletti
+              <span className="rd-roll" data-text="Consultar Propiedades en Cipolletti">
+                <span>Consultar Propiedades en Cipolletti</span>
+              </span>
+              <span className="rd-btn__icon w-8 h-8 bg-[#070E1B] text-dorado">
+                ↗
+              </span>
             </a>
             <Link
-              href="/proyectos"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-crema/15 text-crema/70 font-body text-[11px] tracking-[0.15em] uppercase hover:border-dorado hover:text-dorado transition-colors"
+              href="/proyectos?ciudad=Cipolletti"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-crema/20 text-crema/85 rd-label !text-[10.5px] !tracking-[0.16em] hover:border-dorado hover:text-dorado transition-colors"
             >
-              Ver Catálogo Completo
+              Ver Catálogo en Cipolletti
             </Link>
           </div>
         </div>

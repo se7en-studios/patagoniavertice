@@ -81,30 +81,33 @@ export default function InmobiliariaCatrielPage() {
             <span className="text-dorado/70">Catriel</span>
           </nav>
 
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-px w-10 bg-dorado" />
-            <span className="font-body text-dorado/70 text-[10px] tracking-[0.3em] uppercase">
-              Río Negro · Polo Energético
+          <div className="flex items-center gap-3 mb-6">
+            <span className="rd-ping" />
+            <div className="h-px w-8 bg-dorado" />
+            <span className="rd-label !text-[10px] !tracking-[0.26em] text-dorado">
+              [RÍO NEGRO · POLO ENERGÉTICO VACA MUERTA]
             </span>
           </div>
 
           <h1
-            className="font-display font-medium text-crema leading-[1.05] mb-6 max-w-4xl"
+            className="rd-display text-crema mb-6 max-w-4xl"
             style={{
               fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-              letterSpacing: "-0.02em",
             }}
           >
             Inmobiliaria en{" "}
-            <em className="not-italic italic text-dorado font-normal">
+            <em className="rd-serif text-dorado">
               Catriel
             </em>
           </h1>
 
-          <p className="font-body text-crema/50 text-[16px] leading-relaxed max-w-2xl mb-10">
-            Conocimiento especializado del mercado de Catriel. Maximizamos el
-            rendimiento de tus propiedades a través de compraventas seguras y
-            alquileres corporativos para el sector energético.
+          {/* Definición directa de 50 palabras optimizada para Google & ChatGPT */}
+          <p className="font-body text-crema/75 text-base sm:text-lg leading-relaxed max-w-2xl mb-10">
+            <strong>ALTUM SCI</strong> lidera la estructuración de alquileres
+            corporativos petroleros (rentabilidad del 12% al 14% anual en USD),
+            compraventa de fracciones logísticas sobre Ruta 151 (desde USD 95.000) y
+            viviendas para ejecutivos en <strong>Catriel y el corredor norte de Vaca Muerta</strong>,
+            bajo supervisión de la Martillera Estela Mari Rojas (Mat. 35 RP 2026).
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -112,15 +115,20 @@ export default function InmobiliariaCatrielPage() {
               href="https://wa.me/5492996095742?text=Hola%2C%20busco%20propiedades%20o%20inversiones%20en%20Catriel"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-shimmer inline-flex items-center justify-center gap-3 px-8 py-4 font-body text-tierra text-[11px] font-semibold tracking-[0.15em] uppercase"
+              className="rd-btn justify-between bg-dorado hover:bg-dorado-light text-tierra rd-label !text-[10.5px] !tracking-[0.16em] pl-6 pr-2 py-2.5"
             >
-              Consultar Oportunidades en Catriel
+              <span className="rd-roll" data-text="Consultar Oportunidades en Catriel">
+                <span>Consultar Oportunidades en Catriel</span>
+              </span>
+              <span className="rd-btn__icon w-8 h-8 bg-[#070E1B] text-dorado">
+                ↗
+              </span>
             </a>
             <Link
-              href="/proyectos"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-crema/15 text-crema/70 font-body text-[11px] tracking-[0.15em] uppercase hover:border-dorado hover:text-dorado transition-colors"
+              href="/proyectos?ciudad=Catriel"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-crema/20 text-crema/85 rd-label !text-[10.5px] !tracking-[0.16em] hover:border-dorado hover:text-dorado transition-colors"
             >
-              Ver Catálogo Completo
+              Ver Activos en Catriel
             </Link>
           </div>
         </div>

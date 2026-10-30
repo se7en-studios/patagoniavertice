@@ -136,29 +136,30 @@ export default function PropiedadesRioNegro() {
               <span className="text-dorado/70">Propiedades Río Negro</span>
             </nav>
 
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-px w-10 bg-dorado" />
-              <span className="font-body text-dorado/70 text-[10px] tracking-[0.3em] uppercase">
-                Patagonia Argentina
+            <div className="flex items-center gap-3 mb-8">
+              <span className="rd-ping" />
+              <div className="h-px w-8 bg-dorado" />
+              <span className="rd-label !text-[10px] !tracking-[0.26em] text-dorado">
+                [PATAGONIA ARGENTINA · RÍO NEGRO &amp; NEUQUÉN]
               </span>
             </div>
 
             <h1
-              className="font-display font-medium text-crema leading-[1.05] mb-6"
+              className="rd-display text-crema mb-6"
               style={{
                 fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-                letterSpacing: "-0.02em",
               }}
             >
               Propiedades en{" "}
-              <em className="not-italic italic text-dorado">Río Negro</em>
+              <em className="rd-serif text-dorado">Río Negro</em>
             </h1>
 
-            <p className="font-body text-crema/45 text-[16px] leading-relaxed max-w-2xl mb-10">
-              Río Negro es la provincia con mayor crecimiento inmobiliario de la
-              Patagonia Argentina. En Altum tenemos más de 5 años operando en el
-              mercado local con más de 200 operaciones exitosas en toda la
-              provincia.
+            <p className="font-body text-crema/75 text-base sm:text-lg leading-relaxed max-w-2xl mb-10">
+              <strong>ALTUM SCI</strong> comercializa y tasa casas, lotes, chacras
+              productivas y fracciones logísticas en <strong>Cipolletti, Catriel,
+              General Roca y todo el Alto Valle de Río Negro</strong>, con respaldo
+              directo de la Martillera y Corredora Pública Colegiada Estela Mari
+              Rojas (Mat. 35 RP 2026).
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -166,13 +167,18 @@ export default function PropiedadesRioNegro() {
                 href="https://wa.me/5492996095742?text=Hola%2C%20busco%20propiedades%20en%20R%C3%ADo%20Negro"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-shimmer inline-flex items-center justify-center gap-3 px-8 py-4 font-body text-tierra text-[11px] font-semibold tracking-[0.15em] uppercase"
+                className="rd-btn justify-between bg-dorado hover:bg-dorado-light text-tierra rd-label !text-[10.5px] !tracking-[0.16em] pl-6 pr-2 py-2.5"
               >
-                Ver propiedades disponibles
+                <span className="rd-roll" data-text="Consultar Propiedades Disponibles">
+                  <span>Consultar Propiedades Disponibles</span>
+                </span>
+                <span className="rd-btn__icon w-8 h-8 bg-[#070E1B] text-dorado">
+                  ↗
+                </span>
               </a>
               <Link
                 href="/proyectos"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-crema/15 text-crema/60 font-body text-[11px] tracking-[0.15em] uppercase hover:border-dorado hover:text-dorado transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-crema/20 text-crema/85 rd-label !text-[10.5px] !tracking-[0.16em] hover:border-dorado hover:text-dorado transition-colors"
               >
                 Ver proyectos
               </Link>

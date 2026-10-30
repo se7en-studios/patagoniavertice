@@ -514,7 +514,7 @@ export default function CatalogoInteractivo({
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           <AnimatePresence>
-            {propiedadesFiltradas.map((p) => {
+            {propiedadesFiltradas.map((p, idx) => {
               const imagen = coverImage(p.imagenes);
               const badge = estadoBadge[p.estado] ?? estadoBadge.disponible;
               const enComparador = comparar.includes(p.id);
@@ -531,10 +531,13 @@ export default function CatalogoInteractivo({
                   transition={{ duration: 0.25 }}
                   className="list-none"
                 >
-                  <article className="group h-full rounded-3xl bg-white border border-navy/[0.08] overflow-hidden shadow-[0_14px_36px_-24px_rgba(14,26,51,0.18)] hover:shadow-[0_24px_54px_-24px_rgba(14,26,51,0.28)] hover:border-dorado/50 transition-all duration-300 flex flex-col justify-between">
+                  <article className="group h-full rounded-3xl bg-white border border-navy/10 overflow-hidden shadow-[0_14px_36px_-24px_rgba(14,26,51,0.18)] hover:shadow-[0_24px_54px_-24px_rgba(14,26,51,0.28)] hover:border-dorado/60 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                     <div>
                       {/* Imagen principal con Badges */}
-                      <div className="relative aspect-[16/11] overflow-hidden bg-navy-950">
+                      <div
+                        data-cursor="VER ↗"
+                        className="relative aspect-[16/11] overflow-hidden bg-navy-950"
+                      >
                         <Image
                           src={imagen}
                           alt={p.titulo}
@@ -542,27 +545,32 @@ export default function CatalogoInteractivo({
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
 
                         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
-                          <span className="px-3 py-1 rounded-full bg-navy-950/90 text-dorado border border-dorado/30 font-mono text-[9px] font-semibold tracking-[0.18em] uppercase backdrop-blur-md">
-                            {p.tipo
-                              ? (tipoLabel[p.tipo] ?? p.tipo)
-                              : "Propiedad"}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="px-2.5 py-1 rounded-full bg-[#070E1B]/85 text-dorado border border-white/15 rd-label !text-[9px] !tracking-[0.18em] backdrop-blur-md">
+                              0{idx + 1}
+                            </span>
+                            <span className="px-3 py-1 rounded-full bg-navy-950/90 text-dorado border border-dorado/30 rd-label !text-[9px] !tracking-[0.18em] backdrop-blur-md">
+                              {p.tipo
+                                ? (tipoLabel[p.tipo] ?? p.tipo)
+                                : "Propiedad"}
+                            </span>
+                          </div>
                           <span
-                            className={`px-3 py-1 rounded-full font-mono text-[9px] uppercase tracking-[0.15em] ${badge}`}
+                            className={`px-3 py-1 rounded-full rd-label !text-[9px] !tracking-[0.15em] ${badge}`}
                           >
                             {estadoLabel[p.estado] ?? estadoLabel.disponible}
                           </span>
                         </div>
 
                         <div className="absolute bottom-3.5 left-4 z-10">
-                          <span className="font-display text-white text-2xl font-bold tracking-tight block">
+                          <span className="rd-condensed text-white text-[1.65rem] leading-none block">
                             {formatPrecio(p.precio, p.moneda)}
                           </span>
                           {p.precio && p.superficie_m2 && p.superficie_m2 > 0 ? (
-                            <span className="font-mono text-[10px] text-dorado block">
+                            <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-dorado block mt-1">
                               {p.moneda}{" "}
                               {Math.round(
                                 p.precio / p.superficie_m2,
@@ -581,7 +589,7 @@ export default function CatalogoInteractivo({
 
                       {/* Contenido */}
                       <div className="p-6 space-y-2.5">
-                        <div className="flex items-center gap-2 font-mono text-[#8A6A1B] text-[10px] tracking-[0.18em] uppercase font-semibold">
+                        <div className="flex items-center gap-2 rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B]">
                           <span>{p.ciudad}</span>
                           {p.barrio && <span>· {p.barrio}</span>}
                           {p.superficie_m2 ? (
@@ -591,7 +599,7 @@ export default function CatalogoInteractivo({
                           ) : null}
                         </div>
 
-                        <h2 className="font-display text-navy text-xl font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors">
+                        <h2 className="font-display text-navy text-xl font-medium tracking-tight leading-snug group-hover:text-[#8A6A1B] transition-colors">
                           <Link
                             href={`/proyectos/${p.id}`}
                             className={focusRing}
@@ -607,13 +615,18 @@ export default function CatalogoInteractivo({
                     </div>
 
                     {/* Acciones Footer */}
-                    <div className="px-6 pb-6 pt-4 border-t border-navy/[0.07] space-y-2 mt-4">
+                    <div className="px-6 pb-6 pt-4 border-t border-navy/10 space-y-2 mt-4">
                       <div className="grid grid-cols-2 gap-2">
                         <Link
                           href={`/proyectos/${p.id}`}
-                          className={`py-2.5 px-3 rounded-xl border border-navy/15 text-navy text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:border-navy transition-colors ${focusRing}`}
+                          className={`rd-btn justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[9.5px] !tracking-[0.16em] pl-3.5 pr-1.5 py-1.5 ${focusRing}`}
                         >
-                          Ver Ficha
+                          <span className="rd-roll" data-text="Ver Ficha">
+                            <span>Ver Ficha</span>
+                          </span>
+                          <span className="rd-btn__icon w-6 h-6 bg-dorado text-tierra">
+                            ↗
+                          </span>
                         </Link>
 
                         <WhatsAppLink
@@ -621,7 +634,7 @@ export default function CatalogoInteractivo({
                           href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                             `Hola Altum Inmobiliaria, quisiera consultar por la propiedad: ${p.titulo} (${p.ciudad} - ${formatPrecio(p.precio, p.moneda)})`,
                           )}`}
-                          className={`py-2.5 px-3 rounded-xl bg-dorado text-tierra text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:bg-dorado-light transition-all ${focusRing}`}
+                          className={`inline-flex items-center justify-center py-2.5 px-3 rounded-full bg-dorado text-tierra text-center rd-label !text-[9.5px] !tracking-[0.16em] hover:bg-dorado-light transition-all ${focusRing}`}
                         >
                           Consultar
                         </WhatsAppLink>

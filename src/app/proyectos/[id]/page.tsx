@@ -400,15 +400,15 @@ export default async function PropiedadDetailPage({
         {/* Hero Title info bottom */}
         <div className="absolute bottom-10 left-0 right-0 z-10 text-crema">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="flex items-center gap-3 mb-2 font-body text-dorado text-xs tracking-[0.25em] uppercase font-medium">
+            <div className="inline-flex items-center gap-2.5 mb-3 px-3.5 py-1 rounded-full bg-[#070E1B]/80 backdrop-blur-md border border-white/15 rd-label !text-[10px] !tracking-[0.2em] text-dorado">
+              <span className="rd-ping" />
               <span>{propiedad.ciudad}</span>
               {propiedad.barrio && <span>· {propiedad.barrio}</span>}
             </div>
             <h1
-              className="font-display font-medium text-crema leading-[1.05] max-w-4xl"
+              className="rd-display text-white max-w-4xl"
               style={{
-                fontSize: "clamp(2.2rem, 4.5vw, 4rem)",
-                letterSpacing: "-0.02em",
+                fontSize: "clamp(2.25rem, 4.5vw, 4.1rem)",
               }}
             >
               {propiedad.titulo}

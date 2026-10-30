@@ -216,6 +216,85 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
               </div>
             </div>
           </div>
+
+          {/* ── Tira de Operaciones Recientes & Casos Verificados (Prueba Social) ── */}
+          <div className="mt-12 pt-10 border-t border-navy/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+              <div className="flex items-center gap-2.5">
+                <span className="rd-ping" />
+                <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B]">
+                  [REGISTRO DE OPERACIONES RECIENTES · TRAZABILIDAD COLEGIADA]
+                </span>
+              </div>
+              <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-navy/45">
+                Protocolo Mat. 35 RP 2026
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-navy/10 rounded-2xl border border-navy/10 bg-[#F6F8FB] overflow-hidden">
+              {[
+                {
+                  code: "CASO 01 · OPERATORIA REMOTA",
+                  titulo: "Adquisición de Lote 850 m² en Bahía de las Playas",
+                  perfil: "Inversor radicado en CABA (Buenos Aires)",
+                  resultado:
+                    "Auditoría dominial, recorrido por videollamada en el Lago Mari Menuco y firma certificada sin traslado físico.",
+                  metrica: "Cierre en 12 días hábiles",
+                },
+                {
+                  code: "CASO 02 · RENTA PETROLERA USD",
+                  titulo: "Contrato Corporativo 24 Meses en Corredor Catriel",
+                  perfil: "Empresa contratista de servicios en Vaca Muerta",
+                  resultado:
+                    "Calificación crediticia societaria, inventario fotográfico notarial y renta mensual dolarizada con garantía.",
+                  metrica: "13.2% ROI anual en USD",
+                },
+                {
+                  code: "CASO 03 · PERITAJE OFICIAL",
+                  titulo: "Tasación Judicial y Partición Patrimonial en Cipolletti",
+                  perfil: "Estudio jurídico & familia propietaria",
+                  resultado:
+                    "Valuación técnica sobre comparables de escrituras reales en el Alto Valle con sello oficial de Martillera Pública.",
+                  metrica: "Dictamen entregado en 24 hs",
+                },
+              ].map((caso, idx) => (
+                <motion.div
+                  key={caso.code}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="p-5 sm:p-6 flex flex-col justify-between hover:bg-white transition-colors"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-[#8A6A1B]">
+                        [{caso.code}]
+                      </span>
+                    </div>
+                    <h3 className="font-display text-base font-semibold tracking-tight text-navy leading-snug mb-1">
+                      {caso.titulo}
+                    </h3>
+                    <p className="rd-label !text-[9px] !tracking-[0.14em] text-navy/45 mb-2.5">
+                      Perfil: {caso.perfil}
+                    </p>
+                    <p className="font-body text-xs text-navy/65 leading-relaxed">
+                      {caso.resultado}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-navy/10 flex items-center justify-between">
+                    <span className="rd-label !text-[9.5px] !tracking-[0.14em] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      ✓ {caso.metrica}
+                    </span>
+                    <span className="rd-label !text-[9px] text-navy/40">
+                      Auditado
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

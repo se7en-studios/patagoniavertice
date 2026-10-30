@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 interface AnimatedNumberProps {
   value: number;
   duration?: number;
+  prefix?: string;
   suffix?: string;
 }
 
@@ -12,6 +13,7 @@ interface AnimatedNumberProps {
 export function AnimatedNumber({
   value,
   duration = 1600,
+  prefix = "",
   suffix = "",
 }: AnimatedNumberProps) {
   const [count, setCount] = useState(0);
@@ -48,6 +50,7 @@ export function AnimatedNumber({
 
   return (
     <span ref={ref}>
+      {prefix}
       {count.toLocaleString("es-AR")}
       {suffix}
     </span>

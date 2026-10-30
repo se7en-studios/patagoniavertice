@@ -66,6 +66,153 @@ interface DemoPropiedad {
   caracteristicas?: string[];
 }
 
+const FALLBACK_PROPIEDADES_DETALLE: Record<string, DemoPropiedad> = {
+  "mari-menuco-primera-linea": {
+    id: "mari-menuco-primera-linea",
+    titulo: "Lote Frente al Lago - Bahía de las Playas",
+    barrio: "Barrio Privado Bahía de las Playas",
+    ciudad: "Mari Menuco, Neuquén",
+    tipo: "lote",
+    estado: "disponible",
+    superficie_m2: 1000,
+    imagenes: [
+      "/mari-menuco/bahia-playas-1.jpg",
+      "/mari-menuco/bahia-playas-2.jpg",
+      "/mari-menuco/bahia-playas-3.jpg",
+    ],
+    descripcion:
+      "Terreno exclusivo en primera línea de costa sobre el Lago Mari Menuco, dentro del desarrollo Bahía de las Playas. Cuenta con acceso directo a la playa, bajada náutica exclusiva, tendido de agua potable y energía eléctrica en puerta de lote, además de los proyectos aprobados de WakePark y Club House social.",
+    precio: 48000,
+    moneda: "USD",
+    ubicacion: "Costa Norte · Lago Mari Menuco, Neuquén",
+    caracteristicas: [
+      "Frente directo al Lago Mari Menuco",
+      "Bajada náutica privada",
+      "Red de agua potable y energía eléctrica",
+      "Seguridad 24 hs y acceso controlado",
+      "Supervisión notarial Estela Mari Rojas (Mat. 35 RP 2026)",
+    ],
+  },
+  "residencia-cipolletti-premium": {
+    id: "residencia-cipolletti-premium",
+    titulo: "Residencia Vanguardista con Piscina & Parque",
+    barrio: "Barrio Residencial Consolidado",
+    ciudad: "Cipolletti, Río Negro",
+    tipo: "venta",
+    estado: "disponible",
+    superficie_m2: 310,
+    dormitorios: 4,
+    banos: 3,
+    imagenes: ["/casa.avif", "/noche.avif"],
+    descripcion:
+      "Propiedad de categoría desarrollada en dos plantas sobre lote parquizado en Cipolletti, a 10 minutos de Neuquén Capital. Cuenta con aberturas de aluminio con DVH, calefacción por losa radiante, piscina climatizada, quincho totalmente equipado y cochera doble.",
+    precio: 195000,
+    moneda: "USD",
+    ubicacion: "Cipolletti, Río Negro",
+    caracteristicas: [
+      "Piscina climatizada y solárium",
+      "Quincho cerrado con parrilla de acero inoxidable",
+      "Calefacción central por losa radiante",
+      "Carpintería de alta prestación con DVH",
+      "Escritura traslativa de dominio inmediata",
+    ],
+  },
+  "lote-panoramico-mari-menuco": {
+    id: "lote-panoramico-mari-menuco",
+    titulo: "Terreno Panorámico con Bajada Náutica",
+    barrio: "Bahía de las Playas · Sector Terrazas",
+    ciudad: "Mari Menuco, Neuquén",
+    tipo: "lote",
+    estado: "disponible",
+    superficie_m2: 850,
+    imagenes: [
+      "/mari-menuco/bahia-playas-2.jpg",
+      "/mari-menuco/bahia-playas-1.jpg",
+      "/mari-menuco/bahia-playas-3.jpg",
+    ],
+    descripcion:
+      "Lote emplazado sobre una terraza natural sobreelevada que asegura visuales panorámicas despejadas de 180° hacia el Lago Mari Menuco. Factibilidad constructiva inmediata con agua y luz en lote.",
+    precio: 36000,
+    moneda: "USD",
+    ubicacion: "Sector Terrazas · Bahía de las Playas, Mari Menuco",
+    caracteristicas: [
+      "Visuales abiertas 180° al espejo de agua",
+      "Agua potable y energía eléctrica en puerta",
+      "Acceso a playa y bajada de lanchas",
+      "Proximidad a WakePark y Club House",
+    ],
+  },
+  "fraccion-desarrollo-alto-valle": {
+    id: "fraccion-desarrollo-alto-valle",
+    titulo: "Fracción Estratégica para Inversión & Logística",
+    barrio: "Corredor Petrolero & Productivo",
+    ciudad: "Catriel, Río Negro",
+    tipo: "desarrollo",
+    estado: "disponible",
+    superficie_m2: 2500,
+    imagenes: ["/bosque.avif"],
+    descripcion:
+      "Fracción de 2.500 m² ubicada estratégicamente sobre el corredor energético del norte patagónico en Catriel. Ideal para base operativa de empresas de servicios petroleros, galpón logístico o desarrollo habitacional corporativo.",
+    precio: 95000,
+    moneda: "USD",
+    ubicacion: "Acceso Ruta Nacional 151 · Catriel, Río Negro",
+    caracteristicas: [
+      "Frente sobre corredor de alto tránsito",
+      "Factibilidad comercial e industrial",
+      "Alta demanda de renta corporativa en USD",
+      "Títulos perfectos listos para transferir",
+    ],
+  },
+  "departamento-corporativo-cipolletti": {
+    id: "departamento-corporativo-cipolletti",
+    titulo: "Semipiso Premium en Torre Central",
+    barrio: "Distrito Financiero",
+    ciudad: "Cipolletti, Río Negro",
+    tipo: "venta",
+    estado: "disponible",
+    superficie_m2: 125,
+    dormitorios: 2,
+    banos: 2,
+    imagenes: ["/noche.avif", "/casa.avif"],
+    descripcion:
+      "Semipiso de categoría en el área central de Cipolletti, con rápido acceso al puente interprovincial hacia Neuquén Capital. Amplio estar comedor con salida a balcón terraza con parrilla, suite principal con vestidor y cochera cubierta.",
+    precio: 125000,
+    moneda: "USD",
+    ubicacion: "Centro · Cipolletti, Río Negro",
+    caracteristicas: [
+      "Cochera cubierta y baulera",
+      "Balcón terraza con parrilla propia",
+      "Aberturas DVH y pisos de porcelanato",
+      "Excelente renta ejecutiva en USD",
+    ],
+  },
+  "lote-segunda-linea-playas": {
+    id: "lote-segunda-linea-playas",
+    titulo: "Lote con Servicios y Factibilidad Inmediata",
+    barrio: "Bahía de las Playas · Sector Club House",
+    ciudad: "Mari Menuco, Neuquén",
+    tipo: "lote",
+    estado: "disponible",
+    superficie_m2: 750,
+    imagenes: [
+      "/mari-menuco/bahia-playas-3.jpg",
+      "/mari-menuco/bahia-playas-2.jpg",
+      "/mari-menuco/bahia-playas-1.jpg",
+    ],
+    descripcion:
+      "El ticket de ingreso más competitivo de Bahía de las Playas en el Lago Mari Menuco. Lote plano de 750 m² con agua y electricidad, próximo al pórtico de acceso y al futuro Club House social.",
+    precio: 32000,
+    moneda: "USD",
+    ubicacion: "Sector Club House · Bahía de las Playas, Mari Menuco",
+    caracteristicas: [
+      "Agua potable y energía eléctrica",
+      "Contiguo al futuro Club House",
+      "Acceso completo a playa y sector náutico",
+      "Financiación personalizada disponible",
+    ],
+  },
+};
+
 async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
   try {
     const supabase = await createClient();
@@ -75,10 +222,11 @@ async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
       .eq("id", id)
       .eq("publicado", true)
       .single();
-    return data ? (data as unknown as DemoPropiedad) : null;
+    if (data) return data as unknown as DemoPropiedad;
   } catch {
-    return null;
+    /* fallback below */
   }
+  return FALLBACK_PROPIEDADES_DETALLE[id] ?? null;
 }
 
 async function fetchSimilares(p: DemoPropiedad): Promise<SimilarItem[]> {

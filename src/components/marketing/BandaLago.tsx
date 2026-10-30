@@ -267,6 +267,102 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
         </div>
       </div>
 
+      {/* Franja Interactiva de los 4 Sectores del Masterplan (Visible en Scroll) */}
+      <div className="max-w-7xl mx-auto mt-5">
+        <div className="rounded-3xl bg-white border border-navy/[0.08] p-5 sm:p-6 shadow-[0_14px_34px_-22px_rgba(14,26,51,0.16)]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3.5 border-b border-navy/[0.07]">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-dorado" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A6A1B] font-semibold">
+                Masterplan Interactivo · 4 Sectores Disponibles en Bahía de las Playas
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEnviadoOk(false);
+                setModalMasterplan(true);
+              }}
+              className="font-mono text-[10px] uppercase tracking-[0.16em] text-navy hover:text-[#8A6A1B] font-semibold transition-colors text-left sm:text-right"
+            >
+              Solicitar plano catastral y disponibilidad →
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {SECTORES_BAHIA.map((sec, idx) => {
+              const isSelected = sec.id === sectorActivo.id;
+              return (
+                <motion.button
+                  key={sec.id}
+                  type="button"
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: idx * 0.06 }}
+                  onClick={() => {
+                    setSectorActivo(sec);
+                    setEnviadoOk(false);
+                    setModalMasterplan(true);
+                  }}
+                  className={`group text-left p-4 rounded-2xl border transition-all duration-300 ${
+                    isSelected
+                      ? "bg-[#0B1528] text-white border-[#0B1528] shadow-md"
+                      : "bg-[#F6F8FB]/75 hover:bg-white text-navy border-navy/[0.08] hover:border-dorado/60"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span
+                      className={`font-mono text-[10px] uppercase tracking-[0.16em] font-semibold ${
+                        isSelected ? "text-dorado" : "text-[#8A6A1B]"
+                      }`}
+                    >
+                      {sec.codigo}
+                    </span>
+                    <span
+                      className={`font-mono text-[9.5px] uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                        isSelected
+                          ? "bg-white/10 text-white/90"
+                          : "bg-navy/[0.06] text-navy/70"
+                      }`}
+                    >
+                      {sec.lotesDisponibles} lotes disp.
+                    </span>
+                  </div>
+
+                  <h3
+                    className={`font-display text-base font-semibold mb-1 ${
+                      isSelected ? "text-white" : "text-navy"
+                    }`}
+                  >
+                    {sec.nombre}
+                  </h3>
+
+                  <p
+                    className={`font-body text-xs line-clamp-2 mb-3 leading-relaxed ${
+                      isSelected ? "text-white/65" : "text-navy/60"
+                    }`}
+                  >
+                    {sec.descripcion}
+                  </p>
+
+                  <div
+                    className={`flex items-center justify-between pt-2.5 border-t font-mono text-[10px] ${
+                      isSelected
+                        ? "border-white/10 text-dorado"
+                        : "border-navy/[0.07] text-navy/75"
+                    }`}
+                  >
+                    <span className="font-semibold">{sec.precioRef}</span>
+                    <span>{sec.superficie} →</span>
+                  </div>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       {/* Modal On-Demand: Masterplan Interactivo + Agendar Visita */}
       <AnimatePresence>
         {modalMasterplan && (

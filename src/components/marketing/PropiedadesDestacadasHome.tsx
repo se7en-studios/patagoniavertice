@@ -239,7 +239,7 @@ export default function PropiedadesDestacadasHome({
           p.tipo === "lote" || p.tipo === "desarrollo" || p.tipo === "chacra",
       );
     }
-    return result.slice(0, 3);
+    return result.slice(0, 6);
   }, [listaBase, tabActiva]);
 
   const propiedadesComparadas = useMemo(

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/marketing/Hero";
+import Manifiesto from "@/components/marketing/Manifiesto";
 import BandaLago from "@/components/marketing/BandaLago";
 import SectionRail from "@/components/marketing/SectionRail";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
@@ -31,8 +32,15 @@ export const metadata: Metadata = {
 const PropiedadesDestacadasHome = dynamic(
   () => import("@/components/marketing/PropiedadesDestacadasHome"),
 );
+const Servicios = dynamic(() => import("@/components/marketing/Servicios"));
+const ZonasInteractivas = dynamic(
+  () => import("@/components/marketing/ZonasInteractivas"),
+);
 const TasadorExpress = dynamic(
   () => import("@/components/marketing/TasadorExpress"),
+);
+const CalculadoraRentabilidad = dynamic(
+  () => import("@/components/marketing/CalculadoraRentabilidad"),
 );
 const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
@@ -65,6 +73,7 @@ export default async function HomePage() {
 
       <div id="sec-inicio">
         <Hero heroConfig={siteConfig.hero} />
+        <Manifiesto statsCustom={siteConfig.statsManifiesto} />
       </div>
 
       <div id="sec-lago">
@@ -75,8 +84,20 @@ export default async function HomePage() {
         <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
       </div>
 
+      <div id="sec-servicios">
+        <Servicios serviciosCustom={siteConfig.servicios} />
+      </div>
+
+      <div id="sec-zonas">
+        <ZonasInteractivas zonasCustom={siteConfig.zonas} />
+      </div>
+
       <div id="sec-tasador">
         <TasadorExpress />
+      </div>
+
+      <div id="sec-calculadora">
+        <CalculadoraRentabilidad />
       </div>
 
       <div id="sec-nosotros">

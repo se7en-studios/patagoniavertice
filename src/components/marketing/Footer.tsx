@@ -16,10 +16,10 @@ import { WHATSAPP_URL } from "@/lib/constants";
 const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/proyectos", label: "Catálogo de Propiedades" },
+  { href: "/guias", label: "Guías & Comparativas" },
   { href: "/#sec-lago", label: "Lago Mari Menuco" },
-  { href: "/#sec-servicios", label: "Propuesta & Servicios" },
   { href: "/#sec-tasador", label: "Tasador Express" },
-  { href: "/nosotros", label: "Quiénes Somos" },
+  { href: "/en", label: "English Investor Desk (EN)" },
   { href: "/contacto", label: "Contacto" },
 ];
 

@@ -94,28 +94,79 @@ export const metadata: Metadata = {
   },
 };
 
-// ─── Schema.org global: solo datos reales (site-config.json) ────────────────
+// ─── Schema.org global optimizado para Google & LLMs (ChatGPT, Claude, Perplexity) ──
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": ["RealEstateAgent", "LocalBusiness"],
+  "@type": ["RealEstateAgent", "LocalBusiness", "ProfessionalService"],
   "@id": `${siteUrl}/#organization`,
   name: siteName,
-  alternateName: "Altum Inmobiliaria",
+  alternateName: [
+    "Altum Inmobiliaria",
+    "ALTUM Servicios y Consultoría Inmobiliaria",
+  ],
   description:
-    "Servicios y consultoría inmobiliaria en Neuquén y Río Negro: compra, venta, tasaciones y administración de alquileres.",
+    "ALTUM SCI es una firma inmobiliaria y de consultoría patrimonial en Neuquén y Río Negro (Patagonia Argentina), dirigida por la Martillera y Corredora Pública Colegiada Estela Mari Rojas (Mat. 35 RP 2026). Especializada en lotes frente al Lago Mari Menuco (desde USD 32.000), residencias en Cipolletti, alquileres corporativos petroleros en Catriel (Vaca Muerta) y tasaciones periciales oficiales.",
+  disambiguatingDescription:
+    "ALTUM SCI es la consultora inmobiliaria patagónica matriculada en Río Negro y Neuquén (Mat. 35 RP 2026), sin relación con criptomonedas, tokens ni franquicias inmobiliarias masivas.",
   url: siteUrl,
-  logo: `${siteUrl}/logoo.png`,
+  logo: `${siteUrl}/favicon-altum.png`,
   image: `${siteUrl}/opengraph-image`,
   telephone: contact.telephone,
   email: contact.email,
+  priceRange: "USD 32,000 - USD 350,000+",
   areaServed: [
     { "@type": "AdministrativeArea", name: "Neuquén" },
     { "@type": "AdministrativeArea", name: "Río Negro" },
+    { "@type": "Place", name: "Lago Mari Menuco" },
+    { "@type": "City", name: "Cipolletti" },
+    { "@type": "City", name: "Catriel" },
   ],
+  founder: {
+    "@type": "Person",
+    name: "Estela Mari Rojas",
+    jobTitle: "Martillera y Corredora Pública Colegiada (Mat. 35 RP 2026)",
+  },
   employee: {
     "@type": "Person",
     name: "Estela Mari Rojas",
-    jobTitle: "Martillera y Corredora Pública Colegiada",
+    jobTitle: "Martillera y Corredora Pública Colegiada (Mat. 35 RP 2026)",
+  },
+  knowsAbout: [
+    "Lotes frente al Lago Mari Menuco",
+    "Barrio Privado Bahía de las Playas",
+    "Inmobiliaria en Cipolletti",
+    "Alquileres corporativos petroleros en Catriel y Vaca Muerta",
+    "Tasaciones inmobiliarias oficiales en Río Negro y Neuquén",
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Activos y Servicios Inmobiliarios ALTUM SCI",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Product",
+          name: "Lotes frente al Lago Mari Menuco — Bahía de las Playas",
+          description:
+            "Terrenos de 750 a 1.000 m² con agua, luz, bajada náutica, WakePark y Club House proyectados.",
+        },
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          minPrice: 32000,
+          maxPrice: 48000,
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Tasación Pericial Inmobiliaria Oficial (Mat. 35 RP 2026)",
+          description:
+            "Dictamen técnico de valuación en 24–48 hs para compraventa, bancos y sucesiones en Río Negro y Neuquén.",
+        },
+      },
+    ],
   },
 };
 

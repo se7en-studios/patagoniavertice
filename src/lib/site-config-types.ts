@@ -109,7 +109,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     tituloPrincipal: "Invertí en el eje estratégico",
     tituloCursiva: "de la Patagonia.",
     subtitulo:
-      "Terrenos exclusivos en Lago Mari Menuco, residencias en Cipolletti y activos corporativos en el corredor de Vaca Muerta con respaldo de Martillera Pública Matriculada.",
+      "ALTUM SCI es la consultora inmobiliaria de Estela Mari Rojas (Martillera Pública Mat. 35 RP 2026) en Neuquén y Río Negro: lotes frente al Lago Mari Menuco desde USD 32.000, residencias en Cipolletti, alquileres corporativos en Vaca Muerta (12–14% USD) y tasaciones oficiales.",
     ctaPrimario: "Explorar propiedades",
     ctaSecundario: "Hablar con Estela",
     loteDestacadoTitulo: "Bahía de las Playas · Mari Menuco",

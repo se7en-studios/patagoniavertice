@@ -98,7 +98,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
     : TITLE_LINES;
   const subtituloText =
     heroConfig?.subtitulo ||
-    "Lotes exclusivos frente al lago en Mari Menuco, residencias en Cipolletti y activos de renta en moneda dura con respaldo notarial colegiado.";
+    "ALTUM SCI es la consultora inmobiliaria de Estela Mari Rojas (Martillera Pública Mat. 35 RP 2026) en Neuquén y Río Negro: lotes frente al Lago Mari Menuco desde USD 32.000, residencias en Cipolletti, alquileres corporativos en Vaca Muerta (12–14% USD) y tasaciones oficiales.";
   const ctaSecundarioText =
     heroConfig?.ctaSecundario || "Hablar directamente con Estela";
 

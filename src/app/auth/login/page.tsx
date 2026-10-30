@@ -54,12 +54,15 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-[#090E1C] border border-[#C9A84C]/40 p-8 md:p-10 shadow-2xl backdrop-blur-2xl relative z-10">
         {/* Logo & Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-4">
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-2xl bg-white border border-[#C9A84C]/60 px-4 py-2.5 shadow-lg mb-4"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logoo.png"
+              src="/logo-altum-crop.png"
               alt="ALTUM SCI"
-              className="h-14 mx-auto w-auto object-contain"
-              style={{ mixBlendMode: "screen", filter: "brightness(1.1)" }}
+              className="h-12 mx-auto w-auto object-contain"
             />
           </Link>
           <div className="flex items-center justify-center gap-2 mb-1">

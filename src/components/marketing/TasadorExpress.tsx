@@ -2,21 +2,27 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import {
-  motion,
-  AnimatePresence,
-  MotionConfig,
-} from "framer-motion";
+  Home,
+  Building2,
+  Compass,
+  Trees,
+  Store,
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const TIPOS_INMUEBLE = [
-  { id: "casa", label: "Casa / Residencia", icon: "🏡" },
-  { id: "depto", label: "Departamento", icon: "🏢" },
-  { id: "terreno", label: "Lote / Terreno", icon: "📐" },
-  { id: "chacra", label: "Chacra / Campo", icon: "🌾" },
-  { id: "comercial", label: "Local / Galpón", icon: "🏬" },
+  { id: "casa", label: "Casa / Residencia", Icon: Home },
+  { id: "depto", label: "Departamento", Icon: Building2 },
+  { id: "terreno", label: "Lote / Terreno", Icon: Compass },
+  { id: "chacra", label: "Chacra / Fracción", Icon: Trees },
+  { id: "comercial", label: "Local / Galpón", Icon: Store },
 ];
 
 const LOCALIDADES = [
@@ -25,8 +31,7 @@ const LOCALIDADES = [
   "Catriel (Polo Energético)",
   "General Roca",
   "Neuquén Capital",
-  "Bariloche & Cordillera",
-  "Otras zonas de Río Negro & Neuquén",
+  "Otras zonas Patagonia",
 ];
 
 const RANGOS_SUPERFICIE = [
@@ -34,13 +39,43 @@ const RANGOS_SUPERFICIE = [
   "70 a 150 m²",
   "150 a 300 m²",
   "300 a 800 m²",
-  "Más de 800 m² / Fracción o Lote",
+  "Más de 800 m² / Lote",
 ];
 
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
-const rise = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
+const BENCHMARK_ZONA: Record<
+  string,
+  { rangoM2: string; demanda: string; tendencia: string }
+> = {
+  Cipolletti: {
+    rangoM2: "USD 1.350 – 1.850 / m² cub.",
+    demanda: "Muy Alta · Polo Residencial",
+    tendencia: "+8.4% anual en USD",
+  },
+  "Mari Menuco / Lagos": {
+    rangoM2: "USD 38 – 55 / m² en lote",
+    demanda: "Alta · Segunda Residencia & Náutica",
+    tendencia: "+14.0% plusvalía anual",
+  },
+  "Catriel (Polo Energético)": {
+    rangoM2: "USD 950 – 1.420 / m²",
+    demanda: "Sostenida · Demanda Corporativa",
+    tendencia: "Renta 12–14% anual USD",
+  },
+  "General Roca": {
+    rangoM2: "USD 1.050 – 1.480 / m²",
+    demanda: "Estable · Eje Alto Valle",
+    tendencia: "+6.5% anual en USD",
+  },
+  "Neuquén Capital": {
+    rangoM2: "USD 1.650 – 2.350 / m²",
+    demanda: "Máxima · Centro Financiero",
+    tendencia: "+9.2% anual en USD",
+  },
+  "Otras zonas Patagonia": {
+    rangoM2: "Valuación según micro-zona",
+    demanda: "Análisis personalizado",
+    tendencia: "Mercado en expansión",
+  },
 };
 
 export default function TasadorExpress() {
@@ -52,8 +87,12 @@ export default function TasadorExpress() {
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [enviadoOk, setEnviadoOk] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const iniciado = useRef(false);
+
+  const benchmark =
+    BENCHMARK_ZONA[localidad] || BENCHMARK_ZONA["Otras zonas Patagonia"];
 
   const marcarInicio = () => {
     if (iniciado.current) return;
@@ -62,19 +101,23 @@ export default function TasadorExpress() {
   };
 
   const solicitarTasacion = async () => {
+    if (!nombre.trim() || !telefono.trim()) {
+      setError("Por favor completá tu nombre y WhatsApp para enviarte el informe.");
+      return;
+    }
     setError(null);
     setEnviando(true);
     const tipoLabel = TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label || tipo;
     const result = await guardarLeadAltum({
-      nombre,
-      telefono,
+      nombre: nombre.trim(),
+      telefono: telefono.trim(),
       tipo_consulta: "tasacion",
       origen: "tasador",
       mensaje: `Solicitud de tasación (${operacion}): ${tipoLabel}, ${localidad}, ${superficie}.`,
       detalle: { tipo: tipoLabel, localidad, superficie, operacion },
     });
     setEnviando(false);
-    // Si el guardado falla igual abrimos WhatsApp: la consulta llega por ahí y no se pierde.
+    setEnviadoOk(true);
     track("tasador_complete", { tipo, localidad, operacion });
     if (result.success) track("lead_submit", { origen: "tasador" });
     track("whatsapp_click", { origen: "tasador" });
@@ -82,419 +125,427 @@ export default function TasadorExpress() {
   };
 
   const generarMensajeWhatsApp = () => {
-    const texto = `Hola Estela Mari Rojas (ALTUM SCI - Servicios & Consultoría Inmobiliaria). Quisiera solicitar la tasación profesional de mi inmueble:
+    const texto = `Hola Estela Mari Rojas (ALTUM SCI). Quisiera solicitar la tasación profesional de mi inmueble:
 • Tipo: ${TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label || tipo}
 • Localidad: ${localidad}
 • Superficie aprox: ${superficie}
-• Intención: ${operacion === "vender" ? "Venta Inmobiliaria" : "Alquiler / Administración"}
-¿Cuándo podríamos coordinar la visita técnica o peritaje preliminar?`;
+• Objetivo: ${operacion === "vender" ? "Venta Inmobiliaria" : "Alquiler / Administración"}
+Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
 
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
   };
 
   return (
     <MotionConfig reducedMotion="user">
-    <section
-      className="py-24 lg:py-32 relative overflow-hidden text-navy bg-[#EAF0F7]"
-      id="tasador-express"
-      style={{
-        backgroundImage:
-          "radial-gradient(600px circle at 85% 20%, rgba(201,168,76,0.14), transparent 70%)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Context & Trust */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
-                ALTUM SCI · Tasación Oficial Certificada
-              </span>
+      <section
+        className="py-24 lg:py-32 relative overflow-hidden text-navy bg-white border-y border-navy/[0.06]"
+        id="tasador-express"
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            {/* Left Column: PropTech Trust & Methodology */}
+            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6F8FB] border border-navy/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
+                  Valuación Técnica Certificada
+                </span>
+              </div>
+
+              <h2
+                className="font-display font-medium leading-[1.04] text-navy"
+                style={{
+                  fontSize: "clamp(2.3rem, 4.2vw, 3.5rem)",
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                Conocé el valor real de tu activo en{" "}
+                <em className="not-italic italic text-[#A47C1B]">Patagonia.</em>
+              </h2>
+
+              <p className="font-body text-navy/60 text-sm lg:text-base leading-relaxed">
+                Combinamos inteligencia de precios de cierres efectivos en el
+                Alto Valle con dictamen técnico firmado por{" "}
+                <strong className="text-navy font-medium">
+                  Estela Mari Rojas
+                </strong>{" "}
+                (Martillera Pública Colegiada Mat. 35 RP 2026).
+              </p>
+
+              {/* Live Market Benchmark Box */}
+              <div className="rounded-2xl bg-[#0B1528] text-white p-5 border border-navy/10 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-dorado">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Benchmark en vivo · {localidad}
+                  </span>
+                  <span className="font-mono text-[10px] text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                    {benchmark.tendencia}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
+                  <div>
+                    <span className="block font-mono text-[9.5px] uppercase text-white/50">
+                      Valor de Referencia
+                    </span>
+                    <span className="font-display text-sm sm:text-base font-semibold text-white">
+                      {benchmark.rangoM2}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block font-mono text-[9.5px] uppercase text-white/50">
+                      Nivel de Liquidez
+                    </span>
+                    <span className="font-body text-xs font-medium text-white/90">
+                      {benchmark.demanda}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3 Pillars */}
+              <div className="space-y-3 pt-2">
+                {[
+                  {
+                    t: "Comparables de Escrituras Reales",
+                    d: "Valuamos sobre cierres efectivos de la zona, no precios de publicación distorsionados.",
+                  },
+                  {
+                    t: "Validez Notarial, Bancaria y Sucesoria",
+                    d: "Informe técnico respaldado por matrícula profesional del Colegio de Martilleros.",
+                  },
+                  {
+                    t: "Entrega de Dictamen en 24 Horas",
+                    d: "Relevamiento presencial o satelital con informe ejecutivo de comercialización.",
+                  },
+                ].map((item) => (
+                  <div key={item.t} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-[#8A6A1B] shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-body text-xs font-semibold text-navy">
+                        {item.t}
+                      </h4>
+                      <p className="font-body text-navy/55 text-xs leading-relaxed">
+                        {item.d}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Firma Estela */}
+              <div className="flex items-center gap-3.5 rounded-2xl border border-navy/[0.08] bg-[#F6F8FB] p-3.5">
+                <div className="relative h-11 w-11 rounded-full overflow-hidden border border-dorado/60 shrink-0">
+                  <Image
+                    src="/estela-avatar.jpg"
+                    alt="Estela Mari Rojas"
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-sm font-semibold text-navy truncate">
+                    Estela Mari Rojas
+                  </p>
+                  <p className="font-mono text-[10px] text-[#8A6A1B] uppercase tracking-wider font-semibold truncate">
+                    Martillera &amp; Corredora Pública · Mat. 35 RP 2026
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <h2
-              className="font-display font-medium leading-[1.05]"
-              style={{
-                fontSize: "clamp(2.3rem, 4.2vw, 3.6rem)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              ¿Cuánto vale tu propiedad en{" "}
-              <em className="not-italic italic text-[#A47C1B]">Patagonia?</em>
-            </h2>
+            {/* Right Column: Minimalist Interactive Configurator */}
+            <div className="lg:col-span-7">
+              <div className="p-7 sm:p-9 lg:p-11 rounded-[2rem] border border-navy/10 bg-[#F6F8FB] shadow-[0_24px_60px_-30px_rgba(14,26,51,0.16)]">
+                {/* Top Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-6 border-b border-navy/[0.08]">
+                  <div>
+                    <span className="font-mono text-[#8A6A1B] text-[10px] tracking-[0.2em] uppercase font-semibold">
+                      Paso 0{step} de 02
+                    </span>
+                    <h3 className="font-display text-xl sm:text-2xl font-medium text-navy mt-0.5">
+                      {step === 1
+                        ? "Configurá las características del activo"
+                        : "Recibí tu valuación profesional"}
+                    </h3>
+                  </div>
 
-            <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
-              Tasaciones inmobiliarias con rigor técnico y legal a cargo de{" "}
-              <strong>Estela Mari Rojas</strong> (Martillera &amp; Corredora
-              Pública Colegiada Mat. 35 RP 2026).
-            </p>
-
-            {/* Checklist de Garantías */}
-            <motion.div
-              className="space-y-4 pt-4 border-t border-navy/10"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-            >
-              <motion.div variants={rise} className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
-                  ✓
-                </div>
-                <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
-                    Análisis Comparativo de Mercado Real
-                  </h4>
-                  <p className="font-body text-navy/55 text-xs">
-                    Basado en operaciones efectivas y escrituras cerradas en la
-                    zona, sin sobrevaluaciones ficticias.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div variants={rise} className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
-                  ✓
-                </div>
-                <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
-                    Validez Notarial, Judicial y Bancaria
-                  </h4>
-                  <p className="font-body text-navy/55 text-xs">
-                    Revisión de títulos, planos y estado dominial para
-                    garantizar una operación sin sorpresas.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div variants={rise} className="flex items-start gap-3.5">
-                <div className="w-5 h-5 rounded-full bg-[#DFF1EA] flex items-center justify-center shrink-0 mt-0.5 text-[#2F7D6B] font-bold text-xs">
-                  ✓
-                </div>
-                <div>
-                  <h4 className="font-body text-xs font-semibold tracking-wider uppercase text-navy">
-                    Dictamen Rápido y Personalizado
-                  </h4>
-                  <p className="font-body text-navy/55 text-xs">
-                    Coordinamos inspección in situ o relevamiento satelital y
-                    virtual inmediato.
-                  </p>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Sello de confianza de Estela */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="mt-6 flex items-center gap-3.5 rounded-2xl border border-dorado/30 bg-white/90 backdrop-blur-md p-3.5 shadow-sm"
-            >
-              <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-dorado/50 shrink-0">
-                <Image
-                  src="/estela-avatar.jpg"
-                  alt="Estela Mari Rojas"
-                  fill
-                  sizes="48px"
-                  className="object-cover"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-display text-sm font-semibold text-navy truncate">
-                  Estela Mari Rojas
-                </p>
-                <p className="font-body text-[10px] text-[#8A6A1B] uppercase tracking-wider font-semibold truncate">
-                  Martillera Colegiada · Mat. 35 RP 2026
-                </p>
-                <p className="font-body text-[10px] text-navy/50 truncate">
-                  Colegio de Martilleros de Río Negro · Validez legal
-                </p>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Column: Interactive Card */}
-          <div className="lg:col-span-7">
-            <motion.div
-              className="p-8 lg:p-10 rounded-[2rem] border border-white bg-white/80 relative backdrop-blur-xl shadow-[0_30px_70px_-30px_rgba(14,26,51,0.4)]"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Header Card */}
-              <div className="flex items-center justify-between pb-5 mb-4">
-                <div>
-                  <span className="font-body text-[#8A6A1B] text-[11px] tracking-[0.2em] uppercase">
-                    Paso {step} de 2
-                  </span>
-                  <h3 className="font-display text-xl font-medium text-navy mt-0.5">
-                    {step === 1
-                      ? "Datos preliminares del inmueble"
-                      : "Resumen y solicitud de tasación"}
-                  </h3>
+                  {/* Segmented Control Venta / Alquiler */}
+                  <div className="inline-flex bg-white p-1 rounded-full border border-navy/10">
+                    <button
+                      type="button"
+                      onClick={() => setOperacion("vender")}
+                      className={`px-4 py-1.5 rounded-full font-mono text-[10px] tracking-widest uppercase transition-all ${
+                        operacion === "vender"
+                          ? "bg-navy text-white font-semibold shadow-sm"
+                          : "text-navy/55 hover:text-navy"
+                      }`}
+                    >
+                      Venta
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setOperacion("alquilar")}
+                      className={`px-4 py-1.5 rounded-full font-mono text-[10px] tracking-widest uppercase transition-all ${
+                        operacion === "alquilar"
+                          ? "bg-navy text-white font-semibold shadow-sm"
+                          : "text-navy/55 hover:text-navy"
+                      }`}
+                    >
+                      Alquiler
+                    </button>
+                  </div>
                 </div>
 
-                {/* Switch Operación */}
-                <div className="flex bg-navy/5 p-1 rounded-full">
-                  <button
-                    onClick={() => setOperacion("vender")}
-                    className={`px-3.5 py-1.5 rounded-full font-body text-[10px] tracking-widest uppercase transition-colors ${
-                      operacion === "vender"
-                        ? "bg-dorado text-tierra font-semibold"
-                        : "text-navy/55 hover:text-navy"
-                    }`}
-                  >
-                    Venta
-                  </button>
-                  <button
-                    onClick={() => setOperacion("alquilar")}
-                    className={`px-3.5 py-1.5 rounded-full font-body text-[10px] tracking-widest uppercase transition-colors ${
-                      operacion === "alquilar"
-                        ? "bg-dorado text-tierra font-semibold"
-                        : "text-navy/55 hover:text-navy"
-                    }`}
-                  >
-                    Alquiler
-                  </button>
-                </div>
-              </div>
-
-              <div className="h-1.5 rounded-full bg-navy/10 mb-8 overflow-hidden" aria-hidden="true">
-                <motion.div
-                  className="h-full w-full rounded-full bg-dorado origin-left"
-                  initial={false}
-                  animate={{ scaleX: step / 2 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                />
-              </div>
-
-              <AnimatePresence mode="wait">
-                {step === 1 ? (
-                  <motion.div
-                    key="step-1"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    className="space-y-6"
-                  >
-                    {/* Selector de Tipo */}
-                    <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
-                        1. Tipo de Propiedad
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {TIPOS_INMUEBLE.map((t) => (
-                          <button
-                            key={t.id}
-                            type="button"
-                            onClick={() => {
-                              marcarInicio();
-                              setTipo(t.id);
-                            }}
-                            className={`p-3 text-left rounded-2xl border transition-all flex items-center gap-2.5 ${
-                              tipo === t.id
-                                ? "border-dorado bg-[#FBF0CF] text-[#7A5A12] font-medium"
-                                : "border-navy/10 bg-white text-navy/65 hover:border-navy/30 hover:text-navy"
-                            }`}
-                          >
-                            <span className="text-base">{t.icon}</span>
-                            <span className="font-body text-xs truncate">
-                              {t.label}
-                            </span>
-                          </button>
-                        ))}
+                <AnimatePresence mode="wait">
+                  {step === 1 ? (
+                    <motion.div
+                      key="step-1"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.22 }}
+                      className="space-y-7"
+                    >
+                      {/* 1. Tipo */}
+                      <div>
+                        <label className="block font-mono text-[10px] tracking-[0.18em] uppercase text-navy/55 mb-3 font-semibold">
+                          01 · Tipología de Propiedad
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                          {TIPOS_INMUEBLE.map(({ id, label, Icon }) => {
+                            const active = tipo === id;
+                            return (
+                              <button
+                                key={id}
+                                type="button"
+                                onClick={() => {
+                                  marcarInicio();
+                                  setTipo(id);
+                                }}
+                                className={`p-3.5 text-left rounded-2xl border transition-all flex items-center gap-3 ${
+                                  active
+                                    ? "border-navy bg-navy text-white shadow-sm"
+                                    : "border-navy/10 bg-white text-navy/75 hover:border-navy/30 hover:text-navy"
+                                }`}
+                              >
+                                <Icon
+                                  className={`w-4 h-4 shrink-0 ${
+                                    active ? "text-dorado" : "text-[#8A6A1B]"
+                                  }`}
+                                />
+                                <span className="font-body text-xs font-medium truncate">
+                                  {label}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Selector de Localidad */}
-                    <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
-                        2. Localidad / Zona en Patagonia
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {LOCALIDADES.map((loc) => (
-                          <button
-                            key={loc}
-                            type="button"
-                            onClick={() => {
-                              marcarInicio();
-                              setLocalidad(loc);
-                            }}
-                            className={`p-2.5 text-center rounded-full border font-body text-xs transition-all ${
-                              localidad === loc
-                                ? "border-dorado bg-dorado text-tierra font-semibold"
-                                : "border-navy/10 bg-white text-navy/65 hover:border-navy/30 hover:text-navy"
-                            }`}
-                          >
-                            {loc}
-                          </button>
-                        ))}
+                      {/* 2. Localidad */}
+                      <div>
+                        <label className="block font-mono text-[10px] tracking-[0.18em] uppercase text-navy/55 mb-3 font-semibold">
+                          02 · Ubicación en Patagonia
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {LOCALIDADES.map((loc) => {
+                            const active = localidad === loc;
+                            return (
+                              <button
+                                key={loc}
+                                type="button"
+                                onClick={() => {
+                                  marcarInicio();
+                                  setLocalidad(loc);
+                                }}
+                                className={`py-2.5 px-3.5 text-center rounded-xl border font-body text-xs transition-all ${
+                                  active
+                                    ? "border-dorado bg-[#FBF0CF]/70 text-navy font-semibold"
+                                    : "border-navy/10 bg-white text-navy/65 hover:border-navy/25 hover:text-navy"
+                                }`}
+                              >
+                                {loc}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Selector de Superficie */}
-                    <div>
-                      <label className="block font-body text-[11px] tracking-[0.16em] uppercase text-navy/60 mb-3">
-                        3. Superficie estimada
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {RANGOS_SUPERFICIE.map((sup) => (
-                          <button
-                            key={sup}
-                            type="button"
-                            onClick={() => {
-                              marcarInicio();
-                              setSuperficie(sup);
-                            }}
-                            className={`px-4 py-2 rounded-full border font-body text-[11px] transition-all ${
-                              superficie === sup
-                                ? "border-dorado text-[#7A5A12] bg-[#FBF0CF] font-medium"
-                                : "border-navy/10 bg-white text-navy/55 hover:text-navy"
-                            }`}
-                          >
-                            {sup}
-                          </button>
-                        ))}
+                      {/* 3. Superficie */}
+                      <div>
+                        <label className="block font-mono text-[10px] tracking-[0.18em] uppercase text-navy/55 mb-3 font-semibold">
+                          03 · Superficie Estimada
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {RANGOS_SUPERFICIE.map((sup) => {
+                            const active = superficie === sup;
+                            return (
+                              <button
+                                key={sup}
+                                type="button"
+                                onClick={() => {
+                                  marcarInicio();
+                                  setSuperficie(sup);
+                                }}
+                                className={`px-4 py-2 rounded-full border font-body text-xs transition-all ${
+                                  active
+                                    ? "border-navy bg-navy text-white font-medium"
+                                    : "border-navy/10 bg-white text-navy/65 hover:border-navy/25 hover:text-navy"
+                                }`}
+                              >
+                                {sup}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Siguiente Paso */}
-                    <div className="pt-4 flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          marcarInicio();
-                          setStep(2);
-                        }}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-md"
-                      >
-                        <span>Continuar</span>
-                        <span>→</span>
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="step-2"
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    className="space-y-6"
-                  >
-                    {/* Resumen de Tasación */}
-                    <div className="p-6 rounded-3xl bg-[#F6F8FB] border border-navy/10 space-y-3">
-                      <h4 className="font-body text-[#8A6A1B] text-[11px] tracking-[0.2em] uppercase">
-                        Detalles seleccionados
-                      </h4>
-                      <div className="grid grid-cols-2 gap-4 text-xs font-body text-navy/70 pt-2 border-t border-navy/10">
+                      {/* Footer Step 1 */}
+                      <div className="pt-4 border-t border-navy/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <span className="font-mono text-[11px] text-navy/55">
+                          Referencia zonal:{" "}
+                          <strong className="text-navy">
+                            {benchmark.rangoM2}
+                          </strong>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            marcarInicio();
+                            setStep(2);
+                          }}
+                          className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-sm"
+                        >
+                          <span>Continuar al Dictamen</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="step-2"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.22 }}
+                      className="space-y-6"
+                    >
+                      {/* Ficha Resumen */}
+                      <div className="p-5 rounded-2xl bg-white border border-navy/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-body">
                         <div>
-                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
-                            Inmueble
+                          <span className="block font-mono text-[9.5px] uppercase text-navy/45">
+                            Tipología
                           </span>
-                          <span className="font-medium text-navy">
+                          <span className="font-semibold text-navy">
                             {TIPOS_INMUEBLE.find((t) => t.id === tipo)?.label}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
-                            Ubicación
+                          <span className="block font-mono text-[9.5px] uppercase text-navy/45">
+                            Localidad
                           </span>
-                          <span className="font-medium text-navy">
+                          <span className="font-semibold text-navy">
                             {localidad}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
+                          <span className="block font-mono text-[9.5px] uppercase text-navy/45">
                             Superficie
                           </span>
-                          <span className="font-medium text-navy">
+                          <span className="font-semibold text-navy">
                             {superficie}
                           </span>
                         </div>
                         <div>
-                          <span className="block text-navy/55 text-[10px] uppercase tracking-wider">
-                            Operación
+                          <span className="block font-mono text-[9.5px] uppercase text-navy/45">
+                            Referencia m²
                           </span>
-                          <span className="font-medium text-navy capitalize">
-                            {operacion}
+                          <span className="font-mono font-semibold text-[#8A6A1B]">
+                            {benchmark.rangoM2}
                           </span>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        required
-                        autoComplete="name"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                        placeholder="Tu nombre"
-                        aria-label="Tu nombre"
-                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
-                      />
-                      <input
-                        type="tel"
-                        required
-                        autoComplete="tel"
-                        value={telefono}
-                        onChange={(e) => setTelefono(e.target.value)}
-                        placeholder="Tu WhatsApp o teléfono"
-                        aria-label="Tu WhatsApp o teléfono"
-                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
-                      />
-                    </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block font-mono text-[10px] uppercase tracking-wider text-navy/55 mb-1.5">
+                            Tu Nombre y Apellido *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            autoComplete="name"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            placeholder="Ej: Laura Méndez"
+                            className="w-full bg-white border border-navy/15 rounded-xl px-4 py-3 text-sm font-body text-navy placeholder:text-navy/35 focus:outline-none focus:border-navy transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-mono text-[10px] uppercase tracking-wider text-navy/55 mb-1.5">
+                            Tu WhatsApp o Teléfono *
+                          </label>
+                          <input
+                            type="tel"
+                            required
+                            autoComplete="tel"
+                            value={telefono}
+                            onChange={(e) => setTelefono(e.target.value)}
+                            placeholder="Ej: +54 9 299 ..."
+                            className="w-full bg-white border border-navy/15 rounded-xl px-4 py-3 text-sm font-body text-navy placeholder:text-navy/35 focus:outline-none focus:border-navy transition-colors"
+                          />
+                        </div>
+                      </div>
 
-                    <p className="font-body text-navy/60 text-xs leading-relaxed">
-                      Estela te responde personalmente por WhatsApp. Al
-                      continuar se abrirá la conversación con los datos de tu
-                      inmueble ya cargados.
-                    </p>
+                      {enviadoOk && (
+                        <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-body">
+                          ✓ Tu solicitud quedó registrada en el CRM de Estela Mari
+                          Rojas y abrimos WhatsApp para coordinar.
+                        </div>
+                      )}
 
-                    {error && (
-                      <p
-                        role="alert"
-                        className="font-body text-xs text-red-600"
-                      >
-                        {error}
-                      </p>
-                    )}
+                      {error && (
+                        <p
+                          role="alert"
+                          className="font-body text-xs text-red-600"
+                        >
+                          {error}
+                        </p>
+                      )}
 
-                    {/* Botones Finales */}
-                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setStep(1)}
-                        className="px-5 py-3.5 rounded-full border border-navy/20 font-body text-xs uppercase tracking-wider text-navy/60 hover:text-navy transition-colors"
-                      >
-                        ← Volver a editar
-                      </button>
+                      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setStep(1)}
+                          className="px-5 py-3.5 rounded-full border border-navy/15 bg-white font-body text-xs uppercase tracking-wider text-navy/65 hover:text-navy transition-colors"
+                        >
+                          ← Modificar datos
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={solicitarTasacion}
-                        disabled={enviando}
-                        className="flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-lg text-center disabled:opacity-60"
-                      >
-                        <span>
-                          {enviando
-                            ? "Enviando..."
-                            : "Solicitar Tasación por WhatsApp"}
-                        </span>
-                        <span>→</span>
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                        <button
+                          type="button"
+                          onClick={solicitarTasacion}
+                          disabled={enviando}
+                          className="flex-1 inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra font-body text-xs font-semibold tracking-[0.16em] uppercase transition-all shadow-md disabled:opacity-60"
+                        >
+                          <span>
+                            {enviando
+                              ? "Procesando..."
+                              : "Solicitar Valuación Oficial"}
+                          </span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </MotionConfig>
   );
 }

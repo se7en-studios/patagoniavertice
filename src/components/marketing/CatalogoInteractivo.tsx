@@ -43,6 +43,7 @@ const estadoBadge: Record<string, string> = {
 };
 
 const CIUDADES_FILTRO = [
+  "Mari Menuco",
   "Cipolletti",
   "Catriel",
   "General Roca",
@@ -56,9 +57,9 @@ const ORDENES = [
   { id: "recientes", label: "Más recientes" },
 ] as const;
 
-const fieldClass = `w-full bg-crema/40 border border-tierra/15 px-3 py-2.5 text-xs font-body text-tierra placeholder:text-tierra/40 focus:outline-none focus:border-dorado ${focusRing} transition-colors`;
+const fieldClass = `w-full bg-[#F6F8FB] border border-navy/10 rounded-xl px-3.5 py-2.5 text-xs font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-navy ${focusRing} transition-colors`;
 const labelClass =
-  "block font-body text-[10px] tracking-[0.2em] uppercase text-tierra/60 mb-2 font-medium";
+  "block font-mono text-[10px] tracking-[0.18em] uppercase text-navy/55 mb-2 font-semibold";
 
 interface Filtros {
   q: string;
@@ -80,14 +81,18 @@ function num(v: string | null): number | null {
 
 function leerFiltros(sp: URLSearchParams): Filtros {
   const tipo = sp.get("tipo") ?? "";
-  const ciudad = sp.get("ciudad") ?? "";
+  const rawCiudad = sp.get("ciudad") ?? "";
+  const ciudad =
+    rawCiudad === "Neuquén"
+      ? "Mari Menuco"
+      : (CIUDADES_FILTRO as readonly string[]).includes(rawCiudad)
+        ? rawCiudad
+        : "";
   const orden = sp.get("orden") ?? "";
   return {
     q: sp.get("q") ?? "",
     tipo: (TIPOS_FILTRO as readonly string[]).includes(tipo) ? tipo : "",
-    ciudad: (CIUDADES_FILTRO as readonly string[]).includes(ciudad)
-      ? ciudad
-      : "",
+    ciudad,
     pmin: num(sp.get("pmin")),
     pmax: num(sp.get("pmax")),
     smin: num(sp.get("smin")),
@@ -311,7 +316,7 @@ export default function CatalogoInteractivo({
         role="search"
         aria-label="Filtrar propiedades"
         onSubmit={(e) => e.preventDefault()}
-        className="p-6 lg:p-8 bg-white border border-tierra/10 shadow-sm space-y-6"
+        className="p-6 lg:p-8 rounded-3xl bg-white border border-navy/[0.08] shadow-[0_18px_44px_-28px_rgba(14,26,51,0.14)] space-y-6"
       >
         <div>
           <label htmlFor="cat-q" className={labelClass}>
@@ -526,10 +531,10 @@ export default function CatalogoInteractivo({
                   transition={{ duration: 0.25 }}
                   className="list-none"
                 >
-                  <article className="group h-full bg-white border border-tierra/10 overflow-hidden shadow-sm hover:shadow-2xl hover:border-dorado/40 transition-all duration-300 flex flex-col justify-between">
+                  <article className="group h-full rounded-3xl bg-white border border-navy/[0.08] overflow-hidden shadow-[0_14px_36px_-24px_rgba(14,26,51,0.18)] hover:shadow-[0_24px_54px_-24px_rgba(14,26,51,0.28)] hover:border-dorado/50 transition-all duration-300 flex flex-col justify-between">
                     <div>
                       {/* Imagen principal con Badges */}
-                      <div className="relative aspect-[4/3] overflow-hidden bg-navy-950">
+                      <div className="relative aspect-[16/11] overflow-hidden bg-navy-950">
                         <Image
                           src={imagen}
                           alt={p.titulo}
@@ -537,40 +542,46 @@ export default function CatalogoInteractivo({
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
-                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
-                          <span className="px-2.5 py-1 bg-navy-950/90 text-dorado border border-dorado/30 font-body text-[9px] font-semibold tracking-[0.2em] uppercase backdrop-blur-md">
+                        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
+                          <span className="px-3 py-1 rounded-full bg-navy-950/90 text-dorado border border-dorado/30 font-mono text-[9px] font-semibold tracking-[0.18em] uppercase backdrop-blur-md">
                             {p.tipo
                               ? (tipoLabel[p.tipo] ?? p.tipo)
                               : "Propiedad"}
                           </span>
                           <span
-                            className={`px-2.5 py-1 font-body text-[9px] uppercase tracking-[0.15em] ${badge}`}
+                            className={`px-3 py-1 rounded-full font-mono text-[9px] uppercase tracking-[0.15em] ${badge}`}
                           >
                             {estadoLabel[p.estado] ?? estadoLabel.disponible}
                           </span>
                         </div>
 
-                        <div className="absolute bottom-3 left-3 z-10">
-                          <span className="font-body text-crema/70 text-[10px] tracking-wider uppercase block">
-                            Valor
-                          </span>
-                          <span className="font-display text-crema text-2xl font-bold tracking-tight">
+                        <div className="absolute bottom-3.5 left-4 z-10">
+                          <span className="font-display text-white text-2xl font-bold tracking-tight block">
                             {formatPrecio(p.precio, p.moneda)}
                           </span>
+                          {p.precio && p.superficie_m2 && p.superficie_m2 > 0 ? (
+                            <span className="font-mono text-[10px] text-dorado block">
+                              {p.moneda}{" "}
+                              {Math.round(
+                                p.precio / p.superficie_m2,
+                              ).toLocaleString("es-AR")}
+                              /m²
+                            </span>
+                          ) : null}
                         </div>
 
                         <FavoriteButton
                           id={p.id}
                           titulo={p.titulo}
-                          className="absolute bottom-3 right-3 z-10 w-10 h-10 bg-navy-950/85 text-dorado border border-dorado/40 hover:bg-navy-950"
+                          className="absolute bottom-3.5 right-3.5 z-10 w-9 h-9 rounded-full bg-navy-950/85 text-dorado border border-dorado/40 hover:bg-navy-950"
                         />
                       </div>
 
                       {/* Contenido */}
-                      <div className="p-6 space-y-3">
-                        <div className="flex items-center gap-2 font-body text-dorado text-[11px] tracking-[0.2em] uppercase font-semibold">
+                      <div className="p-6 space-y-2.5">
+                        <div className="flex items-center gap-2 font-mono text-[#8A6A1B] text-[10px] tracking-[0.18em] uppercase font-semibold">
                           <span>{p.ciudad}</span>
                           {p.barrio && <span>· {p.barrio}</span>}
                           {p.superficie_m2 ? (
@@ -580,7 +591,7 @@ export default function CatalogoInteractivo({
                           ) : null}
                         </div>
 
-                        <h2 className="font-display text-tierra text-xl font-medium leading-snug group-hover:text-dorado transition-colors">
+                        <h2 className="font-display text-navy text-xl font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors">
                           <Link
                             href={`/proyectos/${p.id}`}
                             className={focusRing}
@@ -589,20 +600,20 @@ export default function CatalogoInteractivo({
                           </Link>
                         </h2>
 
-                        <p className="font-body text-tierra/70 text-xs leading-relaxed line-clamp-3">
+                        <p className="font-body text-navy/60 text-xs leading-relaxed line-clamp-3">
                           {p.descripcion}
                         </p>
                       </div>
                     </div>
 
                     {/* Acciones Footer */}
-                    <div className="px-6 pb-6 pt-4 border-t border-tierra/5 space-y-2 mt-4">
+                    <div className="px-6 pb-6 pt-4 border-t border-navy/[0.07] space-y-2 mt-4">
                       <div className="grid grid-cols-2 gap-2">
                         <Link
                           href={`/proyectos/${p.id}`}
-                          className={`py-3 px-3 border border-tierra/20 text-tierra text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:border-dorado hover:text-dorado transition-colors ${focusRing}`}
+                          className={`py-2.5 px-3 rounded-xl border border-navy/15 text-navy text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:border-navy transition-colors ${focusRing}`}
                         >
-                          Ver Detalle
+                          Ver Ficha
                         </Link>
 
                         <WhatsAppLink
@@ -610,7 +621,7 @@ export default function CatalogoInteractivo({
                           href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                             `Hola Altum Inmobiliaria, quisiera consultar por la propiedad: ${p.titulo} (${p.ciudad} - ${formatPrecio(p.precio, p.moneda)})`,
                           )}`}
-                          className={`py-3 px-3 bg-dorado text-tierra text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:bg-dorado-light transition-all ${focusRing}`}
+                          className={`py-2.5 px-3 rounded-xl bg-dorado text-tierra text-center font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:bg-dorado-light transition-all ${focusRing}`}
                         >
                           Consultar
                         </WhatsAppLink>
@@ -632,10 +643,10 @@ export default function CatalogoInteractivo({
                               ? `Máximo ${MAX_COMPARE} propiedades`
                               : undefined
                           }
-                          className={`py-2.5 px-3 border font-body text-[10px] tracking-[0.14em] uppercase font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${focusRing} ${
+                          className={`py-2 px-3 rounded-xl border font-body text-[10px] tracking-[0.14em] uppercase font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${focusRing} ${
                             enComparador
-                              ? "bg-navy-950 text-dorado border-dorado"
-                              : "border-tierra/20 text-tierra hover:border-dorado hover:text-dorado"
+                              ? "bg-navy text-white border-navy"
+                              : "border-navy/12 text-navy/70 hover:border-navy hover:text-navy"
                           }`}
                         >
                           {enComparador ? "✓ Comparando" : "+ Comparar"}
@@ -643,7 +654,7 @@ export default function CatalogoInteractivo({
                         <ShareButton
                           titulo={p.titulo}
                           path={`/proyectos/${p.id}`}
-                          className="py-2.5 px-3 border border-tierra/20 text-tierra font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:border-dorado hover:text-dorado"
+                          className="py-2 px-3 rounded-xl border border-navy/12 text-navy/70 font-body text-[10px] tracking-[0.14em] uppercase font-semibold hover:border-navy hover:text-navy"
                         />
                       </div>
                     </div>

@@ -3,32 +3,31 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Building2, Sparkles, ShieldCheck } from "lucide-react";
 import type { HeroLandingConfig } from "@/lib/site-config-types";
 
 const WA_HERO =
   "https://wa.me/5492996095742?text=Hola%20Altum%20SCI%2C%20quisiera%20asesoramiento%20personalizado%20sobre%20propiedades%20e%20inversiones.";
 
-// value → parámetro que ya entiende /proyectos
 const OPERACIONES = [
-  { value: "venta", label: "comprar" },
-  { value: "inversion", label: "invertir en" },
-  { value: "alquiler", label: "alquilar" },
+  { value: "venta", label: "Comprar Propiedad" },
+  { value: "inversion", label: "Inversión & Plusvalía" },
+  { value: "alquiler", label: "Alquiler Corporativo" },
 ];
 
 const TIPOS = [
-  { value: "todos", label: "cualquier propiedad" },
-  { value: "lote", label: "un lote frente al lago" },
-  { value: "venta", label: "una casa o residencia" },
-  { value: "alquiler", label: "un departamento" },
-  { value: "chacra", label: "una chacra o fracción" },
+  { value: "todos", label: "Todos los activos" },
+  { value: "lote", label: "Lotes frente al lago" },
+  { value: "venta", label: "Casas & Residencias" },
+  { value: "alquiler", label: "Departamentos" },
+  { value: "chacra", label: "Chacras & Fracciones" },
 ];
 
 const ZONAS = [
-  { value: "todas", label: "toda la Patagonia" },
-  { value: "Neuquén", label: "Mari Menuco" },
-  { value: "Cipolletti", label: "Cipolletti" },
-  { value: "Catriel", label: "Catriel" },
+  { value: "todas", label: "Toda la Patagonia" },
+  { value: "Neuquén", label: "Mari Menuco (Lagos)" },
+  { value: "Cipolletti", label: "Cipolletti (Alto Valle)" },
+  { value: "Catriel", label: "Catriel (Polo Energético)" },
   { value: "General Roca", label: "General Roca" },
 ];
 
@@ -37,9 +36,6 @@ const TITLE_LINES = [
   { text: "estratégico de la", cls: "text-navy" },
   { text: "Patagonia.", cls: "italic text-[#A47C1B]" },
 ];
-
-const SELECT =
-  "appearance-none bg-[#FBF0CF]/85 hover:bg-[#FBF0CF] px-3 py-1 rounded-xl font-display font-semibold text-navy border border-dorado/50 hover:border-dorado focus:outline-none focus:border-dorado cursor-pointer [field-sizing:content] max-w-full transition-colors shadow-sm";
 
 export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -50,7 +46,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
   const [zona, setZona] = useState("todas");
 
   const eyebrowText =
-    heroConfig?.eyebrow || "ALTUM SCI · Servicios & Consultoría Inmobiliaria";
+    heroConfig?.eyebrow || "ALTUM SCI · Real Estate & Consultoría Patrimonial";
   const lines = heroConfig?.tituloPrincipal
     ? [
         { text: heroConfig.tituloPrincipal, cls: "text-navy" },
@@ -60,6 +56,9 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
         },
       ]
     : TITLE_LINES;
+  const subtituloText =
+    heroConfig?.subtitulo ||
+    "Lotes exclusivos frente al lago en Mari Menuco, residencias en Cipolletti y activos de renta en moneda dura con respaldo notarial colegiado.";
   const ctaSecundarioText =
     heroConfig?.ctaSecundario || "Hablar directamente con Estela";
 
@@ -77,7 +76,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
 
   return (
     <section className="relative min-h-[94vh] lg:min-h-screen flex flex-col overflow-hidden bg-[#F6F8FB]">
-      {/* Fondo de video sin filtros CSS costosos por frame */}
+      {/* Fondo de video con velo arquitectónico minimalista */}
       <div className="absolute inset-0 overflow-hidden">
         <video
           ref={videoRef}
@@ -91,44 +90,44 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
           <source src="/bg-hero.webm" type="video/webm" />
           <source src="/bg-hero-opt.mp4" type="video/mp4" />
         </video>
-        {/* Velos editoriales que garantizan contraste perfecto sin sobrecargar la GPU */}
-        <div className="absolute inset-0 bg-white/15" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F6F8FB]/95 via-[#F6F8FB]/70 to-[#F6F8FB]/15" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#F6F8FB] via-[#F6F8FB]/25 to-transparent" />
+        <div className="absolute inset-0 bg-white/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F6F8FB]/95 via-[#F6F8FB]/80 to-[#F6F8FB]/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#F6F8FB] via-[#F6F8FB]/30 to-transparent" />
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col justify-end max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 w-full pt-28 md:pt-36 pb-12 md:pb-20">
-        {/* Eyebrow badge editorial */}
+        {/* Eyebrow minimalista estilo PropTech */}
         <div
-          style={{ "--d": "0.15s" } as React.CSSProperties}
-          className="hero-rise inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 border border-dorado/40 shadow-sm self-start mb-6"
+          style={{ "--d": "0.12s" } as React.CSSProperties}
+          className="hero-rise inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-navy/10 shadow-[0_2px_10px_rgba(14,26,51,0.04)] self-start mb-6 backdrop-blur-md"
         >
-          <span className="w-2 h-2 rounded-full bg-dorado" />
-          <span className="font-body text-[10px] sm:text-[11px] font-semibold tracking-[0.18em] uppercase text-navy">
+          <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
+          <span className="font-mono text-[10px] font-semibold tracking-[0.16em] uppercase text-navy">
             {eyebrowText}
           </span>
-          <span className="hidden sm:inline font-body text-[11px] text-[#8A6A1B] font-semibold">
-            · Neuquén &amp; Río Negro
+          <span className="hidden sm:inline font-mono text-[10px] text-[#8A6A1B] font-semibold">
+            · NEUQUÉN &amp; RÍO NEGRO
           </span>
         </div>
 
+        {/* Titular Principal */}
         <h1
-          className="font-display font-semibold leading-[1.02] mb-6 max-w-4xl"
+          className="font-display font-medium leading-[1.01] mb-5 max-w-4xl"
           style={{
-            fontSize: "clamp(2.5rem, min(6.4vw, 9.5vh), 5.6rem)",
-            letterSpacing: "-0.03em",
+            fontSize: "clamp(2.6rem, min(6.2vw, 9.2vh), 5.4rem)",
+            letterSpacing: "-0.035em",
           }}
           aria-label={lines.map((l) => l.text).join(" ")}
         >
           {lines.map((line, i) => (
             <span
               key={line.text}
-              className="block overflow-hidden pb-[0.08em]"
+              className="block overflow-hidden pb-[0.06em]"
               aria-hidden="true"
             >
               <span
                 className={`hero-line block ${line.cls}`}
-                style={{ "--d": `${0.25 + i * 0.12}s` } as React.CSSProperties}
+                style={{ "--d": `${0.22 + i * 0.1}s` } as React.CSSProperties}
               >
                 {line.text}
               </span>
@@ -136,75 +135,118 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
           ))}
         </h1>
 
-        {/* Búsqueda conversacional de alta gama */}
-        <div
-          style={{ "--d": "0.65s" } as React.CSSProperties}
-          className="hero-rise [--rise:22px] w-full max-w-4xl rounded-[1.75rem] md:rounded-[2rem] border border-dorado/35 bg-white/95 shadow-[0_24px_60px_-24px_rgba(14,26,51,0.28)] p-4 sm:p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4"
+        <p
+          style={{ "--d": "0.5s" } as React.CSSProperties}
+          className="hero-rise font-body text-navy/65 text-sm sm:text-base max-w-xl leading-relaxed mb-8"
         >
-          <p className="flex-1 font-display text-navy text-lg sm:text-xl md:text-2xl leading-[1.9] md:leading-[2]">
-            Quiero{" "}
-            <select
-              aria-label="Operación"
-              value={operacion}
-              onChange={(e) => setOperacion(e.target.value)}
-              className={SELECT}
-            >
-              {OPERACIONES.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>{" "}
-            <select
-              aria-label="Tipo de inmueble"
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              className={SELECT}
-            >
-              {TIPOS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>{" "}
-            en{" "}
-            <select
-              aria-label="Zona"
-              value={zona}
-              onChange={(e) => setZona(e.target.value)}
-              className={SELECT}
-            >
-              {ZONAS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-            .
-          </p>
-          <button
-            type="button"
-            onClick={handleSearch}
-            aria-label="Buscar propiedades"
-            className="btn-shimmer group shrink-0 inline-flex items-center justify-center gap-3 self-stretch md:self-auto rounded-full text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase px-8 py-4 transition-all duration-200 shadow-[0_12px_28px_-10px_rgba(184,150,90,0.75)]"
-          >
-            <span>Buscar</span>
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </button>
+          {subtituloText}
+        </p>
+
+        {/* Buscador Arquitectónico de 4 Columnas (Estilo PropTech Minimalista) */}
+        <div
+          style={{ "--d": "0.62s" } as React.CSSProperties}
+          className="hero-rise [--rise:18px] w-full max-w-5xl rounded-2xl md:rounded-full border border-navy/10 bg-white/95 backdrop-blur-xl shadow-[0_24px_60px_-20px_rgba(14,26,51,0.18)] p-2 md:p-2.5"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-12 items-center divide-y md:divide-y-0 md:divide-x divide-navy/[0.08]">
+            {/* Col 1: Operación */}
+            <div className="md:col-span-3 px-4 py-2.5">
+              <label
+                htmlFor="hero-op"
+                className="flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-navy/45 mb-0.5"
+              >
+                <Sparkles className="w-3 h-3 text-dorado" />
+                <span>01 · Objetivo</span>
+              </label>
+              <select
+                id="hero-op"
+                value={operacion}
+                onChange={(e) => setOperacion(e.target.value)}
+                className="w-full bg-transparent font-body text-xs sm:text-sm font-semibold text-navy focus:outline-none cursor-pointer"
+              >
+                {OPERACIONES.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Col 2: Tipo de Propiedad */}
+            <div className="md:col-span-4 px-4 py-2.5">
+              <label
+                htmlFor="hero-tipo"
+                className="flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-navy/45 mb-0.5"
+              >
+                <Building2 className="w-3 h-3 text-dorado" />
+                <span>02 · Tipo de Activo</span>
+              </label>
+              <select
+                id="hero-tipo"
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+                className="w-full bg-transparent font-body text-xs sm:text-sm font-semibold text-navy focus:outline-none cursor-pointer"
+              >
+                {TIPOS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Col 3: Ubicación */}
+            <div className="md:col-span-3 px-4 py-2.5">
+              <label
+                htmlFor="hero-zona"
+                className="flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-navy/45 mb-0.5"
+              >
+                <MapPin className="w-3 h-3 text-dorado" />
+                <span>03 · Ubicación</span>
+              </label>
+              <select
+                id="hero-zona"
+                value={zona}
+                onChange={(e) => setZona(e.target.value)}
+                className="w-full bg-transparent font-body text-xs sm:text-sm font-semibold text-navy focus:outline-none cursor-pointer"
+              >
+                {ZONAS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Col 4: Botón Buscar */}
+            <div className="md:col-span-2 pt-2 md:pt-0 md:pl-2">
+              <button
+                type="button"
+                onClick={handleSearch}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl md:rounded-full bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase py-3.5 px-5 transition-all duration-200 shadow-sm group"
+              >
+                <span>Explorar</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Chips de filtro rápido */}
+        {/* Chips minimalistas de acceso rápido */}
         <div
-          style={{ "--d": "0.8s" } as React.CSSProperties}
+          style={{ "--d": "0.75s" } as React.CSSProperties}
           className="hero-rise mt-4 flex flex-wrap items-center gap-2 text-xs font-body"
         >
-          <span className="text-navy/60 text-[11px] uppercase tracking-wider font-semibold mr-1">
-            Accesos rápidos:
+          <span className="font-mono text-navy/45 text-[10px] uppercase tracking-widest mr-1">
+            Tendencias:
           </span>
           {[
-            { label: "Lotes en Mari Menuco", t: "lote", z: "Neuquén" },
-            { label: "Residencias Cipolletti", t: "venta", z: "Cipolletti" },
-            { label: "Renta en Catriel", t: "todos", z: "Catriel" },
+            {
+              label: "Bahía de las Playas · Mari Menuco",
+              t: "lote",
+              z: "Neuquén",
+            },
+            { label: "Residencias en Cipolletti", t: "venta", z: "Cipolletti" },
+            { label: "Renta USD · Catriel", t: "todos", z: "Catriel" },
           ].map((item) => {
             const active = tipo === item.t && zona === item.z;
             return (
@@ -215,10 +257,10 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
                   setTipo(item.t);
                   setZona(item.z);
                 }}
-                className={`px-3.5 py-1.5 rounded-full border text-[11px] font-medium transition-all ${
+                className={`px-3.5 py-1 rounded-full border text-[11px] transition-all ${
                   active
-                    ? "bg-dorado border-dorado text-tierra font-semibold shadow-sm"
-                    : "bg-white/90 hover:bg-white border-dorado/30 hover:border-dorado text-navy/80 hover:text-navy shadow-sm"
+                    ? "bg-navy text-white border-navy font-medium"
+                    : "bg-white/80 hover:bg-white border-navy/10 hover:border-navy/30 text-navy/75 hover:text-navy"
                 }`}
               >
                 {item.label}
@@ -227,20 +269,27 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
           })}
         </div>
 
-        {/* Respaldo y contacto */}
+        {/* Barra Inferior de Garantía Colegiada y Contacto Directo */}
         <div
-          style={{ "--d": "0.95s" } as React.CSSProperties}
-          className="hero-rise mt-6 flex flex-wrap items-center justify-between gap-y-3 font-body text-[11px] tracking-[0.12em] uppercase text-navy/75 pt-4 border-t border-navy/10 max-w-4xl"
+          style={{ "--d": "0.88s" } as React.CSSProperties}
+          className="hero-rise mt-7 flex flex-wrap items-center justify-between gap-y-3 font-body text-[11px] text-navy/70 pt-4 border-t border-navy/[0.08] max-w-5xl"
         >
-          <span className="flex items-center gap-2 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Respaldo de Martillera Pública Matriculada (Mat. 35 RP 2026)
-          </span>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <span className="inline-flex items-center gap-2 font-medium text-navy">
+              <ShieldCheck className="w-4 h-4 text-[#8A6A1B]" />
+              <span>Martillera Pública Estela Mari Rojas · Mat. 35 RP 2026</span>
+            </span>
+            <span className="hidden md:inline-block text-navy/25">|</span>
+            <span className="hidden md:inline-block font-mono text-[10px] uppercase tracking-wider text-navy/55">
+              Lotes desde USD 32.000 · Renta Corporativa 12–14% USD
+            </span>
+          </div>
+
           <a
             href={WA_HERO}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-semibold text-navy hover:text-[#8A6A1B] bg-white hover:bg-[#FBF0CF]/50 px-4 py-1.5 rounded-full border border-dorado/40 hover:border-dorado shadow-sm transition-all"
+            className="inline-flex items-center gap-2.5 font-semibold text-navy hover:text-[#8A6A1B] bg-white hover:bg-[#FBF0CF]/40 px-4 py-1.5 rounded-full border border-navy/12 hover:border-dorado shadow-sm transition-all"
           >
             <span className="relative w-5 h-5 rounded-full overflow-hidden ring-1 ring-dorado shrink-0">
               <Image
@@ -251,8 +300,8 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
                 className="object-cover"
               />
             </span>
-            <span>{ctaSecundarioText}</span>
-            <span>→</span>
+            <span className="text-[11px] tracking-wide">{ctaSecundarioText}</span>
+            <ArrowRight className="w-3 h-3" />
           </a>
         </div>
       </div>

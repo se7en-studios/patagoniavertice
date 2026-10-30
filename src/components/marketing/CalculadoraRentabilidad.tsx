@@ -9,13 +9,14 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { ArrowRight, TrendingUp, ShieldCheck } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 interface ModeloInversion {
   id: string;
   nombre: string;
-  roiAnual: number; // Porcentaje ej: 14
-  plusvaliaAnual: number; // Porcentaje ej: 10
+  roiAnual: number;
+  plusvaliaAnual: number;
   zonaRecomendada: string;
   tipoRenta: string;
   descripcion: string;
@@ -47,10 +48,10 @@ const MODELOS_INVERSION: ModeloInversion[] = [
     nombre: "Renta Turística & Recreativa",
     roiAnual: 12,
     plusvaliaAnual: 9,
-    zonaRecomendada: "Bariloche & Mari Menuco",
+    zonaRecomendada: "Mari Menuco & Lagos",
     tipoRenta: "Flujo de caja continuo en USD",
     descripcion:
-      "Unidades residenciales y chalets comercializados con tarifa diaria en plataformas internacionales y turismo premium.",
+      "Unidades residenciales y casas de lago comercializadas por estadía para turismo de fin de semana y temporada.",
   },
   {
     id: "residencial-tradicional",
@@ -64,13 +65,14 @@ const MODELOS_INVERSION: ModeloInversion[] = [
   },
 ];
 
-// Cifra que "corre" hasta el nuevo valor cada vez que cambia la simulación.
 function AnimNum({ value }: { value: number }) {
   const spring = useSpring(0, { stiffness: 90, damping: 22 });
   useEffect(() => {
     spring.set(value);
   }, [value, spring]);
-  const text = useTransform(spring, (v) => Math.round(v).toLocaleString("es-AR"));
+  const text = useTransform(spring, (v) =>
+    Math.round(v).toLocaleString("es-AR"),
+  );
   return <motion.span>{text}</motion.span>;
 }
 
@@ -78,10 +80,9 @@ export default function CalculadoraRentabilidad() {
   const [modeloSeleccionado, setModeloSeleccionado] = useState<ModeloInversion>(
     MODELOS_INVERSION[0],
   );
-  const [montoUSD, setMontoUSD] = useState<number>(60000);
+  const [montoUSD, setMontoUSD] = useState<number>(48000);
   const [horizonteAnios, setHorizonteAnios] = useState<number>(3);
 
-  // Cálculos de Proyección
   const rentaAnualEstimada = (montoUSD * modeloSeleccionado.roiAnual) / 100;
   const plusvaliaTotalEstimada =
     montoUSD *
@@ -107,18 +108,23 @@ export default function CalculadoraRentabilidad() {
   };
 
   const dejarContacto = async () => {
+    if (!nombre.trim() || !telefono.trim()) {
+      setError("Completá tu nombre y WhatsApp para recibir las opciones.");
+      return;
+    }
     setError(null);
     setEnviando(true);
     const result = await guardarLeadAltum({
-      nombre,
-      telefono,
+      nombre: nombre.trim(),
+      telefono: telefono.trim(),
       tipo_consulta: "inversion",
       origen: "calculadora",
       mensaje: `Simuló una inversión: ${modeloSeleccionado.nombre}, USD ${montoUSD.toLocaleString("es-AR")}, ${horizonteAnios} años.`,
       detalle: {
         modelo: modeloSeleccionado.nombre,
-        montoUSD,
+        presupuesto_usd: montoUSD,
         horizonteAnios,
+        zona: modeloSeleccionado.zonaRecomendada,
       },
     });
     setEnviando(false);
@@ -133,323 +139,298 @@ export default function CalculadoraRentabilidad() {
   };
 
   const generarEnlaceWhatsApp = () => {
-    const texto = `Hola Estela Mari Rojas (ALTUM SCI). Estuve simulando una inversión con su Calculadora de Rentabilidad:
-• Modelo de Interés: ${modeloSeleccionado.nombre}
+    const texto = `Hola Estela Mari Rojas (ALTUM SCI). Simulé una inversión en su plataforma:
+• Estrategia: ${modeloSeleccionado.nombre}
 • Capital Estimado: USD ${montoUSD.toLocaleString("es-AR")}
-• Plazo Proyectado: ${horizonteAnios} años
-• Retorno Total Proyectado: +USD ${Math.round(retornoTotalEstimado).toLocaleString("es-AR")} (+${porcentajeGanancia}%)
-¿Qué oportunidades activas tienen disponibles para este perfil de inversión?`;
+• Horizonte: ${horizonteAnios} años
+• Retorno Proyectado: +USD ${Math.round(retornoTotalEstimado).toLocaleString("es-AR")} (+${porcentajeGanancia}%)
+¿Qué activos tienen disponibles hoy para este perfil?`;
 
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
   };
 
   return (
     <MotionConfig reducedMotion="user">
-    <section
-      className="py-24 lg:py-32 relative overflow-hidden text-navy bg-[#EAF0F7]"
-      id="calculadora-inversion"
-      style={{
-        backgroundImage:
-          "radial-gradient(700px circle at 50% 45%, rgba(201,168,76,0.14), transparent 70%)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
-          <div>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
-                ALTUM SCI · Simulador Financiero Inmobiliario
-              </span>
-            </div>
-            <h2
-              className="font-display font-medium text-navy leading-[1.05]"
-              style={{
-                fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Calculadora de Inversión &amp;{" "}
-              <em className="not-italic italic text-[#A47C1B]">Rentabilidad</em>
-            </h2>
-            <p className="font-body text-navy/60 text-sm lg:text-base max-w-2xl mt-4">
-              Proyectá el retorno estimado de tu capital según el modelo
-              inmobiliario en Río Negro, Neuquén y zonas de influencia
-              energética.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 rounded-full border border-white bg-white/80 px-4 py-2 self-start lg:self-auto backdrop-blur-sm">
-            <span className="text-[#8A6A1B] text-xs">✦</span>
-            <span className="font-body text-navy/70 text-xs tracking-wider uppercase font-medium">
-              Datos Auditados de Mercado Real
-            </span>
-          </div>
-        </div>
-
-        {/* Interactive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Controls Left Column */}
-          <motion.div
-            className="lg:col-span-6 space-y-8 p-8 lg:p-10 rounded-[2rem] bg-white/80 border border-white backdrop-blur-xl shadow-[0_30px_70px_-34px_rgba(14,26,51,0.35)]"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* 1. Selector de Estrategia */}
+      <section
+        className="py-24 lg:py-32 relative overflow-hidden text-navy bg-white border-y border-navy/[0.06]"
+        id="calculadora-inversion"
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          {/* Header Minimalista */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
             <div>
-              <label className="block font-body text-[11px] tracking-[0.2em] uppercase text-[#8A6A1B] mb-3 font-semibold">
-                1. Seleccioná el Modelo de Inversión
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {MODELOS_INVERSION.map((mod) => (
-                  <button
-                    key={mod.id}
-                    type="button"
-                    onClick={() => {
-                      marcarUso("modelo");
-                      setModeloSeleccionado(mod);
-                    }}
-                    className={`p-4 text-left rounded-2xl border transition-all ${
-                      modeloSeleccionado.id === mod.id
-                        ? "border-dorado bg-[#FBF0CF] text-[#7A5A12] shadow-sm"
-                        : "border-navy/10 bg-white text-navy/65 hover:border-navy/30 hover:text-navy"
-                    }`}
-                  >
-                    <span className="font-display text-sm font-semibold block mb-1">
-                      {mod.nombre}
-                    </span>
-                    <span className="font-body text-[10px] tracking-wider text-navy/55 uppercase block">
-                      ROI: ~{mod.roiAnual}% Anual
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 2. Slider Capital a Invertir */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <label className="font-body text-[11px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
-                  2. Capital Inicial a Invertir
-                </label>
-                <span className="font-display text-[#8A6A1B] text-2xl font-bold">
-                  USD {montoUSD.toLocaleString("es-AR")}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6F8FB] border border-navy/10 mb-4">
+                <TrendingUp className="w-3.5 h-3.5 text-[#8A6A1B]" />
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
+                  Simulador Patrimonial en USD
                 </span>
               </div>
-
-              <input
-                type="range"
-                aria-label="Capital inicial a invertir en USD"
-                min={20000}
-                max={500000}
-                step={5000}
-                value={montoUSD}
-                onChange={(e) => {
-                  marcarUso("monto");
-                  setMontoUSD(Number(e.target.value));
+              <h2
+                className="font-display font-medium text-navy leading-[1.04]"
+                style={{
+                  fontSize: "clamp(2.3rem, 4.3vw, 3.6rem)",
+                  letterSpacing: "-0.03em",
                 }}
-                className="w-full accent-[#C9A84C] cursor-pointer h-2 bg-navy/10 rounded-full appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dorado/50"
-              />
-
-              <div className="flex justify-between text-[10px] font-body text-navy/55 tracking-wider mt-2">
-                <span>USD 20.000</span>
-                <span>USD 250.000</span>
-                <span>USD 500.000+</span>
-              </div>
+              >
+                Proyectá el rendimiento de tu{" "}
+                <em className="not-italic italic text-[#A47C1B]">capital.</em>
+              </h2>
+              <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-3">
+                Compará tasas de apreciación de tierra en Mari Menuco frente a
+                renta corporativa en el corredor energético de Río Negro y
+                Neuquén.
+              </p>
             </div>
 
-            {/* 3. Horizonte Temporal */}
-            <div>
-              <label className="block font-body text-[11px] tracking-[0.2em] uppercase text-[#8A6A1B] mb-3 font-semibold">
-                3. Plazo de Inversión Proyectado
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {[1, 2, 3, 5].map((anios) => (
-                  <button
-                    key={anios}
-                    type="button"
-                    onClick={() => {
-                      marcarUso("horizonte");
-                      setHorizonteAnios(anios);
-                    }}
-                    className={`py-2.5 text-center rounded-full font-body text-xs border transition-all ${
-                      horizonteAnios === anios
-                        ? "border-dorado bg-dorado text-tierra font-bold shadow-sm"
-                        : "border-navy/10 bg-white text-navy/55 hover:text-navy hover:border-navy/30"
-                    }`}
-                  >
-                    {anios} {anios === 1 ? "Año" : "Años"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Nota Informativa del Modelo */}
-            <div className="p-4 rounded-2xl bg-[#F6F8FB] border border-navy/10 text-xs font-body text-navy/70 space-y-1">
-              <span className="text-[#8A6A1B] font-semibold block uppercase text-[10px] tracking-wider">
-                Zona de Mayor Demanda: {modeloSeleccionado.zonaRecomendada}
+            <div className="inline-flex items-center gap-2 rounded-full border border-navy/10 bg-[#F6F8FB] px-4 py-2 self-start lg:self-auto">
+              <ShieldCheck className="w-4 h-4 text-[#8A6A1B]" />
+              <span className="font-mono text-navy/70 text-[10px] tracking-wider uppercase font-semibold">
+                Parámetros de Mercado Real 2026
               </span>
-              <p>{modeloSeleccionado.descripcion}</p>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Results Projection Right Column */}
-          <div className="lg:col-span-6 space-y-6">
-            <motion.div
-              className="p-8 lg:p-12 rounded-[2rem] border border-white bg-white/90 shadow-[0_30px_70px_-34px_rgba(14,26,51,0.4)] space-y-8 backdrop-blur-xl relative overflow-hidden"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Header Box */}
+          {/* Interactive Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Left Column: Minimalist Controls */}
+            <div className="lg:col-span-6 p-7 sm:p-9 rounded-[2rem] bg-[#F6F8FB] border border-navy/10 flex flex-col justify-between space-y-7">
+              {/* 1. Estrategia */}
               <div>
-                <span className="font-body text-[#8A6A1B] text-[10px] tracking-[0.25em] uppercase block mb-1 font-semibold">
-                  Proyección a {horizonteAnios}{" "}
-                  {horizonteAnios === 1 ? "año" : "años"}
+                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 mb-3 font-semibold">
+                  01 · Estrategia de Inversión
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {MODELOS_INVERSION.map((mod) => {
+                    const active = modeloSeleccionado.id === mod.id;
+                    return (
+                      <button
+                        key={mod.id}
+                        type="button"
+                        onClick={() => {
+                          marcarUso("modelo");
+                          setModeloSeleccionado(mod);
+                        }}
+                        className={`p-4 text-left rounded-2xl border transition-all ${
+                          active
+                            ? "border-navy bg-navy text-white shadow-sm"
+                            : "border-navy/10 bg-white text-navy/70 hover:border-navy/30 hover:text-navy"
+                        }`}
+                      >
+                        <span className="font-display text-sm font-semibold block mb-1">
+                          {mod.nombre}
+                        </span>
+                        <span
+                          className={`font-mono text-[10px] tracking-wider uppercase block ${
+                            active ? "text-dorado" : "text-[#8A6A1B]"
+                          }`}
+                        >
+                          ROI Est: ~{mod.roiAnual}% + {mod.plusvaliaAnual}% Plusvalía
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. Slider Capital */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 font-semibold">
+                    02 · Capital Inicial (USD)
+                  </label>
+                  <span className="font-display text-navy text-2xl font-bold">
+                    USD {montoUSD.toLocaleString("es-AR")}
+                  </span>
+                </div>
+
+                <input
+                  type="range"
+                  aria-label="Capital inicial a invertir en USD"
+                  min={20000}
+                  max={350000}
+                  step={4000}
+                  value={montoUSD}
+                  onChange={(e) => {
+                    marcarUso("monto");
+                    setMontoUSD(Number(e.target.value));
+                  }}
+                  className="w-full accent-[#0B1528] cursor-pointer h-2 bg-navy/15 rounded-full appearance-none"
+                />
+
+                <div className="flex justify-between text-[10px] font-mono text-navy/45 mt-2">
+                  <span>USD 20.000</span>
+                  <span>USD 150.000</span>
+                  <span>USD 350.000+</span>
+                </div>
+              </div>
+
+              {/* 3. Horizonte */}
+              <div>
+                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 mb-3 font-semibold">
+                  03 · Horizonte de Inversión
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[1, 2, 3, 5].map((anios) => (
+                    <button
+                      key={anios}
+                      type="button"
+                      onClick={() => {
+                        marcarUso("horizonte");
+                        setHorizonteAnios(anios);
+                      }}
+                      className={`py-2.5 text-center rounded-xl font-mono text-xs border transition-all ${
+                        horizonteAnios === anios
+                          ? "border-dorado bg-[#FBF0CF] text-navy font-bold"
+                          : "border-navy/10 bg-white text-navy/60 hover:text-navy"
+                      }`}
+                    >
+                      {anios} {anios === 1 ? "Año" : "Años"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Resumen del Modelo */}
+              <div className="p-4 rounded-2xl bg-white border border-navy/[0.08] text-xs font-body text-navy/65 space-y-1">
+                <span className="font-mono text-[#8A6A1B] font-semibold block uppercase text-[10px] tracking-wider">
+                  Foco Territorial: {modeloSeleccionado.zonaRecomendada}
                 </span>
-                <h3 className="font-display text-3xl font-medium text-navy">
-                  Retorno Estimado Total
-                </h3>
+                <p>{modeloSeleccionado.descripcion}</p>
               </div>
+            </div>
 
-              {/* Big Stat */}
-              <div className="p-6 rounded-3xl bg-[#F6F8FB] border border-navy/10 space-y-1">
-                <span className="font-body text-navy/55 text-[11px] uppercase tracking-wider block">
-                  Ganancia Proyectada (Renta + Plusvalía)
-                </span>
-                <div className="font-display text-4xl lg:text-5xl font-bold text-[#A47C1B] tracking-tight">
-                  +USD <AnimNum value={retornoTotalEstimado} />
-                </div>
-                <div className="flex items-center gap-2 pt-2">
-                  <span className="font-body text-emerald-600 text-xs font-semibold">
-                    ▲ +{porcentajeGanancia}% de apreciación neta
-                  </span>
-                  <span className="text-navy/40 text-xs">·</span>
-                  <span className="font-body text-navy/55 text-xs">
-                    Renta anual: ~{modeloSeleccionado.roiAnual}% USD
-                  </span>
-                </div>
-              </div>
-
-              {/* Desglose Métrico */}
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-navy/10">
-                <div className="space-y-1">
-                  <span className="font-body text-navy/55 text-[10px] uppercase tracking-wider block">
-                    Renta Anual Estimada
-                  </span>
-                  <span className="font-display text-xl text-navy font-semibold">
-                    USD <AnimNum value={rentaAnualEstimada} />
+            {/* Right Column: Executive Dark Navy Results Panel */}
+            <div className="lg:col-span-6 p-7 sm:p-10 rounded-[2rem] bg-[#0B1528] text-white border border-navy/20 shadow-[0_28px_64px_-28px_rgba(14,26,51,0.45)] flex flex-col justify-between space-y-6">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  <div>
+                    <span className="font-mono text-dorado text-[10px] tracking-[0.22em] uppercase block">
+                      Proyección a {horizonteAnios}{" "}
+                      {horizonteAnios === 1 ? "año" : "años"}
+                    </span>
+                    <h3 className="font-display text-2xl sm:text-3xl font-medium text-white mt-0.5">
+                      Patrimonio Proyectado
+                    </h3>
+                  </div>
+                  <span className="font-mono text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
+                    +{porcentajeGanancia}% Neto
                   </span>
                 </div>
 
-                <div className="space-y-1">
-                  <span className="font-body text-navy/55 text-[10px] uppercase tracking-wider block">
-                    Patrimonio Final Estimado
+                {/* Cifra Principal */}
+                <div className="p-6 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
+                  <span className="font-mono text-white/55 text-[10px] uppercase tracking-widest block">
+                    Ganancia Acumulada (Renta + Plusvalía)
                   </span>
-                  <span className="font-display text-xl text-[#A47C1B] font-semibold">
-                    USD <AnimNum value={valorFinalPatrimonio} />
-                  </span>
-                </div>
-              </div>
-
-              {/* Capital vs. patrimonio final: la barra oscura se estira según la simulación */}
-              <div aria-hidden="true">
-                <div className="relative h-3 rounded-full bg-dorado/80 overflow-hidden">
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-navy origin-left"
-                    initial={false}
-                    animate={{ scaleX: montoUSD / valorFinalPatrimonio }}
-                    transition={{ type: "spring", stiffness: 90, damping: 20 }}
-                  />
-                </div>
-                <div className="flex justify-between mt-2 font-body text-[10px] uppercase tracking-wider text-navy/55">
-                  <span>Capital invertido</span>
-                  <span>Ganancia proyectada</span>
-                </div>
-              </div>
-
-              {/* Botón Call to Action */}
-              <div className="pt-4 space-y-3">
-                {enviado ? (
-                  <p className="font-body text-xs text-[#8A6A1B] text-center">
-                    Recibimos tus datos. Estela te responde personalmente por
-                    WhatsApp o mail.
+                  <div className="font-display text-4xl sm:text-5xl font-semibold text-dorado tracking-tight">
+                    +USD <AnimNum value={retornoTotalEstimado} />
+                  </div>
+                  <p className="font-body text-white/60 text-xs pt-1">
+                    Patrimonio final estimado:{" "}
+                    <strong className="text-white">
+                      USD <AnimNum value={valorFinalPatrimonio} />
+                    </strong>
                   </p>
+                </div>
+
+                {/* Desglose 2 columnas */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07]">
+                    <span className="font-mono text-white/50 text-[10px] uppercase tracking-wider block">
+                      Flujo Anual Estimado
+                    </span>
+                    <span className="font-display text-xl text-white font-semibold mt-1 block">
+                      USD <AnimNum value={rentaAnualEstimada} /> / año
+                    </span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07]">
+                    <span className="font-mono text-white/50 text-[10px] uppercase tracking-wider block">
+                      Valorización Tierra/Activo
+                    </span>
+                    <span className="font-display text-xl text-emerald-400 font-semibold mt-1 block">
+                      +USD <AnimNum value={plusvaliaTotalEstimada} />
+                    </span>
+                  </div>
+                </div>
+
+                {/* Barra de proporción Capital vs Ganancia */}
+                <div>
+                  <div className="relative h-2.5 rounded-full bg-dorado/85 overflow-hidden">
+                    <motion.div
+                      className="absolute inset-y-0 left-0 rounded-full bg-white/35 origin-left"
+                      initial={false}
+                      animate={{ scaleX: montoUSD / valorFinalPatrimonio }}
+                      transition={{ type: "spring", stiffness: 90, damping: 20 }}
+                    />
+                  </div>
+                  <div className="flex justify-between mt-2 font-mono text-[10px] uppercase tracking-wider text-white/50">
+                    <span>Capital Base (USD {montoUSD.toLocaleString("es-AR")})</span>
+                    <span className="text-dorado">
+                      Retorno (+USD {Math.round(retornoTotalEstimado).toLocaleString("es-AR")})
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Captura de Lead Directa al CRM */}
+              <div className="pt-5 border-t border-white/10 space-y-3">
+                {enviado ? (
+                  <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-emerald-200 text-xs font-body text-center">
+                    ✓ Guardamos tu perfil de inversión en nuestro CRM. Estela Mari
+                    Rojas te contactará con las carpetas disponibles.
+                  </div>
                 ) : (
-                  <div className="space-y-2">
-                    <p className="font-body text-navy/60 text-[11px]">
-                      Dejá tu contacto y Estela te responde personalmente por
-                      WhatsApp o mail con oportunidades para este perfil.
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="space-y-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <input
                         type="text"
-                        autoComplete="name"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         placeholder="Tu nombre"
-                        aria-label="Tu nombre"
-                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
+                        className="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-2.5 text-xs font-body text-white placeholder:text-white/40 focus:outline-none focus:border-dorado"
                       />
                       <input
                         type="tel"
-                        autoComplete="tel"
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
-                        placeholder="Tu WhatsApp o teléfono"
-                        aria-label="Tu WhatsApp o teléfono"
-                        className="w-full bg-white border border-navy/15 rounded-full px-5 py-3 text-sm font-body text-navy placeholder:text-navy/40 focus:outline-none focus:border-dorado focus-visible:ring-2 focus-visible:ring-dorado/40 transition-colors"
+                        placeholder="Tu WhatsApp"
+                        className="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-2.5 text-xs font-body text-white placeholder:text-white/40 focus:outline-none focus:border-dorado"
                       />
                     </div>
                     {error && (
-                      <p
-                        role="alert"
-                        className="font-body text-xs text-red-600"
-                      >
-                        {error}
-                      </p>
+                      <p className="font-body text-xs text-red-400">{error}</p>
                     )}
-                    <button
-                      type="button"
-                      onClick={dejarContacto}
-                      disabled={enviando}
-                      className="w-full py-3 px-6 rounded-full border border-dorado text-[#8A6A1B] font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado/10 transition-all disabled:opacity-60"
-                    >
-                      {enviando ? "Enviando..." : "Quiero que me contacten"}
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-2.5">
+                      <button
+                        type="button"
+                        onClick={dejarContacto}
+                        disabled={enviando}
+                        className="flex-1 py-3 px-5 rounded-full bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.15em] uppercase hover:bg-dorado-light transition-all"
+                      >
+                        {enviando
+                          ? "Registrando..."
+                          : "Recibir Carpetas para este Capital"}
+                      </button>
+                      <a
+                        href={generarEnlaceWhatsApp()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() =>
+                          track("whatsapp_click", { origen: "calculadora" })
+                        }
+                        className="inline-flex items-center justify-center gap-2 py-3 px-5 rounded-full border border-white/20 text-white hover:border-dorado hover:text-dorado font-body text-[11px] font-semibold uppercase tracking-wider transition-colors"
+                      >
+                        <span>WhatsApp</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
                   </div>
                 )}
-
-                <a
-                  href={generarEnlaceWhatsApp()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    track("whatsapp_click", { origen: "calculadora" })
-                  }
-                  className="w-full inline-flex items-center justify-center gap-3 py-4 px-6 rounded-full bg-dorado text-tierra font-body text-xs font-semibold tracking-[0.18em] uppercase hover:bg-dorado-light transition-all shadow-xl text-center"
-                >
-                  <span>Consultar Oportunidades para este Perfil</span>
-                  <span>→</span>
-                </a>
-
-                <div className="flex items-center justify-center gap-2 text-center text-navy/55 text-[10px] font-body">
-                  <span>✦</span>
-                  <span>
-                    Asesoría personalizada por Estela Mari Rojas (Mat. 35 RP
-                    2026)
-                  </span>
-                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </MotionConfig>
   );
 }

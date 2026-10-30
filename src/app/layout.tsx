@@ -92,6 +92,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    other: {
+      "msvalidate.01": "AA6CC44F6736669A963F04071BDA74A2",
+    },
+  },
 };
 
 // ─── Schema.org global optimizado para Google & LLMs (ChatGPT, Claude, Perplexity) ──

@@ -200,6 +200,7 @@ export default function PropiedadesDestacadasHome({
     null,
   );
   const [fotoActivaIdx, setFotoActivaIdx] = useState(0);
+  const [cardFotoIdx, setCardFotoIdx] = useState<Record<string, number>>({});
 
   // Estado del formulario de agendamiento dentro de Vista Rápida
   const [nombreVisita, setNombreVisita] = useState("");
@@ -434,31 +435,49 @@ export default function PropiedadesDestacadasHome({
           </div>
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Pills con Indicador Deslizante (Spring Layout) */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-          <div className="flex flex-wrap items-center gap-2">
-            {CATEGORIAS_TAB.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setTabActiva(tab.id)}
-                className={`font-body text-[11px] tracking-[0.16em] uppercase px-5 py-2.5 transition-all rounded-full ${
-                  tabActiva === tab.id
-                    ? "bg-dorado text-tierra font-semibold shadow-md"
-                    : "bg-white text-navy/65 border border-navy/10 hover:border-dorado hover:text-navy"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-navy/10 shadow-sm">
+            {CATEGORIAS_TAB.map((tab) => {
+              const isTabActive = tabActiva === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setTabActiva(tab.id)}
+                  className={`relative font-body text-[11px] tracking-[0.15em] uppercase px-5 py-2.5 transition-colors rounded-full z-10 ${
+                    isTabActive
+                      ? "text-white font-semibold"
+                      : "text-navy/65 hover:text-navy"
+                  }`}
+                >
+                  {isTabActive && (
+                    <motion.span
+                      layoutId="prop-tab-pill"
+                      className="absolute inset-0 rounded-full bg-[#0B1528] shadow-md -z-10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
           <span className="font-body text-xs text-navy/50 hidden md:inline-block">
-            💡 Tip: Hacé clic en <strong>Vista Rápida</strong> o seleccioná hasta
-            3 unidades en <strong>+ Comparar</strong>.
+            💡 Tip: Pasá las fotos dentro de cada tarjeta o hacé clic en{" "}
+            <strong>Vista Rápida</strong>.
           </span>
         </div>
 
         {/* Grid de Propiedades */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
+        >
           <AnimatePresence mode="popLayout">
             {listaFiltrada.map((p, idx) => {
               const precioLabel = p.precio
@@ -470,37 +489,88 @@ export default function PropiedadesDestacadasHome({
                 : null;
               const isComparando = compararIds.includes(p.id);
 
-              const isFallback = PROPIEDADES_SHOWCASE_FALLBACK.some(
-                (f) => f.id === p.id,
-              );
-              const detailHref = isFallback
-                ? "/proyectos"
-                : `/proyectos/${p.id}`;
+              const detailHref = `/proyectos/${p.id}`;
+              const fotosCard =
+                p.imagenes && p.imagenes.length > 0
+                  ? p.imagenes
+                  : [coverImage(p.imagenes)];
+              const currentCardIdx = cardFotoIdx[p.id] ?? 0;
+              const currentCardSrc =
+                fotosCard[currentCardIdx % fotosCard.length] ||
+                coverImage(p.imagenes);
 
               return (
                 <motion.article
+                  layout
                   key={p.id}
-                  initial={reduced ? false : { opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  exit={{ opacity: 0, scale: 0.96 }}
+                  initial={reduced ? false : { opacity: 0, y: 24, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
                   transition={{
-                    duration: 0.45,
-                    delay: reduced ? 0 : (idx % 3) * 0.07,
+                    duration: 0.42,
+                    delay: reduced ? 0 : (idx % 3) * 0.06,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   className="group relative flex flex-col rounded-3xl bg-white border border-dorado/20 hover:border-dorado/60 overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.22)] hover:shadow-[0_28px_60px_-26px_rgba(14,26,51,0.35)] hover:-translate-y-1 transition-all duration-300"
                 >
-                  {/* Imagen & Badges */}
+                  {/* Imagen & Badges con Carrusel Inline */}
                   <div className="relative aspect-[16/11] overflow-hidden bg-navy/5">
                     <Image
-                      src={coverImage(p.imagenes)}
+                      src={currentCardSrc}
                       alt={p.titulo}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 cursor-pointer"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 cursor-pointer"
                       onClick={() => abrirQuickView(p)}
                     />
+
+                    {/* Controles de Carrusel Inline (si tiene más de 1 foto) */}
+                    {fotosCard.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="Foto anterior"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCardFotoIdx((prev) => ({
+                              ...prev,
+                              [p.id]:
+                                ((prev[p.id] ?? 0) - 1 + fotosCard.length) %
+                                fotosCard.length,
+                            }));
+                          }}
+                          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-navy-950/75 hover:bg-navy-950 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/15"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Siguiente foto"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCardFotoIdx((prev) => ({
+                              ...prev,
+                              [p.id]: ((prev[p.id] ?? 0) + 1) % fotosCard.length,
+                            }));
+                          }}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-navy-950/75 hover:bg-navy-950 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/15"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2 py-1 rounded-full bg-navy-950/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                          {fotosCard.map((_, dotIdx) => (
+                            <span
+                              key={dotIdx}
+                              className={`block h-1 rounded-full transition-all ${
+                                dotIdx === currentCardIdx % fotosCard.length
+                                  ? "w-3.5 bg-dorado"
+                                  : "w-1 bg-white/50"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
 
                     {/* Gradient Overlay */}
                     <div
@@ -610,7 +680,7 @@ export default function PropiedadesDestacadasHome({
               );
             })}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
 
       {/* Barra Flotante de Comparación */}

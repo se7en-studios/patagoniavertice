@@ -13,21 +13,21 @@ const GUIAS_EDITORIAL_HIGHLIGHTS = [
     tag: "Comparativa 2026",
     titulo: "Lago Mari Menuco vs. Bariloche y Villa La Angostura",
     resumen: "Ticket de ingreso desde USD 32.000 vs. USD 95.000+ y plusvalía anual proyectada.",
-    href: "/guias/lago-mari-menuco-vs-bariloche-villa-la-angostura-inversion",
+    href: "/guias/mari-menuco-vs-bariloche-villa-la-angostura-donde-invertir-lote-lago",
   },
   {
     num: "02",
     tag: "Análisis de Renta",
     titulo: "Lote en Mari Menuco vs. Departamento en Cipolletti",
     resumen: "Comparativa entre flujo de alquiler inmediato (6–8%) y apreciación de tierra (11–14%).",
-    href: "/guias/invertir-lote-lago-mari-menuco-vs-departamento-cipolletti-neuquen",
+    href: "/guias/invertir-lote-mari-menuco-vs-departamento-cipolletti-rentabilidad-usd",
   },
   {
     num: "03",
     tag: "Debida Diligencia",
-    titulo: "Cómo comprar un terreno en Mari Menuco sin riesgos legales",
-    resumen: "Los 5 controles notariales y catastrales previos antes de firmar reserva o boleto.",
-    href: "/guias/como-comprar-terreno-lago-mari-menuco-debida-diligencia",
+    titulo: "Cómo comprar un terreno en Mari Menuco desde Buenos Aires o el exterior",
+    resumen: "Los 4 pasos notariales, boleto certificado y escritura remota con Martillera Mat. 35 RP.",
+    href: "/guias/como-comprar-terreno-mari-menuco-desde-buenos-aires-exterior-remoto",
   },
 ];
 

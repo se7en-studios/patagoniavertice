@@ -129,7 +129,9 @@ export default function Manifiesto({
             style={{ letterSpacing: "-0.03em" }}
           >
             El territorio con mayor{" "}
-            <span className="italic text-[#A47C1B]">proyección económica</span>{" "}
+            <span className="font-editorial italic text-[#A47C1B]">
+              proyección económica
+            </span>{" "}
             de Argentina exige gestión inmobiliaria de precisión, sin
             intermediarios y con respaldo colegiado.
           </motion.blockquote>

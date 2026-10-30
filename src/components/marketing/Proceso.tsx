@@ -171,7 +171,7 @@ export default function Proceso() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               Tu operación,{" "}
-              <em className="not-italic italic text-[#A47C1B]">paso a paso</em>
+              <em className="font-editorial italic text-[#A47C1B]">paso a paso</em>
             </motion.h2>
           </div>
 

@@ -218,7 +218,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                 }}
               >
                 {titulo}{" "}
-                <em className="not-italic italic text-[#A47C1B]">
+                <em className="font-editorial italic text-[#A47C1B]">
                   {tituloCursiva}
                 </em>
               </h2>

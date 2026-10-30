@@ -187,7 +187,7 @@ export default function Servicios({
               }}
             >
               Gestión inmobiliaria de{" "}
-              <em className="not-italic italic text-[#A47C1B]">
+              <em className="font-editorial italic text-[#A47C1B]">
                 extremo a extremo.
               </em>
             </motion.h2>
@@ -340,7 +340,7 @@ export default function Servicios({
                 </span>
                 <h3 className="font-display text-2xl sm:text-3xl font-medium text-white mt-0.5">
                   Tu operación inmobiliaria en{" "}
-                  <em className="not-italic italic text-dorado">
+                  <em className="font-editorial italic text-dorado">
                     3 etapas claras
                   </em>
                 </h3>

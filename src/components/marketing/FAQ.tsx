@@ -66,7 +66,7 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
               }}
             >
               Preguntas{" "}
-              <em className="not-italic italic text-[#A47C1B] font-normal">
+              <em className="font-editorial italic text-[#A47C1B] font-normal">
                 frecuentes
               </em>
             </h2>

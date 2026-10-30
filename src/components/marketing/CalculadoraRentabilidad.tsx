@@ -173,7 +173,7 @@ export default function CalculadoraRentabilidad() {
                 }}
               >
                 Proyectá el rendimiento de tu{" "}
-                <em className="not-italic italic text-[#A47C1B]">capital.</em>
+                <em className="font-editorial italic text-[#A47C1B]">capital.</em>
               </h2>
               <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-3">
                 Compará tasas de apreciación de tierra en Mari Menuco frente a

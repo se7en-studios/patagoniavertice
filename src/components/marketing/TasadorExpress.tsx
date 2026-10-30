@@ -160,7 +160,7 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
                 }}
               >
                 Conocé el valor real de tu activo en{" "}
-                <em className="not-italic italic text-[#A47C1B]">Patagonia.</em>
+                <em className="font-editorial italic text-[#A47C1B]">Patagonia.</em>
               </h2>
 
               <p className="font-body text-navy/60 text-sm lg:text-base leading-relaxed">

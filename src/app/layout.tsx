@@ -23,6 +23,30 @@ const plusJakarta = localFont({
   display: "swap",
 });
 
+const playfair = localFont({
+  src: [
+    {
+      path: "../../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2",
+      weight: "400 800",
+      style: "normal",
+    },
+    {
+      path: "../../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-italic.woff2",
+      weight: "400 800",
+      style: "italic",
+    },
+  ],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  weight: "100 900",
+  variable: "--font-geist-mono",
+  display: "swap",
+});
+
 const defaultTitle = `${siteName} · ${siteTagline}`;
 const defaultDescription =
   "Lotes frente al lago Mari Menuco, propiedades en Cipolletti, Catriel y Río Negro. Asesoría directa con martillera matriculada Estela Mari Rojas (Mat. 35 RP 2026).";
@@ -120,7 +144,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${outfit.variable} ${plusJakarta.variable}`}>
+    <html
+      lang="es"
+      className={`${outfit.variable} ${plusJakarta.variable} ${playfair.variable} ${geistMono.variable}`}
+    >
       <head>
         {/* Preconnect a dominios externos para mejorar LCP */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -111,7 +111,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                 >
                   {nombreEstela.split(" ")[0]}{" "}
                   {nombreEstela.split(" ")[1] || ""}{" "}
-                  <em className="not-italic italic text-[#A47C1B]">
+                  <em className="font-editorial italic text-[#A47C1B]">
                     {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
                   </em>
                 </h2>

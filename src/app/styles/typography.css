@@ -1,37 +1,82 @@
-/* ── Sistema tipográfico Ultra-Modern Luxury Minimalist ────────────────
-   Headings / Display: Outfit (-0.02em tracking, moderno, arquitectónico)
-   Body / UI:           Plus Jakarta Sans (+0.01em tracking, ultra-legible)
+/* ── Sistema Tipográfico Arquitectónico & Editorial (ALTUM SCI) ────────
+   1. Display / Headings: Outfit (--font-outfit) — geométrica, precisa, tracking -0.03em
+   2. Editorial Accent:   Playfair Display Italic (--font-playfair) — lujo patrimonial en palabras clave
+   3. Body / UI:          Plus Jakarta Sans (--font-plus-jakarta) — lectura cristalina, OpenType activo
+   4. Technical / Mono:   Geist Mono (--font-geist-mono) — cifras tabulares, matrículas y códigos
 ──────────────────────────────────────────────────────────────────────── */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
+}
+
+/* Balance óptico de titulares y párrafos */
+h1,
+h2,
+h3,
+h4,
+blockquote {
+  text-wrap: balance;
+  font-feature-settings: "ss01" 1, "liga" 1;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Contraste Editorial: toda palabra enfatizada en titulares usa Playfair Display Italic real */
+h1 em,
+h2 em,
+h3 em,
+blockquote em,
+blockquote span.italic,
+.hero-line.italic,
+.font-editorial {
+  font-family: var(--font-playfair), Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  font-size: 1.03em;
+}
+
+/* Precisión Tabular en Monospace y Cifras */
+.font-mono {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
 
 .type-h1 {
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -0.032em;
+  line-height: 1.04;
 }
 
 .type-h2 {
   font-family: var(--font-outfit), system-ui, sans-serif;
-  font-size: clamp(1.85rem, 3.5vw, 3rem);
+  font-size: clamp(1.95rem, 3.6vw, 3.2rem);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.028em;
+  line-height: 1.08;
 }
 
 .type-h3 {
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
 }
 
 .type-body {
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  letter-spacing: 0.005em;
+  letter-spacing: -0.003em;
   line-height: 1.68;
 }
 
@@ -39,7 +84,7 @@
   font-family: var(--font-plus-jakarta), system-ui, sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   line-height: 1.6;
 }
 
@@ -53,14 +98,14 @@
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-size: clamp(1.4rem, 2.2vw, 1.9rem);
   font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
+  line-height: 1.45;
+  letter-spacing: -0.018em;
 }
 
 .type-display {
   font-family: var(--font-outfit), system-ui, sans-serif;
   font-size: clamp(2.8rem, 6.5vw, 5.5rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.01;
 }

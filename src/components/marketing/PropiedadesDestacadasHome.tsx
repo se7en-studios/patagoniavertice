@@ -402,7 +402,7 @@ export default function PropiedadesDestacadasHome({
               }}
             >
               Propiedades &amp; Terrenos de{" "}
-              <em className="not-italic italic text-[#A47C1B] font-normal">
+              <em className="font-editorial italic text-[#A47C1B] font-normal">
                 primer nivel
               </em>
             </h2>

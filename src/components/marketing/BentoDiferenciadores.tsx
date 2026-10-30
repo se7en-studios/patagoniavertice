@@ -72,7 +72,7 @@ export default function BentoDiferenciadores() {
               }}
             >
               Por qué los inversores eligen{" "}
-              <em className="not-italic italic text-[#A47C1B]">ALTUM SCI.</em>
+              <em className="font-editorial italic text-[#A47C1B]">ALTUM SCI.</em>
             </h2>
           </div>
 

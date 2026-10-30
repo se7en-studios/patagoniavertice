@@ -43,7 +43,7 @@ export default function Ubicacion() {
             }}
           >
             Un paraíso natural, a{" "}
-            <em className="not-italic italic text-[#A47C1B] tabular-nums">
+            <em className="font-editorial italic text-[#A47C1B] tabular-nums">
               65 km
             </em>{" "}
             de la ciudad

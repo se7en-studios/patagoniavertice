@@ -43,7 +43,7 @@ const ZONAS = [
 const TITLE_LINES = [
   { text: "Invertí en el eje", cls: "text-navy" },
   { text: "estratégico de la", cls: "text-navy" },
-  { text: "Patagonia.", cls: "italic text-[#A47C1B]" },
+  { text: "Patagonia.", cls: "font-editorial italic text-[#A47C1B]" },
 ];
 
 const LIVE_HIGHLIGHTS = [
@@ -92,7 +92,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
         { text: heroConfig.tituloPrincipal, cls: "text-navy" },
         {
           text: heroConfig.tituloCursiva || "de la Patagonia.",
-          cls: "italic text-[#A47C1B]",
+          cls: "font-editorial italic text-[#A47C1B]",
         },
       ]
     : TITLE_LINES;

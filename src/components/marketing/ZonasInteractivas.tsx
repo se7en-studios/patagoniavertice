@@ -171,7 +171,7 @@ export default function ZonasInteractivas({
               }}
             >
               Donde la Patagonia{" "}
-              <em className="not-italic italic text-[#A47C1B]">
+              <em className="font-editorial italic text-[#A47C1B]">
                 crece y rinde
               </em>
             </h2>

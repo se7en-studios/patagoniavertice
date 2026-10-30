@@ -111,7 +111,7 @@ export default function GuiaInversion() {
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Guía Estratégica de Inversión en{" "}
-                <em className="not-italic italic text-[#A47C1B] font-normal">
+                <em className="font-editorial italic text-[#A47C1B] font-normal">
                   Río Negro & Vaca Muerta 2026
                 </em>
               </h2>

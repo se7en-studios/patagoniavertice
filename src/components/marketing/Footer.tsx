@@ -103,7 +103,7 @@ export default function Footer() {
                 }}
               >
                 ¿Listo para evaluar tu próxima operación en{" "}
-                <em className="not-italic italic text-dorado">Patagonia?</em>
+                <em className="font-editorial italic text-dorado">Patagonia?</em>
               </h3>
 
               <div className="flex items-center gap-3 pt-1">

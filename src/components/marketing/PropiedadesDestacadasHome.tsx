@@ -262,6 +262,22 @@ export default function PropiedadesDestacadasHome({
     setVisitaAgendadaOk(false);
   };
 
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (reduced) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rx = ((y / rect.height - 0.5) * -4.2).toFixed(2);
+    const ry = ((x / rect.width - 0.5) * 4.2).toFixed(2);
+    e.currentTarget.style.setProperty("--mx", `${x}px`);
+    e.currentTarget.style.setProperty("--my", `${y}px`);
+    e.currentTarget.style.transform = `perspective(1050px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+  };
+
+  const handleCardMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.transform = "";
+  };
+
   const handleAgendarDesdeQuickView = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!quickViewProp || !nombreVisita.trim() || !telefonoVisita.trim()) return;
@@ -512,10 +528,25 @@ export default function PropiedadesDestacadasHome({
                     delay: reduced ? 0 : (idx % 3) * 0.06,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className="group relative flex flex-col rounded-3xl bg-white border border-dorado/20 hover:border-dorado/60 overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.22)] hover:shadow-[0_28px_60px_-26px_rgba(14,26,51,0.35)] hover:-translate-y-1 transition-all duration-300"
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                  className="group relative flex flex-col rounded-3xl bg-white border border-dorado/20 hover:border-dorado/60 overflow-hidden shadow-[0_18px_40px_-24px_rgba(14,26,51,0.22)] hover:shadow-[0_28px_60px_-26px_rgba(14,26,51,0.35)] transition-[border-color,box-shadow,transform] duration-200 will-change-transform"
                 >
+                  {/* Spotlight especular dorado en GPU */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background:
+                        "radial-gradient(360px circle at var(--mx,50%) var(--my,30%), rgba(201,168,76,0.14), transparent 65%)",
+                    }}
+                  />
+
                   {/* Imagen & Badges con Carrusel Inline */}
-                  <div className="relative aspect-[16/11] overflow-hidden bg-navy/5">
+                  <div
+                    data-cursor="VER ↗"
+                    className="relative aspect-[16/11] overflow-hidden bg-navy/5"
+                  >
                     <Image
                       src={currentCardSrc}
                       alt={p.titulo}

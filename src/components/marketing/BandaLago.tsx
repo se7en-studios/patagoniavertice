@@ -169,6 +169,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
       {/* Banner Compacto & Minimalista de Mari Menuco con Parallax GPU */}
       <div
         ref={bannerRef}
+        data-cursor="MASTERPLAN ↗"
         className="relative h-[64vh] min-h-[480px] max-h-[620px] max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-[0_24px_60px_-28px_rgba(14,26,51,0.38)] border border-navy/10"
       >
         <motion.div

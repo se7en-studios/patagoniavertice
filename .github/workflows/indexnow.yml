@@ -20,3 +20,4 @@ jobs:
           status=$(echo "$response" | tail -n 1)
           echo "IndexNow Status: $status"
           echo "Response: $body"
+

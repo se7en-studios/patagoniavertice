@@ -253,26 +253,36 @@ export default function ZonasInteractivas({
               className="relative rounded-[2rem] border border-navy/10 bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
-                {/* Left Column: Image with dynamic overlay */}
-                <div className="lg:col-span-7 relative min-h-[320px] lg:min-h-[520px] overflow-hidden">
+                {/* Left Column: Image with Curtain Clip-Path Reveal */}
+                <motion.div
+                  initial={
+                    reduced
+                      ? false
+                      : { clipPath: "inset(0 100% 0 0)", scale: 1.05 }
+                  }
+                  animate={{ clipPath: "inset(0 0% 0 0)", scale: 1 }}
+                  transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                  data-cursor="EXPLORAR ↗"
+                  className="lg:col-span-7 relative min-h-[320px] lg:min-h-[520px] overflow-hidden will-change-transform"
+                >
                   <Image
                     src={zonaActiva.imagen}
                     alt={zonaActiva.nombre}
                     fill
                     sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-700 hover:scale-105"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-navy-950/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-navy-950/10 to-transparent pointer-events-none" />
 
                   {/* Floating pill over image */}
-                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10">
+                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10 pointer-events-none">
                     <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#070E1B]/85 backdrop-blur-md border border-white/15 text-dorado rd-label !text-[10px] !tracking-[0.18em] shadow-sm">
                       <span className="rd-ping" />
                       <span>{zonaActiva.tipoInversion}</span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Right Column: Information & Points */}
                 <div className="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-between space-y-6">
@@ -294,19 +304,26 @@ export default function ZonasInteractivas({
                       {zonaActiva.descripcion}
                     </p>
 
-                    {/* Highlights */}
+                    {/* Highlights con entrada escalonada */}
                     <div className="space-y-2.5 pt-4 border-t border-navy/10">
                       <h4 className="rd-label !text-[10px] !tracking-[0.2em] text-navy/50">
                         Ventajas Estratégicas
                       </h4>
                       {zonaActiva.destacados.map((item, idx) => (
-                        <div
-                          key={idx}
+                        <motion.div
+                          key={item}
+                          initial={reduced ? false : { opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            duration: 0.35,
+                            delay: 0.08 + idx * 0.06,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
                           className="flex items-start gap-2.5 text-xs text-navy/80 font-body"
                         >
                           <span className="text-[#A47C1B] mt-0.5 font-bold">✓</span>
                           <span>{item}</span>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>

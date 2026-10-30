@@ -78,7 +78,7 @@ export default function Footer() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20 pb-28 md:pb-14">
-        {/* ── 1. Cabecera Ejecutiva de Conversión ── */}
+        {/* ── 1. Cabecera Ejecutiva de Conversión (Estilo se7endev) ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -88,22 +88,21 @@ export default function Footer() {
         >
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             <div className="space-y-3 max-w-xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-dorado/15 border border-dorado/30 px-3 py-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-dorado">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-dorado/15 border border-dorado/30 px-3.5 py-1">
+                <span className="rd-ping" />
+                <span className="rd-label !text-[10px] !tracking-[0.2em] text-dorado">
                   Asesoría Patrimonial Directa · Sin Intermediarios
                 </span>
               </div>
 
               <h3
-                className="font-display font-medium text-white leading-[1.06]"
+                className="rd-display text-white"
                 style={{
-                  fontSize: "clamp(1.75rem, 3.2vw, 2.6rem)",
-                  letterSpacing: "-0.025em",
+                  fontSize: "clamp(1.85rem, 3.4vw, 2.75rem)",
                 }}
               >
                 ¿Listo para evaluar tu próxima operación en{" "}
-                <em className="font-editorial italic text-dorado">Patagonia?</em>
+                <em className="rd-serif text-dorado">Patagonia?</em>
               </h3>
 
               <div className="flex items-center gap-3 pt-1">
@@ -120,7 +119,7 @@ export default function Footer() {
                   <p className="font-display text-sm font-medium text-white">
                     Estela Mari Rojas
                   </p>
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-white/55">
+                  <p className="rd-label !text-[9.5px] !tracking-[0.18em] text-white/55">
                     Martillera &amp; Corredora Pública · Mat. 35 RP 2026
                   </p>
                 </div>
@@ -132,16 +131,22 @@ export default function Footer() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-dorado hover:bg-dorado-light text-tierra font-body text-xs font-semibold uppercase tracking-[0.15em] px-7 py-4 shadow-[0_14px_30px_-10px_rgba(201,168,76,0.5)] transition-all"
+                className="rd-btn justify-between bg-dorado hover:bg-dorado-light text-tierra rd-label !text-[10.5px] !tracking-[0.16em] pl-6 pr-2 py-2.5 shadow-[0_14px_30px_-10px_rgba(201,168,76,0.5)]"
               >
-                <span>Hablar por WhatsApp</span>
-                <ArrowUpRight className="w-4 h-4" />
+                <span className="rd-roll" data-text="Hablar por WhatsApp">
+                  <span>Hablar por WhatsApp</span>
+                </span>
+                <span className="rd-btn__icon w-8 h-8 bg-[#060C18] text-dorado">
+                  ↗
+                </span>
               </a>
               <Link
                 href="/#sec-tasador"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] hover:border-dorado hover:text-dorado text-white font-body text-xs font-semibold uppercase tracking-[0.15em] px-6 py-4 transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] hover:border-dorado hover:text-dorado text-white rd-label !text-[10.5px] !tracking-[0.16em] px-6 py-4 transition-all"
               >
-                <span>Solicitar Tasación</span>
+                <span className="rd-roll" data-text="Solicitar Tasación">
+                  <span>Solicitar Tasación</span>
+                </span>
               </Link>
               <button
                 type="button"
@@ -196,8 +201,8 @@ export default function Footer() {
           {/* Cols 2 y 3: Navegación + Servicios (5 cols, 2 columnas en móvil) */}
           <div className="grid grid-cols-2 gap-6 sm:gap-8 lg:col-span-5">
             <div>
-              <h4 className="font-mono text-dorado text-[10px] font-semibold tracking-[0.22em] uppercase mb-4">
-                01 / Plataforma
+              <h4 className="rd-label !text-[10px] !tracking-[0.22em] text-dorado mb-4">
+                [01 / PLATAFORMA]
               </h4>
               <nav className="flex flex-col gap-2.5">
                 {navLinks.map((l) => (
@@ -206,7 +211,9 @@ export default function Footer() {
                     href={l.href}
                     className="group inline-flex items-center gap-1.5 font-body text-white/65 text-xs sm:text-sm hover:text-white transition-colors"
                   >
-                    <span>{l.label}</span>
+                    <span className="rd-roll" data-text={l.label}>
+                      <span>{l.label}</span>
+                    </span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-0.5 translate-x-0.5 group-hover:opacity-100 text-dorado transition-all" />
                   </Link>
                 ))}
@@ -214,8 +221,8 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="font-mono text-dorado text-[10px] font-semibold tracking-[0.22em] uppercase mb-4">
-                02 / Soluciones
+              <h4 className="rd-label !text-[10px] !tracking-[0.22em] text-dorado mb-4">
+                [02 / SOLUCIONES]
               </h4>
               <nav className="flex flex-col gap-2.5">
                 {serviceLinks.map((l) => (
@@ -224,7 +231,9 @@ export default function Footer() {
                     href={l.href}
                     className="group inline-flex items-center gap-1.5 font-body text-white/65 text-xs sm:text-sm hover:text-white transition-colors"
                   >
-                    <span>{l.label}</span>
+                    <span className="rd-roll" data-text={l.label}>
+                      <span>{l.label}</span>
+                    </span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-0.5 translate-x-0.5 group-hover:opacity-100 text-dorado transition-all" />
                   </Link>
                 ))}
@@ -234,8 +243,8 @@ export default function Footer() {
 
           {/* Col 4: Contacto Directo & Plazas (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-mono text-dorado text-[10px] font-semibold tracking-[0.22em] uppercase mb-4">
-              03 / Contacto Directo
+            <h4 className="rd-label !text-[10px] !tracking-[0.22em] text-dorado mb-4">
+              [03 / CONTACTO DIRECTO]
             </h4>
 
             <a
@@ -337,15 +346,19 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Marca tipográfica monumental sutil */}
-      <div
+      {/* Marca tipográfica monumental animada estilo se7endev */}
+      <motion.div
         aria-hidden="true"
-        className="pointer-events-none select-none overflow-hidden text-center font-display font-semibold leading-[0.75] tracking-tight text-white/[0.028] pb-1"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-20px" }}
+        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none select-none overflow-hidden text-center rd-display leading-[0.78] text-white/[0.035] pb-1"
       >
-        <span style={{ fontSize: "clamp(3.2rem, 16vw, 13.5rem)" }}>
-          ALTUM SCI
+        <span style={{ fontSize: "clamp(3.2rem, 15vw, 13rem)" }}>
+          ALTUM · PATAGONIA
         </span>
-      </div>
+      </motion.div>
     </footer>
   );
 }

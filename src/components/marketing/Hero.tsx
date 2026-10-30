@@ -4,7 +4,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   ArrowRight,
   MapPin,
@@ -77,8 +82,17 @@ const LIVE_HIGHLIGHTS = [
 ];
 
 export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig }) {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -28]);
 
   const [operacion, setOperacion] = useState("venta");
   const [tipo, setTipo] = useState("todos");
@@ -124,9 +138,15 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
   const currentItem = LIVE_HIGHLIGHTS[activeHighlight];
 
   return (
-    <section className="relative min-h-[94vh] lg:min-h-screen flex flex-col overflow-hidden bg-[#F6F8FB]">
-      {/* Fondo de video con velo arquitectónico minimalista */}
-      <div className="absolute inset-0 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative min-h-[94vh] lg:min-h-screen flex flex-col overflow-hidden bg-[#F6F8FB]"
+    >
+      {/* Fondo de video con Parallax Multicapa en GPU */}
+      <motion.div
+        style={{ scale: bgScale, y: bgY }}
+        className="absolute inset-0 overflow-hidden will-change-transform"
+      >
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
@@ -142,9 +162,12 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
         <div className="absolute inset-0 bg-white/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#F6F8FB]/95 via-[#F6F8FB]/80 to-[#F6F8FB]/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#F6F8FB] via-[#F6F8FB]/30 to-transparent" />
-      </div>
+      </motion.div>
 
-      <div className="relative z-10 flex-1 flex flex-col justify-end max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 w-full pt-28 md:pt-36 pb-12 md:pb-20">
+      <motion.div
+        style={{ y: contentY }}
+        className="relative z-10 flex-1 flex flex-col justify-end max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 w-full pt-28 md:pt-36 pb-12 md:pb-20 will-change-transform"
+      >
         {/* Top Metadata Bar estilo se7endev.vercel.app */}
         <div
           style={{ "--d": "0.08s" } as React.CSSProperties}
@@ -231,11 +254,21 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="rounded-3xl bg-white/92 backdrop-blur-xl border border-navy/10 p-4 shadow-[0_24px_55px_-20px_rgba(14,26,51,0.22)]"
+              className="relative overflow-hidden rounded-3xl bg-white/94 backdrop-blur-xl border border-navy/10 p-4 shadow-[0_24px_55px_-20px_rgba(14,26,51,0.22)]"
             >
+              {/* Barra de progreso en vivo del Radar (5.2s) */}
+              <motion.div
+                key={`bar-${activeHighlight}`}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 5.2, ease: "linear" }}
+                className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-dorado via-[#A47C1B] to-dorado origin-left"
+              />
+
               {/* Selector de las 3 oportunidades */}
               <div className="flex items-center justify-between gap-1.5 mb-3">
-                <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-navy/50 font-semibold">
+                <span className="inline-flex items-center gap-2 rd-label !text-[9.5px] !tracking-[0.18em] text-navy/60">
+                  <span className="rd-ping" />
                   Radar Patrimonial
                 </span>
                 <div className="flex items-center gap-1.5">
@@ -263,7 +296,11 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Link href={currentItem.href} className="group block">
+                  <Link
+                    href={currentItem.href}
+                    data-cursor="EXPLORAR ↗"
+                    className="group block"
+                  >
                     <div className="relative h-32 w-full rounded-2xl overflow-hidden mb-3 border border-navy/[0.06]">
                       <Image
                         src={currentItem.image}
@@ -273,20 +310,20 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/15 to-transparent" />
-                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-navy-950/85 text-dorado font-mono text-[9px] uppercase tracking-wider font-semibold">
+                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-navy-950/85 text-dorado rd-label !text-[9px] !tracking-[0.16em]">
                         {currentItem.code}
                       </span>
-                      <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 text-navy font-mono text-[9.5px] font-semibold shadow-sm">
+                      <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 text-navy rd-label !text-[9.5px] !tracking-[0.12em] shadow-sm">
                         <TrendingUp className="w-3 h-3 text-[#8A6A1B]" />
                         {currentItem.metric}
                       </span>
                     </div>
 
                     <div className="flex items-baseline justify-between gap-2 mb-1">
-                      <h2 className="font-display text-base font-semibold text-navy group-hover:text-[#8A6A1B] transition-colors truncate">
+                      <h2 className="font-display text-base font-semibold tracking-tight text-navy group-hover:text-[#8A6A1B] transition-colors truncate">
                         {currentItem.title}
                       </h2>
-                      <span className="font-mono text-[11px] font-bold text-[#8A6A1B] shrink-0">
+                      <span className="rd-condensed text-sm text-[#8A6A1B] shrink-0">
                         {currentItem.price}
                       </span>
                     </div>
@@ -376,15 +413,19 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
               </select>
             </div>
 
-            {/* Col 4: Botón Buscar */}
+            {/* Col 4: Botón Buscar estilo se7endev */}
             <div className="md:col-span-2 pt-2 md:pt-0 md:pl-2">
               <button
                 type="button"
                 onClick={handleSearch}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl md:rounded-full bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase py-3.5 px-5 transition-all duration-200 shadow-sm group"
+                className="rd-btn w-full justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-4 pr-1.5 py-2 shadow-sm"
               >
-                <span>Explorar</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                <span className="rd-roll" data-text="Explorar">
+                  <span>Explorar</span>
+                </span>
+                <span className="rd-btn__icon w-7 h-7 bg-dorado text-tierra">
+                  ↗
+                </span>
               </button>
             </div>
           </div>
@@ -463,7 +504,7 @@ export default function Hero({ heroConfig }: { heroConfig?: HeroLandingConfig })
             <ArrowRight className="w-3 h-3" />
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

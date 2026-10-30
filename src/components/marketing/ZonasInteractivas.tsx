@@ -151,16 +151,15 @@ export default function ZonasInteractivas({
       }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header Editorial estilo se7endev */}
+        {/* Header Editorial */}
         <motion.div
           {...reveal()}
-          className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 pb-7 border-b border-navy/10"
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 pb-8 border-b border-navy/10"
         >
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="rd-label !text-[10px] text-navy/40">[04]</span>
               <div className="h-px w-8 bg-dorado" />
-              <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
+              <span className="rd-label !text-xs !tracking-[0.24em] text-[#8A6A1B]">
                 Territorio &amp; Mercado Estratégico
               </span>
             </div>
@@ -175,23 +174,21 @@ export default function ZonasInteractivas({
                 crece y rinde
               </em>
             </h2>
-            <p className="font-body text-navy/65 text-sm lg:text-base max-w-xl mt-3.5">
-              Explorá las 4 micro-regiones con mayor desarrollo, plusvalía y
-              retorno de capital en Neuquén y Río Negro con el respaldo de{" "}
-              <strong>ALTUM SCI</strong>.
+            <p className="font-body text-navy/70 text-base lg:text-lg max-w-xl mt-3.5">
+              4 micro-regiones con mayor desarrollo, plusvalía y retorno de capital en Neuquén y Río Negro.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 rounded-full border border-navy/10 bg-white px-4 py-2 self-start lg:self-auto shadow-sm">
             <span className="rd-ping" />
-            <span className="rd-label !text-[10px] !tracking-[0.18em] text-navy/80">
-              4 Polos con Operaciones Activas
+            <span className="rd-label !text-xs !tracking-[0.16em] text-navy/80">
+              Operaciones Activas
             </span>
           </div>
         </motion.div>
 
-        {/* Territory Tabs Bar (Grilla Hairline Atlas) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-navy/10 rounded-2xl border border-navy/10 bg-white overflow-hidden mb-6 shadow-sm">
+        {/* Territory Tabs Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-navy/10 rounded-2xl border border-navy/10 bg-white overflow-hidden mb-8 shadow-sm">
           {zonasData.map((zona, i) => {
             const isSelected = zona.id === zonaActiva.id;
             return (
@@ -200,7 +197,7 @@ export default function ZonasInteractivas({
                 {...reveal(0.08 * i)}
                 onClick={() => setZonaActivaId(zona.id)}
                 aria-pressed={isSelected}
-                className={`p-5 text-left transition-colors relative overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado ${
+                className={`p-6 text-left transition-colors relative overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado ${
                   isSelected
                     ? "bg-[#0B1528] text-white"
                     : "bg-white text-navy/60 hover:bg-[#F6F8FB] hover:text-navy"
@@ -213,25 +210,25 @@ export default function ZonasInteractivas({
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center justify-between mb-2">
                   <span
-                    className={`rd-label !text-[9.5px] !tracking-[0.18em] ${
+                    className={`rd-label !text-[10px] !tracking-[0.18em] ${
                       isSelected ? "text-dorado" : "text-[#8A6A1B]"
                     }`}
                   >
-                    [0{i + 1}] · {zona.provincia}
+                    0{i + 1} · {zona.provincia}
                   </span>
                 </div>
                 <span
-                  className={`block font-display text-base md:text-lg font-medium tracking-tight ${
+                  className={`block font-display text-lg md:text-xl font-medium tracking-tight ${
                     isSelected ? "text-white" : "text-navy"
                   }`}
                 >
                   {zona.nombre}
                 </span>
                 <span
-                  className={`block rd-label !text-[9px] !tracking-[0.14em] truncate mt-1 ${
-                    isSelected ? "text-white/65" : "text-navy/50"
+                  className={`block text-xs font-body truncate mt-1.5 ${
+                    isSelected ? "text-white/70" : "text-navy/55"
                   }`}
                 >
                   {zona.tipoInversion.split("·")[0]}
@@ -250,7 +247,7 @@ export default function ZonasInteractivas({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="relative rounded-[2rem] border border-navy/10 bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.45)]"
+              className="relative rounded-[2rem] border border-navy/10 bg-white overflow-hidden shadow-[0_30px_70px_-34px_rgba(14,26,51,0.35)]"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
                 {/* Left Column: Image with Curtain Clip-Path Reveal */}
@@ -277,7 +274,7 @@ export default function ZonasInteractivas({
 
                   {/* Floating pill over image */}
                   <div className="absolute bottom-6 left-6 right-6 lg:right-auto z-10 pointer-events-none">
-                    <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#070E1B]/85 backdrop-blur-md border border-white/15 text-dorado rd-label !text-[10px] !tracking-[0.18em] shadow-sm">
+                    <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#070E1B]/85 backdrop-blur-md border border-white/15 text-dorado rd-label !text-xs !tracking-[0.16em] shadow-sm">
                       <span className="rd-ping" />
                       <span>{zonaActiva.tipoInversion}</span>
                     </div>
@@ -286,30 +283,27 @@ export default function ZonasInteractivas({
 
                 {/* Right Column: Information & Points */}
                 <div className="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-between space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-1.5">
-                      <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B] block">
-                        [{zonaActiva.provincia} · POLO SELECCIONADO]
+                  <div className="space-y-5">
+                    <div className="space-y-2">
+                      <span className="rd-label !text-xs !tracking-[0.2em] text-[#8A6A1B] block">
+                        {zonaActiva.provincia}
                       </span>
                       <h3 className="rd-display text-3xl lg:text-4xl text-navy">
                         {zonaActiva.nombre}
                       </h3>
                     </div>
 
-                    <p className="font-display text-[#8A6A1B] text-base font-medium leading-snug">
+                    <p className="font-display text-[#8A6A1B] text-lg font-medium leading-snug">
                       {zonaActiva.tagline}
                     </p>
 
-                    <p className="font-body text-navy/65 text-sm leading-relaxed">
+                    <p className="font-body text-navy/70 text-sm lg:text-base leading-relaxed">
                       {zonaActiva.descripcion}
                     </p>
 
-                    {/* Highlights con entrada escalonada */}
-                    <div className="space-y-2.5 pt-4 border-t border-navy/10">
-                      <h4 className="rd-label !text-[10px] !tracking-[0.2em] text-navy/50">
-                        Ventajas Estratégicas
-                      </h4>
-                      {zonaActiva.destacados.map((item, idx) => (
+                    {/* Highlights */}
+                    <div className="space-y-3 pt-5 border-t border-navy/10">
+                      {zonaActiva.destacados.slice(0, 3).map((item, idx) => (
                         <motion.div
                           key={item}
                           initial={reduced ? false : { opacity: 0, x: -10 }}
@@ -319,7 +313,7 @@ export default function ZonasInteractivas({
                             delay: 0.08 + idx * 0.06,
                             ease: [0.16, 1, 0.3, 1],
                           }}
-                          className="flex items-start gap-2.5 text-xs text-navy/80 font-body"
+                          className="flex items-start gap-3 text-sm text-navy/80 font-body"
                         >
                           <span className="text-[#A47C1B] mt-0.5 font-bold">✓</span>
                           <span>{item}</span>
@@ -332,7 +326,7 @@ export default function ZonasInteractivas({
                   <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t border-navy/10">
                     <Link
                       href={zonaActiva.enlace}
-                      className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 shadow-md"
+                      className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-xs !tracking-[0.16em] pl-6 pr-2 py-2.5 shadow-md"
                     >
                       <span className="rd-roll" data-text="Ver Oportunidades">
                         <span>Ver Oportunidades</span>
@@ -348,7 +342,7 @@ export default function ZonasInteractivas({
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-navy/15 text-navy/80 hover:text-[#8A6A1B] hover:border-dorado transition-colors text-center rd-label !text-[10px] !tracking-[0.16em]"
+                      className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-navy/15 text-navy/80 hover:text-[#8A6A1B] hover:border-dorado transition-colors text-center rd-label !text-xs !tracking-[0.16em]"
                     >
                       Consultar Asesor
                     </a>

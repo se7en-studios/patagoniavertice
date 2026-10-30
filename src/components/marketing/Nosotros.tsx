@@ -122,13 +122,12 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
             </div>
 
             {/* Columna Derecha: Perfil Ejecutivo & Servicios Clave */}
-            <div className="lg:col-span-7 space-y-5">
+            <div className="lg:col-span-7 space-y-6">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="rd-label !text-[10px] text-navy/40">[07]</span>
                   <div className="h-px w-8 bg-dorado" />
-                  <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B]">
-                    Dirección Profesional · ALTUM SCI
+                  <span className="rd-label !text-xs !tracking-[0.22em] text-[#8A6A1B]">
+                    Dirección Profesional
                   </span>
                 </div>
 
@@ -144,7 +143,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                     {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
                   </em>
                 </h2>
-                <p className="rd-label !text-[10.5px] !tracking-[0.18em] text-navy/55 mt-1.5">
+                <p className="rd-label !text-xs !tracking-[0.18em] text-navy/60 mt-2">
                   {perfil?.titulo || "Martillera y Corredora Pública Colegiada"}
                 </p>
               </div>
@@ -155,12 +154,12 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.08 }}
-                className="p-5 rounded-2xl bg-[#F6F8FB] border border-navy/10"
+                className="p-6 rounded-2xl bg-[#F6F8FB] border border-navy/10"
               >
-                <p className="font-display text-navy text-base sm:text-lg font-medium tracking-tight leading-snug">
+                <p className="font-display text-navy text-lg sm:text-xl font-medium tracking-tight leading-snug">
                   &ldquo;{fraseConfianza}&rdquo;
                 </p>
-                <p className="font-body text-navy/65 text-xs sm:text-sm leading-relaxed mt-1">
+                <p className="font-body text-navy/70 text-sm leading-relaxed mt-2">
                   {subfraseConfianza}
                 </p>
               </motion.div>
@@ -174,18 +173,18 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: 0.12 + idx * 0.07 }}
-                    className="group p-4 hover:bg-white transition-all duration-300"
+                    className="group p-5 hover:bg-white transition-all duration-300"
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 mb-2">
                       <Icon className="w-4 h-4 text-[#8A6A1B] group-hover:scale-110 transition-transform" />
-                      <span className="rd-label !text-[9px] !tracking-[0.16em] text-navy/45">
+                      <span className="rd-label !text-[10px] !tracking-[0.16em] text-navy/50">
                         {label}
                       </span>
                     </div>
-                    <p className="font-display text-xs font-semibold text-navy leading-snug">
+                    <p className="font-display text-sm font-semibold text-navy leading-snug">
                       {value}
                     </p>
-                    <p className="font-body text-[11px] text-navy/55 mt-0.5 leading-snug">
+                    <p className="font-body text-xs text-navy/60 mt-1 leading-snug">
                       {sub}
                     </p>
                   </motion.div>
@@ -198,7 +197,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                   href={`https://wa.me/${whatsappEstela.replace(/\D/g, "")}?text=Hola%20Estela%20Mari%20Rojas%20(ALTUM%20SCI)%2C%20quisiera%20solicitar%20asesoramiento%20personalizado.`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rd-btn bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 shadow-sm"
+                  className="rd-btn bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-xs !tracking-[0.16em] pl-6 pr-2 py-2.5 shadow-sm"
                 >
                   <span className="rd-roll" data-text="Hablar con Estela">
                     <span>Hablar con Estela</span>
@@ -209,7 +208,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                 </a>
                 <Link
                   href="/servicios"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-navy/15 text-navy hover:border-navy rd-label !text-[10px] !tracking-[0.16em] transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-navy/15 text-navy hover:border-navy rd-label !text-xs !tracking-[0.16em] transition-colors"
                 >
                   <span>Ver Servicios</span>
                 </Link>
@@ -217,45 +216,42 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
             </div>
           </div>
 
-          {/* ── Tira de Operaciones Recientes & Casos Verificados (Prueba Social) ── */}
-          <div className="mt-12 pt-10 border-t border-navy/10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+          {/* ── Tira de Operaciones Recientes ── */}
+          <div className="mt-14 pt-12 border-t border-navy/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-8">
               <div className="flex items-center gap-2.5">
                 <span className="rd-ping" />
-                <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B]">
-                  [REGISTRO DE OPERACIONES RECIENTES · TRAZABILIDAD COLEGIADA]
+                <span className="rd-label !text-xs !tracking-[0.22em] text-[#8A6A1B]">
+                  Casos Recientes &amp; Trazabilidad
                 </span>
               </div>
-              <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-navy/45">
-                Protocolo Mat. 35 RP 2026
+              <span className="rd-label !text-[10px] !tracking-[0.16em] text-navy/45">
+                Mat. 35 RP 2026
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-navy/10 rounded-2xl border border-navy/10 bg-[#F6F8FB] overflow-hidden">
               {[
                 {
-                  code: "CASO 01 · OPERATORIA REMOTA",
+                  code: "LOTE FRENTE AL LAGO",
                   titulo: "Adquisición de Lote 850 m² en Bahía de las Playas",
-                  perfil: "Inversor radicado en CABA (Buenos Aires)",
                   resultado:
-                    "Auditoría dominial, recorrido por videollamada en el Lago Mari Menuco y firma certificada sin traslado físico.",
-                  metrica: "Cierre en 12 días hábiles",
+                    "Auditoría dominial, recorrido en vivo en Mari Menuco y firma certificada para inversor radicado en CABA.",
+                  metrica: "Cierre en 12 días",
                 },
                 {
-                  code: "CASO 02 · RENTA PETROLERA USD",
-                  titulo: "Contrato Corporativo 24 Meses en Corredor Catriel",
-                  perfil: "Empresa contratista de servicios en Vaca Muerta",
+                  code: "RENTA CORPORATIVA",
+                  titulo: "Contrato Petrolero en Corredor Catriel",
                   resultado:
-                    "Calificación crediticia societaria, inventario fotográfico notarial y renta mensual dolarizada con garantía.",
-                  metrica: "13.2% ROI anual en USD",
+                    "Calificación crediticia de contratista en Vaca Muerta, inventario notarial y renta mensual en USD.",
+                  metrica: "13.2% ROI anual USD",
                 },
                 {
-                  code: "CASO 03 · PERITAJE OFICIAL",
-                  titulo: "Tasación Judicial y Partición Patrimonial en Cipolletti",
-                  perfil: "Estudio jurídico & familia propietaria",
+                  code: "PERITAJE OFICIAL",
+                  titulo: "Tasación Judicial y Partición en Cipolletti",
                   resultado:
-                    "Valuación técnica sobre comparables de escrituras reales en el Alto Valle con sello oficial de Martillera Pública.",
-                  metrica: "Dictamen entregado en 24 hs",
+                    "Valuación técnica sobre comparables de escrituras reales en el Alto Valle con dictamen colegiado.",
+                  metrica: "Dictamen en 24 hs",
                 },
               ].map((caso, idx) => (
                 <motion.div
@@ -264,30 +260,27 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="p-5 sm:p-6 flex flex-col justify-between hover:bg-white transition-colors"
+                  className="p-6 sm:p-7 flex flex-col justify-between hover:bg-white transition-colors"
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-[#8A6A1B]">
-                        [{caso.code}]
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B]">
+                        {caso.code}
                       </span>
                     </div>
-                    <h3 className="font-display text-base font-semibold tracking-tight text-navy leading-snug mb-1">
+                    <h3 className="font-display text-base sm:text-lg font-semibold tracking-tight text-navy leading-snug mb-2">
                       {caso.titulo}
                     </h3>
-                    <p className="rd-label !text-[9px] !tracking-[0.14em] text-navy/45 mb-2.5">
-                      Perfil: {caso.perfil}
-                    </p>
-                    <p className="font-body text-xs text-navy/65 leading-relaxed">
+                    <p className="font-body text-xs sm:text-sm text-navy/70 leading-relaxed">
                       {caso.resultado}
                     </p>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-navy/10 flex items-center justify-between">
-                    <span className="rd-label !text-[9.5px] !tracking-[0.14em] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                  <div className="mt-5 pt-4 border-t border-navy/10 flex items-center justify-between">
+                    <span className="rd-label !text-[10px] !tracking-[0.14em] text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
                       ✓ {caso.metrica}
                     </span>
-                    <span className="rd-label !text-[9px] text-navy/40">
+                    <span className="rd-label !text-[10px] text-navy/40">
                       Auditado
                     </span>
                   </div>

@@ -9,7 +9,6 @@ import {
   Compass,
   Trees,
   Store,
-  CheckCircle2,
   ArrowRight,
 } from "lucide-react";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
@@ -142,12 +141,11 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: PropTech Trust & Methodology (Estilo se7endev) */}
-            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28">
+            {/* Left Column: PropTech Trust & Methodology */}
+            <div className="lg:col-span-5 space-y-7 lg:sticky lg:top-28">
               <div className="flex items-center gap-3">
-                <span className="rd-label !text-[10px] text-navy/40">[05]</span>
                 <div className="h-px w-8 bg-dorado" />
-                <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
+                <span className="rd-label !text-xs !tracking-[0.24em] text-[#8A6A1B]">
                   Valuación Técnica Certificada
                 </span>
               </div>
@@ -162,93 +160,63 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
                 <em className="rd-serif text-[#A47C1B]">Patagonia.</em>
               </h2>
 
-              <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
-                Combinamos inteligencia de precios de cierres efectivos en el
-                Alto Valle con dictamen técnico firmado por{" "}
-                <strong className="text-navy font-medium">
+              <p className="font-body text-navy/70 text-base leading-relaxed">
+                Precios de escrituras y cierres efectivos en el
+                Alto Valle con dictamen técnico colegiado firmado por{" "}
+                <strong className="text-navy font-semibold">
                   Estela Mari Rojas
                 </strong>{" "}
-                (Martillera Pública Colegiada Mat. 35 RP 2026).
+                (Mat. 35 RP 2026).
               </p>
 
               {/* Live Market Benchmark Box */}
-              <div className="rounded-2xl bg-[#070E1B] text-white p-5 border border-white/10 shadow-sm space-y-3">
+              <div className="rounded-2xl bg-[#070E1B] text-white p-6 border border-white/10 shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-2 rd-label !text-[10px] !tracking-[0.18em] text-dorado">
+                  <span className="inline-flex items-center gap-2 rd-label !text-xs !tracking-[0.16em] text-dorado">
                     <span className="rd-ping" />
-                    Benchmark en vivo · {localidad}
+                    Benchmark · {localidad}
                   </span>
-                  <span className="rd-label !text-[9.5px] !tracking-[0.14em] text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                  <span className="rd-label !text-xs !tracking-[0.14em] text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-3 py-1 rounded-full">
                     {benchmark.tendencia}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 pt-2.5 border-t border-white/10">
+                <div className="grid grid-cols-2 gap-4 pt-3 border-t border-white/10">
                   <div>
-                    <span className="block rd-label !text-[9px] !tracking-[0.16em] text-white/45">
-                      Valor de Referencia
+                    <span className="block rd-label !text-[10px] !tracking-[0.16em] text-white/50">
+                      Referencia
                     </span>
-                    <span className="rd-condensed text-base sm:text-lg text-white mt-0.5 block">
+                    <span className="rd-condensed text-lg sm:text-xl text-white mt-1 block">
                       {benchmark.rangoM2}
                     </span>
                   </div>
                   <div>
-                    <span className="block rd-label !text-[9px] !tracking-[0.16em] text-white/45">
-                      Nivel de Liquidez
+                    <span className="block rd-label !text-[10px] !tracking-[0.16em] text-white/50">
+                      Demanda
                     </span>
-                    <span className="font-body text-xs font-medium text-white/90 mt-0.5 block">
+                    <span className="font-body text-sm font-medium text-white/90 mt-1 block">
                       {benchmark.demanda}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* 3 Pillars */}
-              <div className="space-y-3 pt-2">
-                {[
-                  {
-                    t: "Comparables de Escrituras Reales",
-                    d: "Valuamos sobre cierres efectivos de la zona, no precios de publicación distorsionados.",
-                  },
-                  {
-                    t: "Validez Notarial, Bancaria y Sucesoria",
-                    d: "Informe técnico respaldado por matrícula profesional del Colegio de Martilleros.",
-                  },
-                  {
-                    t: "Entrega de Dictamen en 24 Horas",
-                    d: "Relevamiento presencial o satelital con informe ejecutivo de comercialización.",
-                  },
-                ].map((item) => (
-                  <div key={item.t} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-[#8A6A1B] shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-body text-xs font-semibold text-navy">
-                        {item.t}
-                      </h4>
-                      <p className="font-body text-navy/55 text-xs leading-relaxed">
-                        {item.d}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
               {/* Firma Estela */}
-              <div className="flex items-center gap-3.5 rounded-2xl border border-navy/[0.08] bg-[#F6F8FB] p-3.5">
-                <div className="relative h-11 w-11 rounded-full overflow-hidden border border-dorado/60 shrink-0">
+              <div className="flex items-center gap-4 rounded-2xl border border-navy/10 bg-[#F6F8FB] p-4">
+                <div className="relative h-12 w-12 rounded-full overflow-hidden border border-dorado/60 shrink-0">
                   <Image
                     src="/estela-avatar.jpg"
                     alt="Estela Mari Rojas"
                     fill
-                    sizes="44px"
+                    sizes="48px"
                     className="object-cover"
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-sm font-semibold text-navy truncate">
+                  <p className="font-display text-base font-semibold text-navy truncate">
                     Estela Mari Rojas
                   </p>
-                  <p className="font-mono text-[10px] text-[#8A6A1B] uppercase tracking-wider font-semibold truncate">
-                    Martillera &amp; Corredora Pública · Mat. 35 RP 2026
+                  <p className="rd-label !text-[10px] !tracking-[0.16em] text-[#8A6A1B] truncate">
+                    Martillera Colegiada · Mat. 35 RP 2026
                   </p>
                 </div>
               </div>

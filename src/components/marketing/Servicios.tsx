@@ -159,8 +159,8 @@ export default function Servicios({
       id="propuesta-servicios"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* ── 1. Cabecera: Propuesta de Valor Integral (Estilo se7endev) ── */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 pb-7 border-b border-navy/10">
+        {/* ── 1. Cabecera: Propuesta de Valor Integral ── */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 pb-8 border-b border-navy/10">
           <div>
             <motion.div
               initial={{ opacity: 0, x: -16 }}
@@ -169,10 +169,9 @@ export default function Servicios({
               transition={{ duration: 0.45 }}
               className="flex items-center gap-3 mb-4"
             >
-              <span className="rd-label !text-[10px] text-navy/40">[03]</span>
               <div className="h-px w-8 bg-dorado" />
-              <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
-                Propuesta de Valor &amp; Servicios Integrales
+              <span className="rd-label !text-xs !tracking-[0.24em] text-[#8A6A1B]">
+                Servicios &amp; Consultoría
               </span>
             </motion.div>
             <motion.h2
@@ -197,15 +196,15 @@ export default function Servicios({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.12 }}
-            className="font-body text-navy/65 text-sm lg:text-base leading-relaxed max-w-md"
+            className="font-body text-navy/70 text-base lg:text-lg leading-relaxed max-w-md"
           >
-            Combinamos inteligencia territorial en Neuquén y Río Negro con el
-            respaldo jurídico directo de una firma matriculada.
+            Inteligencia territorial en Neuquén y Río Negro con el
+            respaldo jurídico directo de firma matriculada.
           </motion.p>
         </div>
 
-        {/* ── 2. Tira de los 4 Pilares de Valor (Grilla Hairline Editorial) ── */}
-        <div className="rounded-[1.65rem] bg-[#F6F8FB] border border-navy/10 overflow-hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-navy/10 mb-12">
+        {/* ── 2. Tira de Pilares de Valor (Minimalista y Limpia) ── */}
+        <div className="rounded-2xl bg-[#F6F8FB] border border-navy/10 overflow-hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-navy/10 mb-14">
           {PROPUESTA_VALOR.map((item, i) => {
             const Icon = item.Icon;
             return (
@@ -219,21 +218,21 @@ export default function Servicios({
                   delay: i * 0.06,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="p-6 flex flex-col justify-between hover:bg-white transition-colors"
+                className="p-7 flex flex-col justify-between hover:bg-white transition-colors"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="rd-label !text-[10px] !tracking-[0.2em] text-[#8A6A1B]">
-                    [PILAR {item.num}]
+                <div className="flex items-center justify-between mb-5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white border border-navy/10 text-[#8A6A1B] shadow-sm">
+                    <Icon className="w-5 h-5" strokeWidth={1.7} />
                   </span>
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white border border-navy/10 text-[#8A6A1B]">
-                    <Icon className="w-4 h-4" strokeWidth={1.7} />
+                  <span className="rd-condensed text-navy/30 text-xl font-light">
+                    {item.num}
                   </span>
                 </div>
                 <div>
                   <h3 className="font-display text-base font-semibold tracking-tight text-navy leading-snug">
                     {item.titulo}
                   </h3>
-                  <p className="font-body text-xs text-navy/60 mt-1 leading-relaxed">
+                  <p className="font-body text-xs text-navy/60 mt-1.5 leading-relaxed">
                     {item.detalle}
                   </p>
                 </div>
@@ -242,8 +241,8 @@ export default function Servicios({
           })}
         </div>
 
-        {/* ── 3. Grilla Arquitectónica 2x2 de Servicios con Spotlight ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 mb-14">
+        {/* ── 3. Grilla Arquitectónica de Servicios con Spotlight ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
           {listaServicios.map((s, i) => {
             const Icon = ICONOS[i % ICONOS.length];
             return (
@@ -258,7 +257,7 @@ export default function Servicios({
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 onMouseMove={handleSpotlightMove}
-                className="group relative overflow-hidden rounded-[1.85rem] p-7 lg:p-9 bg-[#F6F8FB] hover:bg-white border border-navy/10 hover:border-dorado/60 shadow-[0_14px_34px_-24px_rgba(14,26,51,0.14)] hover:shadow-[0_26px_54px_-24px_rgba(14,26,51,0.24)] transition-all duration-300 flex flex-col justify-between"
+                className="group relative overflow-hidden rounded-[2rem] p-8 lg:p-10 bg-[#F6F8FB] hover:bg-white border border-navy/10 hover:border-dorado/60 shadow-[0_14px_34px_-24px_rgba(14,26,51,0.12)] hover:shadow-[0_26px_54px_-24px_rgba(14,26,51,0.22)] transition-all duration-300 flex flex-col justify-between"
               >
                 {/* Spotlight interactivo en GPU */}
                 <div
@@ -271,56 +270,40 @@ export default function Servicios({
                 />
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-navy/10">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white border border-navy/10 text-navy group-hover:bg-[#0B1528] group-hover:text-dorado transition-colors">
+                  <div className="flex items-center justify-between mb-8 pb-5 border-b border-navy/10">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-navy/10 text-navy group-hover:bg-[#0B1528] group-hover:text-dorado transition-colors shadow-sm">
                       <Icon className="h-5 w-5" strokeWidth={1.6} />
                     </span>
-                    <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 border border-navy/10 rd-label !text-[9.5px] !tracking-[0.18em] text-[#8A6A1B]">
-                      <span>[{s.num}]</span>
-                      <span>·</span>
-                      <span>{s.tag}</span>
+                    <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 border border-navy/10 rd-label !text-[10px] !tracking-[0.16em] text-[#8A6A1B] shadow-sm">
+                      {s.tag}
                     </span>
                   </div>
 
-                  <h3 className="font-display font-medium tracking-tight text-navy text-xl lg:text-2xl leading-snug mb-2.5">
+                  <h3 className="font-display font-medium tracking-tight text-navy text-2xl lg:text-3xl leading-snug mb-3">
                     {s.titulo}
                   </h3>
 
-                  <p className="font-body text-sm leading-relaxed text-navy/65 mb-5">
+                  <p className="font-body text-sm lg:text-base leading-relaxed text-navy/70 mb-8">
                     {s.descripcion}
                   </p>
-
-                  {s.entregables && (
-                    <div className="space-y-1.5 mb-6 pt-4 border-t border-navy/10">
-                      {s.entregables.map((ent) => (
-                        <div
-                          key={ent}
-                          className="flex items-center gap-2 text-xs font-body text-navy/75"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
-                          <span>{ent}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
-                <div className="relative z-10 pt-4 border-t border-navy/10 flex items-center justify-between">
+                <div className="relative z-10 pt-6 border-t border-navy/10 flex items-center justify-between">
                   <a
                     href={`https://wa.me/${WA}?text=${s.waText}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rd-btn bg-[#0B1528] group-hover:bg-dorado text-white group-hover:text-tierra rd-label !text-[9.5px] !tracking-[0.16em] pl-4 pr-1.5 py-1.5 transition-colors"
+                    className="rd-btn bg-[#0B1528] group-hover:bg-dorado text-white group-hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 transition-colors"
                   >
                     <span className="rd-roll" data-text="Solicitar Asesoría">
                       <span>Solicitar Asesoría</span>
                     </span>
-                    <span className="rd-btn__icon w-6 h-6 bg-dorado group-hover:bg-[#0B1528] text-tierra group-hover:text-dorado">
+                    <span className="rd-btn__icon w-7 h-7 bg-dorado group-hover:bg-[#0B1528] text-tierra group-hover:text-dorado">
                       ↗
                     </span>
                   </a>
-                  <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-navy/45">
-                    Mat. 35 RP 2026
+                  <span className="rd-condensed text-2xl text-navy/20">
+                    {s.num}
                   </span>
                 </div>
               </motion.div>
@@ -328,30 +311,30 @@ export default function Servicios({
           })}
         </div>
 
-        {/* ── 4. Metodología en 3 Pasos + Video Institucional en Bloque Ejecutivo ── */}
+        {/* ── 4. Metodología en 3 Pasos + Video Institucional ── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55 }}
-          className="rounded-[2.25rem] bg-[#070E1B] text-white border border-white/10 p-6 sm:p-10 lg:p-12 shadow-[0_26px_64px_-28px_rgba(7,14,27,0.55)]"
+          className="rounded-[2.25rem] bg-[#070E1B] text-white border border-white/10 p-7 sm:p-11 lg:p-14 shadow-[0_26px_64px_-28px_rgba(7,14,27,0.55)]"
         >
           {/* Los 3 pasos de operación */}
-          <div className="mb-10 pb-10 border-b border-white/10">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-7">
+          <div className="mb-12 pb-12 border-b border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
               <div>
-                <span className="rd-label !text-[10px] !tracking-[0.22em] text-dorado block mb-2">
-                  [PROTOCOLO DE EJECUCIÓN · ALTUM SCI]
+                <span className="rd-label !text-xs !tracking-[0.22em] text-dorado block mb-2">
+                  Protocolo de Ejecución
                 </span>
                 <h3 className="rd-display text-2xl sm:text-3xl text-white">
-                  Tu operación inmobiliaria en{" "}
+                  Tu operación en{" "}
                   <em className="rd-serif text-dorado">
                     3 etapas claras
                   </em>
                 </h3>
               </div>
-              <span className="rd-label !text-[10px] !tracking-[0.18em] text-white/50">
-                100% Trazabilidad Documental
+              <span className="rd-label !text-xs !tracking-[0.18em] text-white/50">
+                Trazabilidad Colegiada
               </span>
             </div>
 
@@ -363,20 +346,17 @@ export default function Servicios({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className="p-6"
+                  className="p-7"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="rd-condensed text-3xl text-dorado">
+                  <div className="mb-4">
+                    <span className="rd-condensed text-3xl sm:text-4xl text-dorado">
                       {paso.num}
                     </span>
-                    <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-white/40">
-                      [ETAPA 0{idx + 1}]
-                    </span>
                   </div>
-                  <h4 className="font-display text-lg font-medium tracking-tight text-white mb-1.5">
+                  <h4 className="font-display text-lg font-medium tracking-tight text-white mb-2">
                     {paso.titulo}
                   </h4>
-                  <p className="font-body text-xs text-white/65 leading-relaxed">
+                  <p className="font-body text-xs sm:text-sm text-white/65 leading-relaxed">
                     {paso.desc}
                   </p>
                 </motion.div>
@@ -385,10 +365,10 @@ export default function Servicios({
           </div>
 
           {/* Video Institucional */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-7">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
             <div>
-              <span className="rd-label !text-[10px] !tracking-[0.22em] text-dorado block mb-1.5">
-                Presentación Audiovisual · Estudio ALTUM
+              <span className="rd-label !text-xs !tracking-[0.22em] text-dorado block mb-1.5">
+                Presentación Audiovisual
               </span>
               <h3 className="rd-display text-xl sm:text-2xl text-white">
                 Conocé por dentro el estándar de{" "}
@@ -399,7 +379,7 @@ export default function Servicios({
               href={`https://wa.me/${WA}?text=Vi%20su%20presentaci%C3%B3n%20institucional%20y%20quiero%20consultar`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rd-btn self-start lg:self-auto bg-dorado hover:bg-dorado-light text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2"
+              className="rd-btn self-start lg:self-auto bg-dorado hover:bg-dorado-light text-tierra rd-label !text-xs !tracking-[0.16em] pl-5 pr-2 py-2"
             >
               <span className="rd-roll" data-text="Coordinar Reunión">
                 <span>Coordinar Reunión</span>

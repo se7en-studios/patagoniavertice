@@ -203,9 +203,9 @@ export default function Manifiesto({
           </blockquote>
         </div>
 
-        {/* Architectural 4-Column Metric Grid con Contadores y Línea Dorada Animada */}
+        {/* Architectural 4-Column Metric Grid Minimalista */}
         <div className="mt-12 lg:mt-14 rounded-3xl bg-white border border-navy/10 shadow-[0_20px_50px_-30px_rgba(14,26,51,0.14)] overflow-hidden">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-navy/10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 divide-x divide-navy/10">
             {items.map((item, i) => (
               <motion.div
                 key={item.id || i}
@@ -217,9 +217,8 @@ export default function Manifiesto({
                   delay: i * 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="group relative p-7 lg:p-8 flex flex-col justify-between hover:bg-[#F6F8FB]/70 transition-colors"
+                className="group relative p-7 lg:p-9 text-center hover:bg-[#F6F8FB]/70 transition-colors"
               >
-                {/* Barra superior dorada que se expande al entrar en viewport */}
                 <motion.div
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
@@ -232,34 +231,20 @@ export default function Manifiesto({
                   className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-dorado via-dorado/60 to-transparent origin-left"
                 />
 
-                <div className="flex items-center justify-between mb-5">
-                  <span className="rd-label !text-[10px] !tracking-[0.2em] text-navy/40 group-hover:text-[#8A6A1B] transition-colors">
-                    [0{i + 1} / MÉTRICA]
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-dorado/70 group-hover:scale-125 transition-transform" />
-                </div>
-
-                <div>
-                  <dd className="rd-condensed tabular-nums text-navy text-5xl lg:text-[4rem] leading-none">
-                    {item.value !== null ? (
-                      <AnimatedNumber
-                        value={item.value}
-                        prefix={item.prefix}
-                        suffix={item.suffix}
-                      />
-                    ) : (
-                      item.raw
-                    )}
-                  </dd>
-                  <dt className="rd-label !text-[10.5px] !tracking-[0.16em] text-navy mt-3">
-                    {item.label}
-                  </dt>
-                  {item.detail && (
-                    <p className="font-body text-navy/55 text-xs mt-1.5 leading-relaxed">
-                      {item.detail}
-                    </p>
+                <dd className="rd-condensed tabular-nums text-navy text-5xl lg:text-[4.25rem] leading-none">
+                  {item.value !== null ? (
+                    <AnimatedNumber
+                      value={item.value}
+                      prefix={item.prefix}
+                      suffix={item.suffix}
+                    />
+                  ) : (
+                    item.raw
                   )}
-                </div>
+                </dd>
+                <dt className="font-display text-sm sm:text-base font-medium text-navy/80 mt-3">
+                  {item.label}
+                </dt>
               </motion.div>
             ))}
           </div>

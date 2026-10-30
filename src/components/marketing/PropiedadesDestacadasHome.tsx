@@ -16,14 +16,6 @@ const tipoLabel: Record<string, string> = {
   chacra: "Chacra / Campo",
 };
 
-const categoriaLabel: Record<string, string> = {
-  venta: "Casa / Residencia",
-  alquiler: "Corporativo",
-  desarrollo: "Oportunidad",
-  lote: "Frente al Lago",
-  chacra: "Fracción",
-};
-
 export interface PropiedadDestacada {
   id: string;
   titulo: string;
@@ -500,10 +492,6 @@ export default function PropiedadesDestacadasHome({
               const precioLabel = p.precio
                 ? `${p.moneda} ${p.precio.toLocaleString("es-AR")}`
                 : "Consultar precio";
-              const usdM2 = calcularUsdM2(p);
-              const valorM2 = usdM2
-                ? `${p.moneda} ${usdM2.toLocaleString("es-AR")}/m²`
-                : null;
               const isComparando = compararIds.includes(p.id);
 
               const detailHref = `/proyectos/${p.id}`;
@@ -609,19 +597,11 @@ export default function PropiedadesDestacadasHome({
                       className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/20 to-transparent pointer-events-none"
                     />
 
-                    {/* Badge Superior Izquierdo: Índice + Tipo */}
-                    <div className="absolute top-3.5 left-3.5 flex flex-wrap items-center gap-1.5">
-                      <span className="rd-label !text-[9.5px] !tracking-[0.18em] rounded-full bg-[#070E1B]/85 backdrop-blur-md text-dorado border border-white/15 px-2.5 py-1">
-                        0{idx + 1}
-                      </span>
-                      <span className="rd-label !text-[9px] !tracking-[0.18em] rounded-full bg-dorado text-tierra px-3 py-1 shadow-sm">
+                    {/* Badge Superior Izquierdo Minimalista */}
+                    <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5">
+                      <span className="rd-label !text-[10px] !tracking-[0.16em] rounded-full bg-dorado text-tierra px-3 py-1 shadow-sm">
                         {tipoLabel[p.tipo] ?? p.tipo}
                       </span>
-                      {p.destacado_badge && (
-                        <span className="rd-label !text-[8.5px] !tracking-[0.15em] rounded-full bg-navy-950/85 text-dorado border border-dorado/40 px-2.5 py-1">
-                          {p.destacado_badge}
-                        </span>
-                      )}
                     </div>
 
                     {/* Botón Comparar Superior Derecho */}
@@ -637,33 +617,26 @@ export default function PropiedadesDestacadasHome({
                       {isComparando ? "✓ Comparando" : "+ Comparar"}
                     </button>
 
-                    {/* Precio flotante sobre la foto con tipografía condensada se7endev */}
+                    {/* Precio flotante sobre la foto */}
                     <div className="absolute bottom-3.5 left-4 right-4 flex items-end justify-between gap-2 pointer-events-none">
-                      <div>
-                        <p className="rd-condensed text-white text-[1.65rem] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-                          {precioLabel}
-                        </p>
-                        {valorM2 && (
-                          <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-dorado/95 block mt-1">
-                            {valorM2}
-                          </span>
-                        )}
-                      </div>
-                      <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-white bg-navy-950/80 border border-white/15 px-2.5 py-1 rounded-full">
+                      <p className="rd-condensed text-white text-2xl sm:text-[1.75rem] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+                        {precioLabel}
+                      </p>
+                      <span className="font-body text-xs font-medium text-white bg-navy-950/80 border border-white/15 px-3 py-1 rounded-full">
                         {p.ciudad.split(",")[0]}
                       </span>
                     </div>
                   </div>
 
-                  {/* Body Content */}
+                  {/* Body Content Minimalista */}
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <p className="rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B] truncate">
+                      <div className="flex items-center justify-between gap-2 mb-2 text-xs font-body text-[#8A6A1B] font-medium">
+                        <span className="truncate">
                           {p.barrio ? `${p.barrio}` : p.ciudad}
-                        </p>
-                        <span className="rd-label !text-[9px] !tracking-[0.14em] text-navy/45 shrink-0">
-                          {categoriaLabel[p.tipo] ?? p.tipo}
+                        </span>
+                        <span className="text-navy/60 shrink-0">
+                          {formatSuperficie(p.superficie_m2)}
                         </span>
                       </div>
                       <button
@@ -671,37 +644,21 @@ export default function PropiedadesDestacadasHome({
                         onClick={() => abrirQuickView(p)}
                         className="text-left w-full"
                       >
-                        <h3 className="font-display text-navy text-lg font-medium tracking-tight leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
+                        <h3 className="font-display text-navy text-xl font-medium tracking-tight leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-5 line-clamp-2">
                           {p.titulo}
                         </h3>
                       </button>
-
-                      {/* Metadatos: Superficie & Seguridad con Hairline */}
-                      <div className="grid grid-cols-2 gap-2 py-3 border-y border-navy/10 mb-5 rd-label !text-[10px] !tracking-[0.14em] text-navy/70">
-                        <div className="flex items-center gap-2">
-                          <SurfaceIcon />
-                          <span className="truncate">
-                            {formatSuperficie(p.superficie_m2)}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[#8A6A1B] justify-end">
-                          <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
-                          <span className="truncate">
-                            Mat. 35 RP 2026
-                          </span>
-                        </div>
-                      </div>
                     </div>
 
                     {/* Action buttons con estilo se7endev */}
-                    <div className="flex items-center gap-2 pt-1">
+                    <div className="flex items-center gap-2 pt-3 border-t border-navy/10">
                       <button
                         type="button"
                         onClick={() => abrirQuickView(p)}
-                        className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[9.5px] !tracking-[0.16em] pl-4 pr-1.5 py-1.5 shadow-sm"
+                        className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-4 pr-1.5 py-2 shadow-sm"
                       >
-                        <span className="rd-roll" data-text="Vista Rápida & Visita">
-                          <span>Vista Rápida &amp; Visita</span>
+                        <span className="rd-roll" data-text="Vista Rápida">
+                          <span>Vista Rápida</span>
                         </span>
                         <span className="rd-btn__icon w-6 h-6 bg-dorado text-tierra">
                           ↗
@@ -710,7 +667,7 @@ export default function PropiedadesDestacadasHome({
 
                       <Link
                         href={detailHref}
-                        className="inline-flex items-center justify-center px-3.5 py-2.5 rounded-full border border-navy/15 text-navy/80 hover:text-[#8A6A1B] hover:border-dorado rd-label !text-[9.5px] !tracking-[0.16em] transition-colors"
+                        className="inline-flex items-center justify-center px-4 py-2.5 rounded-full border border-navy/15 text-navy/80 hover:text-[#8A6A1B] hover:border-dorado rd-label !text-[10px] !tracking-[0.16em] transition-colors"
                       >
                         Ficha
                       </Link>
@@ -1187,23 +1144,5 @@ export default function PropiedadesDestacadasHome({
         )}
       </AnimatePresence>
     </section>
-  );
-}
-
-function SurfaceIcon() {
-  return (
-    <svg
-      className="w-3.5 h-3.5 text-dorado shrink-0"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-      />
-    </svg>
   );
 }

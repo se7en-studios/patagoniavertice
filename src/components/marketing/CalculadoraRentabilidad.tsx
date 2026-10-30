@@ -156,14 +156,13 @@ export default function CalculadoraRentabilidad() {
         id="calculadora-inversion"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-          {/* Header Editorial estilo se7endev */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 pb-7 border-b border-navy/10">
+          {/* Header Editorial */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 pb-8 border-b border-navy/10">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <span className="rd-label !text-[10px] text-navy/40">[06]</span>
                 <div className="h-px w-8 bg-dorado" />
-                <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
-                  Simulador Patrimonial en USD
+                <span className="rd-label !text-xs !tracking-[0.24em] text-[#8A6A1B]">
+                  Simulador Patrimonial
                 </span>
               </div>
               <h2
@@ -175,17 +174,15 @@ export default function CalculadoraRentabilidad() {
                 Proyectá el rendimiento de tu{" "}
                 <em className="rd-serif text-[#A47C1B]">capital.</em>
               </h2>
-              <p className="font-body text-navy/65 text-sm lg:text-base max-w-xl mt-3.5">
-                Compará tasas de apreciación de tierra en Mari Menuco frente a
-                renta corporativa en el corredor energético de Río Negro y
-                Neuquén.
+              <p className="font-body text-navy/70 text-base lg:text-lg max-w-xl mt-3.5">
+                Tasas de apreciación en Mari Menuco y renta corporativa en Neuquén y Río Negro.
               </p>
             </div>
 
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-navy/10 bg-[#F6F8FB] px-4 py-2 self-start lg:self-auto">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-navy/10 bg-[#F6F8FB] px-5 py-2.5 self-start lg:self-auto shadow-sm">
               <ShieldCheck className="w-4 h-4 text-[#8A6A1B]" />
-              <span className="rd-label !text-[10px] !tracking-[0.18em] text-navy/75">
-                Parámetros de Mercado Real 2026
+              <span className="rd-label !text-xs !tracking-[0.16em] text-navy/75">
+                Mercado Real 2026
               </span>
             </div>
           </div>
@@ -196,10 +193,10 @@ export default function CalculadoraRentabilidad() {
             <div className="lg:col-span-6 p-7 sm:p-9 rounded-[2rem] bg-[#F6F8FB] border border-navy/10 flex flex-col justify-between space-y-7">
               {/* 1. Estrategia */}
               <div>
-                <label className="block rd-label !text-[10px] !tracking-[0.2em] text-navy/55 mb-3">
-                  [01 · ESTRATEGIA DE INVERSIÓN]
+                <label className="block rd-label !text-xs !tracking-[0.2em] text-navy/60 mb-3.5">
+                  Estrategia de Inversión
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {MODELOS_INVERSION.map((mod) => {
                     const active = modeloSeleccionado.id === mod.id;
                     return (
@@ -220,11 +217,11 @@ export default function CalculadoraRentabilidad() {
                           {mod.nombre}
                         </span>
                         <span
-                          className={`rd-label !text-[9.5px] !tracking-[0.14em] block ${
+                          className={`rd-label !text-[10px] !tracking-[0.14em] block ${
                             active ? "text-dorado" : "text-[#8A6A1B]"
                           }`}
                         >
-                          ROI Est: ~{mod.roiAnual}% + {mod.plusvaliaAnual}% Plusvalía
+                          ~{mod.roiAnual}% ROI + {mod.plusvaliaAnual}% Plusvalía
                         </span>
                       </button>
                     );
@@ -234,9 +231,9 @@ export default function CalculadoraRentabilidad() {
 
               {/* 2. Slider Capital */}
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <label className="rd-label !text-[10px] !tracking-[0.2em] text-navy/55">
-                    [02 · CAPITAL INICIAL (USD)]
+                <div className="flex items-center justify-between mb-3.5">
+                  <label className="rd-label !text-xs !tracking-[0.2em] text-navy/60">
+                    Capital Inicial (USD)
                   </label>
                   <span className="rd-condensed text-navy text-2xl sm:text-3xl">
                     USD {montoUSD.toLocaleString("es-AR")}
@@ -257,7 +254,7 @@ export default function CalculadoraRentabilidad() {
                   className="w-full accent-[#0B1528] cursor-pointer h-2 bg-navy/15 rounded-full appearance-none"
                 />
 
-                <div className="flex justify-between rd-label !text-[9.5px] !tracking-[0.14em] text-navy/45 mt-2">
+                <div className="flex justify-between rd-label !text-[10px] !tracking-[0.14em] text-navy/45 mt-2.5">
                   <span>USD 20.000</span>
                   <span>USD 150.000</span>
                   <span>USD 350.000+</span>
@@ -266,10 +263,10 @@ export default function CalculadoraRentabilidad() {
 
               {/* 3. Horizonte */}
               <div>
-                <label className="block rd-label !text-[10px] !tracking-[0.2em] text-navy/55 mb-3">
-                  [03 · HORIZONTE DE INVERSIÓN]
+                <label className="block rd-label !text-xs !tracking-[0.2em] text-navy/60 mb-3.5">
+                  Horizonte de Inversión
                 </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 gap-2.5">
                   {[1, 2, 3, 5].map((anios) => (
                     <button
                       key={anios}
@@ -278,9 +275,9 @@ export default function CalculadoraRentabilidad() {
                         marcarUso("horizonte");
                         setHorizonteAnios(anios);
                       }}
-                      className={`py-2.5 text-center rounded-xl rd-label !text-[10px] !tracking-[0.16em] border transition-all ${
+                      className={`py-3 text-center rounded-xl rd-label !text-xs !tracking-[0.16em] border transition-all ${
                         horizonteAnios === anios
-                          ? "border-dorado bg-[#FBF0CF] text-navy"
+                          ? "border-dorado bg-[#FBF0CF] text-navy font-semibold"
                           : "border-navy/10 bg-white text-navy/60 hover:text-navy"
                       }`}
                     >
@@ -291,9 +288,9 @@ export default function CalculadoraRentabilidad() {
               </div>
 
               {/* Resumen del Modelo */}
-              <div className="p-4 rounded-2xl bg-white border border-navy/10 text-xs font-body text-navy/65 space-y-1">
-                <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-[#8A6A1B] block">
-                  Foco Territorial: {modeloSeleccionado.zonaRecomendada}
+              <div className="p-4 rounded-2xl bg-white border border-navy/10 text-xs font-body text-navy/70 space-y-1">
+                <span className="rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B] block">
+                  Foco: {modeloSeleccionado.zonaRecomendada}
                 </span>
                 <p>{modeloSeleccionado.descripcion}</p>
               </div>
@@ -304,15 +301,15 @@ export default function CalculadoraRentabilidad() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <div>
-                    <span className="rd-label !text-[10px] !tracking-[0.22em] text-dorado block">
-                      [PROYECCIÓN A {horizonteAnios}{" "}
-                      {horizonteAnios === 1 ? "AÑO" : "AÑOS"}]
+                    <span className="rd-label !text-xs !tracking-[0.22em] text-dorado block">
+                      Proyección a {horizonteAnios}{" "}
+                      {horizonteAnios === 1 ? "Año" : "Años"}
                     </span>
                     <h3 className="rd-display text-2xl sm:text-3xl text-white mt-1">
                       Patrimonio <em className="rd-serif text-dorado">Proyectado</em>
                     </h3>
                   </div>
-                  <span className="rd-label !text-[10px] !tracking-[0.16em] px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
+                  <span className="rd-label !text-xs !tracking-[0.16em] px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
                     +{porcentajeGanancia}% Neto
                   </span>
                 </div>

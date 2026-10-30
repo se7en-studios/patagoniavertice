@@ -12,12 +12,6 @@ import type { BandaLagoConfig } from "@/lib/site-config-types";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 
-const PUNTOS = [
-  "Frente al lago con bajada náutica",
-  "Agua y energía en el lote",
-  "Escrituración con martillera colegiada",
-];
-
 interface SectorMasterplan {
   id: string;
   codigo: string;
@@ -231,44 +225,32 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
               </h2>
 
               {/* Mini indicadores clave con tipografía condensada se7endev */}
-              <div className="grid grid-cols-3 mb-4 py-3 border-y border-navy/10 text-center">
+              <div className="grid grid-cols-3 mb-5 py-3.5 border-y border-navy/10 text-center">
                 <div className="px-1">
-                  <span className="block rd-condensed text-base sm:text-lg text-navy">
+                  <span className="block rd-condensed text-lg sm:text-xl text-navy">
                     {superficieRef}
                   </span>
-                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
+                  <span className="block font-body text-xs text-navy/55 mt-0.5">
                     Superficie
                   </span>
                 </div>
                 <div className="border-x border-navy/10 px-1">
-                  <span className="block rd-condensed text-base sm:text-lg text-navy">
+                  <span className="block rd-condensed text-lg sm:text-xl text-navy">
                     {distanciaRef}
                   </span>
-                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
+                  <span className="block font-body text-xs text-navy/55 mt-0.5">
                     De Neuquén
                   </span>
                 </div>
                 <div className="px-1">
-                  <span className="block rd-condensed text-base sm:text-lg text-[#8A6A1B]">
+                  <span className="block rd-condensed text-lg sm:text-xl text-[#8A6A1B]">
                     Agua + Luz
                   </span>
-                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
+                  <span className="block font-body text-xs text-navy/55 mt-0.5">
                     WakePark &amp; Club
                   </span>
                 </div>
               </div>
-
-              <ul className="space-y-1.5 mb-5">
-                {PUNTOS.map((p) => (
-                  <li
-                    key={p}
-                    className="flex items-center gap-2.5 font-body text-navy/80 text-xs sm:text-[13px]"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
 
               <div className="flex flex-col sm:flex-row gap-2.5">
                 <button
@@ -277,7 +259,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                     setEnviadoOk(false);
                     setModalMasterplan(true);
                   }}
-                  className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 shadow-sm"
+                  className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10.5px] !tracking-[0.16em] pl-5 pr-2 py-2.5 shadow-sm"
                 >
                   <span className="rd-roll" data-text="Masterplan & Sectores">
                     <span>Masterplan &amp; Sectores</span>
@@ -290,7 +272,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                   href="https://wa.me/5492996095742?text=Hola%20Estela%20(ALTUM%20SCI)%2C%20quisiera%20recibir%20informaci%C3%B3n%20sobre%20los%20lotes%20en%20Mari%20Menuco."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-navy/15 bg-white hover:border-navy px-4 py-2.5 rd-label !text-[10px] !tracking-[0.16em] text-navy transition-colors"
+                  className="inline-flex items-center justify-center rounded-full border border-navy/15 bg-white hover:border-navy px-4 py-2.5 rd-label !text-[10.5px] !tracking-[0.16em] text-navy transition-colors"
                 >
                   WhatsApp
                 </a>
@@ -300,29 +282,9 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
         </div>
       </div>
 
-      {/* Franja Interactiva de los 4 Sectores del Masterplan (Grilla Hairline Editorial) */}
+      {/* Franja Interactiva de los 4 Sectores del Masterplan (Minimalista sin texto chico) */}
       <div className="max-w-7xl mx-auto mt-6">
         <div className="rounded-[1.85rem] bg-white border border-navy/10 overflow-hidden shadow-[0_18px_40px_-26px_rgba(14,26,51,0.16)]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 bg-[#FBFBFD] border-b border-navy/10">
-            <div className="flex items-center gap-3">
-              <span className="rd-label !text-[10px] text-navy/40">[01]</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
-              <span className="rd-label !text-[10px] !tracking-[0.2em] text-[#8A6A1B]">
-                Masterplan Interactivo · 4 Sectores Disponibles en Bahía de las Playas
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setEnviadoOk(false);
-                setModalMasterplan(true);
-              }}
-              className="rd-label !text-[10px] !tracking-[0.16em] text-navy hover:text-[#8A6A1B] transition-colors text-left sm:text-right"
-            >
-              Solicitar plano catastral y disponibilidad ↗
-            </button>
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-navy/10">
             {SECTORES_BAHIA.map((sec, idx) => {
               const isSelected = sec.id === sectorActivo.id;
@@ -339,23 +301,23 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                     setEnviadoOk(false);
                     setModalMasterplan(true);
                   }}
-                  className={`group text-left p-5 sm:p-6 transition-all duration-300 flex flex-col justify-between ${
+                  className={`group text-left p-6 transition-all duration-300 flex flex-col justify-between ${
                     isSelected
                       ? "bg-[#0B1528] text-white"
                       : "bg-white hover:bg-[#F6F8FB] text-navy"
                   }`}
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center justify-between gap-2 mb-2">
                       <span
                         className={`rd-label !text-[10px] !tracking-[0.18em] ${
                           isSelected ? "text-dorado" : "text-[#8A6A1B]"
                         }`}
                       >
-                        [0{idx + 1}] · {sec.codigo}
+                        {sec.codigo}
                       </span>
                       <span
-                        className={`rd-label !text-[9px] !tracking-[0.14em] px-2.5 py-0.5 rounded-full ${
+                        className={`font-body text-xs px-2.5 py-0.5 rounded-full ${
                           isSelected
                             ? "bg-white/10 text-white/90"
                             : "bg-navy/[0.06] text-navy/70"
@@ -366,31 +328,23 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                     </div>
 
                     <h3
-                      className={`font-display text-lg font-medium tracking-tight mb-1.5 ${
+                      className={`font-display text-lg sm:text-xl font-medium tracking-tight mb-3 ${
                         isSelected ? "text-white" : "text-navy group-hover:text-[#8A6A1B]"
                       } transition-colors`}
                     >
                       {sec.nombre}
                     </h3>
-
-                    <p
-                      className={`font-body text-xs line-clamp-2 mb-4 leading-relaxed ${
-                        isSelected ? "text-white/65" : "text-navy/60"
-                      }`}
-                    >
-                      {sec.descripcion}
-                    </p>
                   </div>
 
                   <div
-                    className={`flex items-center justify-between pt-3 border-t rd-label !text-[10px] !tracking-[0.14em] ${
+                    className={`flex items-center justify-between pt-3 border-t ${
                       isSelected
                         ? "border-white/12 text-dorado"
-                        : "border-navy/10 text-navy/80"
+                        : "border-navy/10 text-navy"
                     }`}
                   >
-                    <span>{sec.precioRef}</span>
-                    <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+                    <span className="rd-condensed text-base">{sec.precioRef}</span>
+                    <span className="text-xs opacity-70 transition-transform duration-300 group-hover:translate-x-0.5">
                       {sec.superficie} ↗
                     </span>
                   </div>

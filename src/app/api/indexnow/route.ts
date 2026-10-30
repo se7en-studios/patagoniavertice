@@ -11,6 +11,14 @@ export async function POST(request: Request) {
     };
 
     const host = new URL(siteUrl).host;
+    const showcaseIds = [
+      "mari-menuco-primera-linea",
+      "residencia-cipolletti-premium",
+      "lote-panoramico-mari-menuco",
+      "fraccion-desarrollo-alto-valle",
+      "departamento-corporativo-cipolletti",
+      "lote-segunda-linea-playas",
+    ];
     const urlList =
       body.urls && body.urls.length > 0
         ? body.urls
@@ -19,7 +27,14 @@ export async function POST(request: Request) {
             `${siteUrl}/en`,
             `${siteUrl}/proyectos`,
             `${siteUrl}/guias`,
+            `${siteUrl}/inmobiliaria-cipoletti`,
+            `${siteUrl}/inmobiliaria-catriel`,
+            `${siteUrl}/propiedades-rio-negro`,
+            `${siteUrl}/servicios`,
+            `${siteUrl}/nosotros`,
+            `${siteUrl}/contacto`,
             ...GUIAS_SEO.map((g) => `${siteUrl}/guias/${g.slug}`),
+            ...showcaseIds.map((id) => `${siteUrl}/proyectos/${id}`),
           ];
 
     const payload = {

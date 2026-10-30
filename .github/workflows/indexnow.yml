@@ -1,0 +1,22 @@
+name: IndexNow — Notify Bing & ChatGPT Search
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  notify-indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel production deployment to settle
+        run: sleep 45
+
+      - name: Ping ALTUM SCI IndexNow endpoint
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST https://altumsci.com.ar/api/indexnow)
+          body=$(echo "$response" | head -n -1)
+          status=$(echo "$response" | tail -n 1)
+          echo "IndexNow Status: $status"
+          echo "Response: $body"

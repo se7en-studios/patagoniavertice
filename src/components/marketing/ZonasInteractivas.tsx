@@ -9,6 +9,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import type { ZonaConfig } from "@/lib/site-config-types";
 
 interface ZonaInfo {
   id: string;
@@ -93,8 +94,38 @@ const ZONAS_PATAGONIA: ZonaInfo[] = [
   },
 ];
 
-export default function ZonasInteractivas() {
-  const [zonaActiva, setZonaActiva] = useState<ZonaInfo>(ZONAS_PATAGONIA[0]);
+export default function ZonasInteractivas({
+  zonasCustom,
+}: {
+  zonasCustom?: ZonaConfig[];
+}) {
+  const zonasData: ZonaInfo[] =
+    zonasCustom && zonasCustom.length > 0
+      ? zonasCustom
+          .filter((z) => z.activo !== false)
+          .map((zc, idx) => {
+            const base =
+              ZONAS_PATAGONIA.find((b) => b.id === zc.id) ||
+              ZONAS_PATAGONIA[idx % ZONAS_PATAGONIA.length];
+            return {
+              ...base,
+              id: zc.id,
+              nombre: zc.nombre || base.nombre,
+              provincia: zc.provincia || base.provincia,
+              tagline: zc.destacado || base.tagline,
+              descripcion: zc.descripcion || base.descripcion,
+              tipoInversion: zc.tipoInversion || base.tipoInversion,
+            };
+          })
+      : ZONAS_PATAGONIA;
+
+  const [zonaActivaId, setZonaActivaId] = useState<string>(
+    zonasData[0]?.id ?? ZONAS_PATAGONIA[0].id,
+  );
+  const zonaActiva =
+    zonasData.find((z) => z.id === zonaActivaId) ||
+    zonasData[0] ||
+    ZONAS_PATAGONIA[0];
   const reduced = useReducedMotion();
   const reveal = (delay = 0) =>
     reduced
@@ -161,13 +192,13 @@ export default function ZonasInteractivas() {
 
         {/* Territory Tabs Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-          {ZONAS_PATAGONIA.map((zona, i) => {
+          {zonasData.map((zona, i) => {
             const isSelected = zona.id === zonaActiva.id;
             return (
               <motion.button
                 key={zona.id}
                 {...reveal(0.08 * i)}
-                onClick={() => setZonaActiva(zona)}
+                onClick={() => setZonaActivaId(zona.id)}
                 aria-pressed={isSelected}
                 className={`p-4 text-left border rounded-2xl transition-colors relative overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado ${
                   isSelected

@@ -124,7 +124,7 @@ export default async function HomePage() {
       </div>
 
       <div id="sec-zonas">
-        <ZonasInteractivas />
+        <ZonasInteractivas zonasCustom={siteConfig.zonas} />
       </div>
 
       <GuiaInversion />

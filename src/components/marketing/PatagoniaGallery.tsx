@@ -1,92 +1,75 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
 
 const IMAGES = [
   {
+    url: "/mari-menuco/bahia-playas-1.jpg",
+    alt: "Bahía de las Playas - Lago Mari Menuco",
+    caption: "Lago Mari Menuco · Neuquén",
+  },
+  {
     url: "/casa.avif",
-    alt: "Casa junto al lago - Patagonia",
-    caption: "Neuquén, Patagonia",
+    alt: "Residencias de categoría en Cipolletti",
+    caption: "Cipolletti · Río Negro",
   },
   {
     url: "/bosque.avif",
-    alt: "Bosque patagónico",
-    caption: "Río Negro · Neuquén",
-  },
-  {
-    url: "/noche.avif",
-    alt: "Patagonia de noche",
-    caption: "Patagonia Argentina",
+    alt: "Entorno natural patagónico",
+    caption: "Corredor Patagónico",
   },
 ];
 
 export default function PatagoniaGallery() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -30]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -20]);
-
   return (
-    <div
-      ref={ref}
-      className="grid grid-cols-2 grid-rows-2 gap-2 h-[500px] md:h-[580px]"
-    >
+    <div className="grid grid-cols-2 grid-rows-2 gap-3.5 h-[440px] sm:h-[520px] md:h-[560px]">
       {/* Imagen 1 - ocupa las 2 filas izquierda */}
-      <motion.div
-        style={{ y: y1 }}
-        className="relative row-span-2 overflow-hidden group"
-      >
+      <div className="relative row-span-2 overflow-hidden rounded-3xl border border-dorado/25 shadow-lg group">
         <Image
           src={IMAGES[0].url}
           alt={IMAGES[0].alt}
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 35vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <span className="absolute bottom-3 left-3 text-xs text-white/80 tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent" />
+        <span className="absolute bottom-4 left-4 right-4 text-[11px] font-body font-medium text-white tracking-wider uppercase">
           {IMAGES[0].caption}
         </span>
-      </motion.div>
+      </div>
 
       {/* Imagen 2 - fila superior derecha */}
-      <motion.div style={{ y: y2 }} className="relative overflow-hidden group">
+      <div className="relative overflow-hidden rounded-3xl border border-dorado/20 shadow-md group">
         <Image
           src={IMAGES[1].url}
           alt={IMAGES[1].alt}
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <span className="absolute bottom-3 left-3 text-xs text-white/80 tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-transparent to-transparent" />
+        <span className="absolute bottom-3.5 left-4 text-[10px] font-body font-medium text-white tracking-wider uppercase">
           {IMAGES[1].caption}
         </span>
-      </motion.div>
+      </div>
 
       {/* Imagen 3 - fila inferior derecha con badge */}
-      <motion.div style={{ y: y3 }} className="relative overflow-hidden group">
+      <div className="relative overflow-hidden rounded-3xl border border-dorado/20 shadow-md group">
         <Image
           src={IMAGES[2].url}
           alt={IMAGES[2].alt}
           fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div
-          className="absolute top-3 right-3 px-2 py-1 text-xs font-medium tracking-widest uppercase z-10"
-          style={{ backgroundColor: "#C9A84C", color: "#1A2752" }}
-        >
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-transparent to-transparent" />
+        <div className="absolute top-3.5 right-3.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase z-10 bg-dorado text-tierra shadow-sm">
           Patagonia
         </div>
-      </motion.div>
+        <span className="absolute bottom-3.5 left-4 text-[10px] font-body font-medium text-white tracking-wider uppercase">
+          {IMAGES[2].caption}
+        </span>
+      </div>
     </div>
   );
 }

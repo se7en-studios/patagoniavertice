@@ -37,6 +37,15 @@ export const metadata: Metadata = {
   publisher: siteName,
   category: "Real Estate",
   verification: { google: "googled9f5728c228e184a" },
+  icons: {
+    icon: [
+      { url: "/favicon-altum.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: ["/favicon-altum.png"],
+    apple: [
+      { url: "/favicon-altum.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "es_AR",
@@ -44,11 +53,20 @@ export const metadata: Metadata = {
     siteName,
     title: defaultTitle,
     description: defaultDescription,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: defaultTitle,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: defaultTitle,
     description: defaultDescription,
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,

@@ -26,6 +26,14 @@ export const metadata: Metadata = {
       "ALTUM SCI · Servicios & Consultoría Inmobiliaria - Neuquén & Patagonia",
     description:
       "Terrenos frente al lago Mari Menuco, loteos y residencias en Neuquén y Río Negro. Seguridad jurídica, confidencialidad y transparencia total.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ALTUM SCI · Servicios & Consultoría Inmobiliaria",
+      },
+    ],
   },
 };
 

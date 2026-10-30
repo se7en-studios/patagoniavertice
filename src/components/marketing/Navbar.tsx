@@ -11,7 +11,7 @@ const links = [
   { href: "/", label: "Inicio" },
   { href: "/proyectos", label: "Propiedades" },
   { href: "/servicios", label: "Servicios" },
-  { href: "/#tasador-express", label: "Tasaciones" },
+  { href: "/#sec-tasador", label: "Tasaciones" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
@@ -68,16 +68,12 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-16 md:h-20">
         {/* ── Logo & Brand ── */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div className="flex items-center justify-center rounded-2xl bg-[#0B1528] px-3 py-1.5 border border-dorado/40 shadow-[0_6px_18px_-6px_rgba(14,26,51,0.35)] group-hover:border-dorado transition-colors">
+          <div className="flex items-center justify-center rounded-2xl bg-white px-2.5 py-1.5 border border-dorado/45 shadow-[0_6px_18px_-6px_rgba(14,26,51,0.22)] group-hover:border-dorado transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logoo.png"
+              src="/logo-altum-crop.png"
               alt="ALTUM SCI - Servicios y Consultoría Inmobiliaria"
-              className="h-8 md:h-10 w-auto object-contain"
-              style={{
-                mixBlendMode: "screen",
-                filter: "brightness(1.12)",
-              }}
+              className="h-8 md:h-9 w-auto object-contain"
             />
           </div>
           <div className="hidden xl:flex flex-col pl-1">

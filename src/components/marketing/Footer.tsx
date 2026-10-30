@@ -160,17 +160,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           {/* Col 1: Identidad & Respaldo Colegiado (4 cols) */}
           <div className="lg:col-span-4 space-y-5">
-            <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="rounded-2xl bg-white/[0.04] border border-white/10 px-3.5 py-2 group-hover:border-dorado/50 transition-colors">
+            <Link href="/" className="inline-flex items-center gap-3.5 group">
+              <div className="rounded-2xl bg-white border border-dorado/45 px-3 py-2 shadow-md group-hover:border-dorado transition-colors">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/logoo.png"
+                  src="/logo-altum-crop.png"
                   alt="ALTUM SCI"
                   className="h-10 sm:h-11 w-auto object-contain"
-                  style={{
-                    mixBlendMode: "screen",
-                    filter: "brightness(1.15)",
-                  }}
                 />
               </div>
               <div>

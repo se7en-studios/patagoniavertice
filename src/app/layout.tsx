@@ -49,7 +49,12 @@ export const metadata: Metadata = {
   creator: siteName,
   publisher: siteName,
   category: "Real Estate",
-  verification: { google: "googled9f5728c228e184a" },
+  verification: {
+    google: "googled9f5728c228e184a",
+    other: {
+      "msvalidate.01": "AA6CC44F6736669A963F04071BDA74A2",
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon-altum.png", type: "image/png", sizes: "512x512" },
@@ -90,11 +95,6 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
-    },
-  },
-  verification: {
-    other: {
-      "msvalidate.01": "AA6CC44F6736669A963F04071BDA74A2",
     },
   },
 };

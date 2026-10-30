@@ -9,7 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowRight, TrendingUp, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 interface ModeloInversion {

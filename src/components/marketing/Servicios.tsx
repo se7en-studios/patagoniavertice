@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ArrowRight,
   Building2,
   FileSignature,
   KeyRound,

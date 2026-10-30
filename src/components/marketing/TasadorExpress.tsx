@@ -11,7 +11,6 @@ import {
   Store,
   CheckCircle2,
   ArrowRight,
-  Sparkles,
 } from "lucide-react";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
 import { track } from "@/lib/analytics";

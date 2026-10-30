@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShieldCheck, MapPin, Award, ArrowRight } from "lucide-react";
+import { ShieldCheck, MapPin, Award } from "lucide-react";
 
 export interface PerfilProps {
   nombre?: string;

@@ -2,9 +2,34 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { faqs } from "@/components/seo/faqData";
 import type { FaqLandingItem } from "@/lib/site-config-types";
+
+const GUIAS_EDITORIAL_HIGHLIGHTS = [
+  {
+    num: "01",
+    tag: "Comparativa 2026",
+    titulo: "Lago Mari Menuco vs. Bariloche y Villa La Angostura",
+    resumen: "Ticket de ingreso desde USD 32.000 vs. USD 95.000+ y plusvalía anual proyectada.",
+    href: "/guias/lago-mari-menuco-vs-bariloche-villa-la-angostura-inversion",
+  },
+  {
+    num: "02",
+    tag: "Análisis de Renta",
+    titulo: "Lote en Mari Menuco vs. Departamento en Cipolletti",
+    resumen: "Comparativa entre flujo de alquiler inmediato (6–8%) y apreciación de tierra (11–14%).",
+    href: "/guias/invertir-lote-lago-mari-menuco-vs-departamento-cipolletti-neuquen",
+  },
+  {
+    num: "03",
+    tag: "Debida Diligencia",
+    titulo: "Cómo comprar un terreno en Mari Menuco sin riesgos legales",
+    resumen: "Los 5 controles notariales y catastrales previos antes de firmar reserva o boleto.",
+    href: "/guias/como-comprar-terreno-lago-mari-menuco-debida-diligencia",
+  },
+];
 
 const categorias = [
   "Todas",
@@ -45,35 +70,99 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
 
   return (
     <section
-      className="py-16 lg:py-22 bg-white border-t border-navy/[0.06] relative overflow-hidden text-navy"
+      className="py-16 lg:py-24 bg-white border-t border-navy/10 relative overflow-hidden text-navy"
       aria-labelledby="faq-heading"
       id="faq"
     >
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+        {/* ── Tira Editorial: Informes & Comparativas de Inversión 2026 ── */}
+        <div className="mb-16 pb-14 border-b border-navy/10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+            <div>
+              <div className="flex items-center gap-3 mb-2.5">
+                <span className="rd-label !text-[10px] text-navy/40">[08]</span>
+                <div className="h-px w-8 bg-dorado" />
+                <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B]">
+                  Research &amp; Comparativas Patrimoniales
+                </span>
+              </div>
+              <h3 className="rd-display text-2xl sm:text-3xl text-navy">
+                Guías técnicas para invertir en{" "}
+                <em className="rd-serif text-[#A47C1B]">Patagonia Norte</em>
+              </h3>
+            </div>
+
+            <Link
+              href="/guias"
+              className="rd-btn self-start sm:self-auto bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2"
+            >
+              <span className="rd-roll" data-text="Ver las 6 Guías Completas">
+                <span>Ver las 6 Guías Completas</span>
+              </span>
+              <span className="rd-btn__icon w-7 h-7 bg-dorado text-tierra">
+                ↗
+              </span>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-navy/10 rounded-[1.75rem] border border-navy/10 bg-[#F6F8FB] overflow-hidden">
+            {GUIAS_EDITORIAL_HIGHLIGHTS.map((g) => (
+              <Link
+                key={g.href}
+                href={g.href}
+                className="group p-6 hover:bg-white transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B]">
+                      [{g.num} · {g.tag}]
+                    </span>
+                    <span className="rd-label !text-[10px] text-navy/35 group-hover:text-dorado transition-colors">
+                      ↗
+                    </span>
+                  </div>
+                  <h4 className="font-display text-base sm:text-lg font-medium tracking-tight text-navy group-hover:text-[#8A6A1B] transition-colors leading-snug mb-2">
+                    {g.titulo}
+                  </h4>
+                  <p className="font-body text-xs text-navy/60 leading-relaxed">
+                    {g.resumen}
+                  </p>
+                </div>
+                <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-navy/70 group-hover:text-[#8A6A1B] mt-4 pt-3 border-t border-navy/10 block">
+                  Leer informe técnico completo →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left: Sticky Header & Search */}
           <div className="lg:col-span-5 lg:sticky lg:top-32 lg:self-start space-y-6">
-            <span className="inline-flex items-center rounded-full bg-[#FBF0CF] text-[#7A5A12] font-body text-[11px] font-semibold tracking-[0.14em] uppercase px-3.5 py-1.5">
-              Dudas &amp; Asesoramiento
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="rd-label !text-[10px] text-navy/40">[09]</span>
+              <div className="h-px w-8 bg-dorado" />
+              <span className="rd-label !text-[10px] !tracking-[0.22em] text-[#8A6A1B]">
+                Dudas &amp; Asesoramiento Colegiado
+              </span>
+            </div>
 
             <h2
               id="faq-heading"
-              className="font-display font-medium text-navy leading-[1.05]"
+              className="rd-display text-navy"
               style={{
-                fontSize: "clamp(2.3rem, 4.2vw, 3.6rem)",
-                letterSpacing: "-0.03em",
+                fontSize: "clamp(2.35rem, 4.2vw, 3.6rem)",
               }}
             >
               Preguntas{" "}
-              <em className="font-editorial italic text-[#A47C1B] font-normal">
+              <em className="rd-serif text-[#A47C1B]">
                 frecuentes
               </em>
             </h2>
 
-            <p className="font-body text-navy/60 text-sm lg:text-base leading-relaxed">
+            <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
               Resolvemos tus inquietudes sobre trámites de compraventa,
-              tasaciones, contratos y gestión de alquileres en Río Negro.
+              tasaciones, contratos y gestión de alquileres en Río Negro y Neuquén.
             </p>
 
             {/* Buscador de preguntas */}
@@ -84,7 +173,7 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                 onChange={(e) => setBusqueda(e.target.value)}
                 aria-label="Buscar en las preguntas frecuentes"
                 placeholder="Buscar duda o tema (ej: tasación, escritura)..."
-                className="w-full rounded-full bg-white border border-navy/10 shadow-sm px-5 py-3.5 text-sm font-body text-navy placeholder:text-navy/45 focus:outline-none focus:border-dorado transition-colors"
+                className="w-full rounded-full bg-[#F6F8FB] border border-navy/12 shadow-sm px-5 py-3.5 text-sm font-body text-navy placeholder:text-navy/45 focus:outline-none focus:border-dorado focus:bg-white transition-colors"
               />
               {busqueda && (
                 <button
@@ -103,7 +192,7 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                 href="https://wa.me/5492996095742?text=Hola%20Estela%20(ALTUM%20SCI)%2C%20tengo%20una%20consulta%20que%20no%20figura%20en%20las%20preguntas%20frecuentes."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-dorado/30 hover:border-dorado shadow-sm transition-all"
+                className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#F6F8FB] hover:bg-white border border-navy/10 hover:border-dorado shadow-sm transition-all"
               >
                 <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-dorado/50 shrink-0">
                   <Image
@@ -118,8 +207,8 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                   <span className="block font-display text-sm font-semibold text-navy group-hover:text-[#8A6A1B] transition-colors">
                     ¿Tenés una consulta específica?
                   </span>
-                  <span className="block font-body text-[11px] text-navy/60">
-                    Hablá directo con Estela por WhatsApp →
+                  <span className="block rd-label !text-[9.5px] !tracking-[0.14em] text-navy/60 mt-0.5">
+                    Hablar directo con Estela por WhatsApp ↗
                   </span>
                 </div>
               </a>
@@ -137,9 +226,9 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                     setCategoriaActiva(cat);
                     setOpenIndex(0);
                   }}
-                  className={`font-body text-[10px] tracking-[0.16em] uppercase px-4 py-2.5 rounded-full border transition-all ${
+                  className={`rd-label !text-[10px] !tracking-[0.16em] px-4 py-2.5 rounded-full border transition-all ${
                     categoriaActiva === cat
-                      ? "border-dorado bg-dorado text-tierra font-semibold shadow-sm"
+                      ? "border-[#0B1528] bg-[#0B1528] text-white shadow-sm"
                       : "border-navy/10 bg-white text-navy/60 hover:text-navy hover:border-navy/30"
                   }`}
                 >
@@ -148,26 +237,24 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
               ))}
             </div>
 
-            {/* FAQ Items: cada tarjeta entra con el scroll, escalonada */}
-            <div className="space-y-3">
+            {/* FAQ Items con numeración arquitectónica */}
+            <div className="divide-y divide-navy/10 rounded-[1.85rem] border border-navy/10 bg-[#F6F8FB] overflow-hidden">
               {filtradas.length > 0 ? (
                 filtradas.map((faq, i) => {
                   const isOpen = openIndex === i;
                   return (
                     <motion.div
                       key={faq.pregunta}
-                      initial={{ opacity: 0, y: 28 }}
+                      initial={{ opacity: 0, y: 16 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-40px" }}
                       transition={{
-                        duration: 0.6,
-                        delay: Math.min(i, 5) * 0.07,
+                        duration: 0.45,
+                        delay: Math.min(i, 5) * 0.05,
                         ease: [0.16, 1, 0.3, 1],
                       }}
-                      className={`rounded-3xl bg-white border px-6 py-5 transition-all duration-300 ${
-                        isOpen
-                          ? "border-dorado/50 shadow-[0_18px_40px_-24px_rgba(14,26,51,0.35)]"
-                          : "border-white shadow-[0_8px_24px_-18px_rgba(14,26,51,0.25)] hover:border-navy/10"
+                      className={`px-6 py-5 transition-colors duration-300 ${
+                        isOpen ? "bg-white" : "hover:bg-white/70"
                       }`}
                     >
                       <button
@@ -175,16 +262,21 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                         className="w-full flex items-start justify-between gap-4 text-left group"
                         aria-expanded={isOpen}
                       >
-                        <span className="font-display font-medium text-navy group-hover:text-[#8A6A1B] transition-colors text-lg lg:text-xl leading-snug">
-                          {faq.pregunta}
-                        </span>
+                        <div className="flex items-baseline gap-3.5">
+                          <span className="rd-label !text-[10px] !tracking-[0.16em] text-[#8A6A1B] shrink-0">
+                            [0{i + 1}]
+                          </span>
+                          <span className="font-display font-medium tracking-tight text-navy group-hover:text-[#8A6A1B] transition-colors text-base sm:text-lg leading-snug">
+                            {faq.pregunta}
+                          </span>
+                        </div>
 
                         <span
                           aria-hidden="true"
-                          className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-sm transition-all duration-300 ${
+                          className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-sm transition-all duration-300 ${
                             isOpen
                               ? "rotate-45 bg-dorado text-tierra"
-                              : "bg-[#EAF0F7] text-navy"
+                              : "bg-white border border-navy/10 text-navy"
                           }`}
                         >
                           +
@@ -198,12 +290,12 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{
-                              duration: 0.35,
+                              duration: 0.32,
                               ease: [0.16, 1, 0.3, 1],
                             }}
                             className="overflow-hidden"
                           >
-                            <p className="pt-4 font-body text-sm text-navy/65 leading-relaxed">
+                            <p className="pt-3.5 pl-9 font-body text-sm text-navy/65 leading-relaxed">
                               {faq.respuesta}
                             </p>
                           </motion.div>

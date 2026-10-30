@@ -156,35 +156,35 @@ export default function CalculadoraRentabilidad() {
         id="calculadora-inversion"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-          {/* Header Minimalista */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
+          {/* Header Editorial estilo se7endev */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 pb-7 border-b border-navy/10">
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6F8FB] border border-navy/10 mb-4">
-                <TrendingUp className="w-3.5 h-3.5 text-[#8A6A1B]" />
-                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="rd-label !text-[10px] text-navy/40">[06]</span>
+                <div className="h-px w-8 bg-dorado" />
+                <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
                   Simulador Patrimonial en USD
                 </span>
               </div>
               <h2
-                className="font-display font-medium text-navy leading-[1.04]"
+                className="rd-display text-navy"
                 style={{
-                  fontSize: "clamp(2.3rem, 4.3vw, 3.6rem)",
-                  letterSpacing: "-0.03em",
+                  fontSize: "clamp(2.35rem, 4.3vw, 3.75rem)",
                 }}
               >
                 Proyectá el rendimiento de tu{" "}
-                <em className="font-editorial italic text-[#A47C1B]">capital.</em>
+                <em className="rd-serif text-[#A47C1B]">capital.</em>
               </h2>
-              <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-3">
+              <p className="font-body text-navy/65 text-sm lg:text-base max-w-xl mt-3.5">
                 Compará tasas de apreciación de tierra en Mari Menuco frente a
                 renta corporativa en el corredor energético de Río Negro y
                 Neuquén.
               </p>
             </div>
 
-            <div className="inline-flex items-center gap-2 rounded-full border border-navy/10 bg-[#F6F8FB] px-4 py-2 self-start lg:self-auto">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-navy/10 bg-[#F6F8FB] px-4 py-2 self-start lg:self-auto">
               <ShieldCheck className="w-4 h-4 text-[#8A6A1B]" />
-              <span className="font-mono text-navy/70 text-[10px] tracking-wider uppercase font-semibold">
+              <span className="rd-label !text-[10px] !tracking-[0.18em] text-navy/75">
                 Parámetros de Mercado Real 2026
               </span>
             </div>
@@ -196,8 +196,8 @@ export default function CalculadoraRentabilidad() {
             <div className="lg:col-span-6 p-7 sm:p-9 rounded-[2rem] bg-[#F6F8FB] border border-navy/10 flex flex-col justify-between space-y-7">
               {/* 1. Estrategia */}
               <div>
-                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 mb-3 font-semibold">
-                  01 · Estrategia de Inversión
+                <label className="block rd-label !text-[10px] !tracking-[0.2em] text-navy/55 mb-3">
+                  [01 · ESTRATEGIA DE INVERSIÓN]
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {MODELOS_INVERSION.map((mod) => {
@@ -212,15 +212,15 @@ export default function CalculadoraRentabilidad() {
                         }}
                         className={`p-4 text-left rounded-2xl border transition-all ${
                           active
-                            ? "border-navy bg-navy text-white shadow-sm"
+                            ? "border-[#070E1B] bg-[#070E1B] text-white shadow-sm"
                             : "border-navy/10 bg-white text-navy/70 hover:border-navy/30 hover:text-navy"
                         }`}
                       >
-                        <span className="font-display text-sm font-semibold block mb-1">
+                        <span className="font-display text-sm font-semibold tracking-tight block mb-1">
                           {mod.nombre}
                         </span>
                         <span
-                          className={`font-mono text-[10px] tracking-wider uppercase block ${
+                          className={`rd-label !text-[9.5px] !tracking-[0.14em] block ${
                             active ? "text-dorado" : "text-[#8A6A1B]"
                           }`}
                         >
@@ -235,10 +235,10 @@ export default function CalculadoraRentabilidad() {
               {/* 2. Slider Capital */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 font-semibold">
-                    02 · Capital Inicial (USD)
+                  <label className="rd-label !text-[10px] !tracking-[0.2em] text-navy/55">
+                    [02 · CAPITAL INICIAL (USD)]
                   </label>
-                  <span className="font-display text-navy text-2xl font-bold">
+                  <span className="rd-condensed text-navy text-2xl sm:text-3xl">
                     USD {montoUSD.toLocaleString("es-AR")}
                   </span>
                 </div>
@@ -257,7 +257,7 @@ export default function CalculadoraRentabilidad() {
                   className="w-full accent-[#0B1528] cursor-pointer h-2 bg-navy/15 rounded-full appearance-none"
                 />
 
-                <div className="flex justify-between text-[10px] font-mono text-navy/45 mt-2">
+                <div className="flex justify-between rd-label !text-[9.5px] !tracking-[0.14em] text-navy/45 mt-2">
                   <span>USD 20.000</span>
                   <span>USD 150.000</span>
                   <span>USD 350.000+</span>
@@ -266,8 +266,8 @@ export default function CalculadoraRentabilidad() {
 
               {/* 3. Horizonte */}
               <div>
-                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-navy/55 mb-3 font-semibold">
-                  03 · Horizonte de Inversión
+                <label className="block rd-label !text-[10px] !tracking-[0.2em] text-navy/55 mb-3">
+                  [03 · HORIZONTE DE INVERSIÓN]
                 </label>
                 <div className="grid grid-cols-4 gap-2">
                   {[1, 2, 3, 5].map((anios) => (
@@ -278,9 +278,9 @@ export default function CalculadoraRentabilidad() {
                         marcarUso("horizonte");
                         setHorizonteAnios(anios);
                       }}
-                      className={`py-2.5 text-center rounded-xl font-mono text-xs border transition-all ${
+                      className={`py-2.5 text-center rounded-xl rd-label !text-[10px] !tracking-[0.16em] border transition-all ${
                         horizonteAnios === anios
-                          ? "border-dorado bg-[#FBF0CF] text-navy font-bold"
+                          ? "border-dorado bg-[#FBF0CF] text-navy"
                           : "border-navy/10 bg-white text-navy/60 hover:text-navy"
                       }`}
                     >
@@ -291,8 +291,8 @@ export default function CalculadoraRentabilidad() {
               </div>
 
               {/* Resumen del Modelo */}
-              <div className="p-4 rounded-2xl bg-white border border-navy/[0.08] text-xs font-body text-navy/65 space-y-1">
-                <span className="font-mono text-[#8A6A1B] font-semibold block uppercase text-[10px] tracking-wider">
+              <div className="p-4 rounded-2xl bg-white border border-navy/10 text-xs font-body text-navy/65 space-y-1">
+                <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-[#8A6A1B] block">
                   Foco Territorial: {modeloSeleccionado.zonaRecomendada}
                 </span>
                 <p>{modeloSeleccionado.descripcion}</p>
@@ -300,29 +300,29 @@ export default function CalculadoraRentabilidad() {
             </div>
 
             {/* Right Column: Executive Dark Navy Results Panel */}
-            <div className="lg:col-span-6 p-7 sm:p-10 rounded-[2rem] bg-[#0B1528] text-white border border-navy/20 shadow-[0_28px_64px_-28px_rgba(14,26,51,0.45)] flex flex-col justify-between space-y-6">
+            <div className="lg:col-span-6 p-7 sm:p-10 rounded-[2rem] bg-[#070E1B] text-white border border-white/10 shadow-[0_28px_64px_-28px_rgba(7,14,27,0.55)] flex flex-col justify-between space-y-6">
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <div>
-                    <span className="font-mono text-dorado text-[10px] tracking-[0.22em] uppercase block">
-                      Proyección a {horizonteAnios}{" "}
-                      {horizonteAnios === 1 ? "año" : "años"}
+                    <span className="rd-label !text-[10px] !tracking-[0.22em] text-dorado block">
+                      [PROYECCIÓN A {horizonteAnios}{" "}
+                      {horizonteAnios === 1 ? "AÑO" : "AÑOS"}]
                     </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-medium text-white mt-0.5">
-                      Patrimonio Proyectado
+                    <h3 className="rd-display text-2xl sm:text-3xl text-white mt-1">
+                      Patrimonio <em className="rd-serif text-dorado">Proyectado</em>
                     </h3>
                   </div>
-                  <span className="font-mono text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
+                  <span className="rd-label !text-[10px] !tracking-[0.16em] px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
                     +{porcentajeGanancia}% Neto
                   </span>
                 </div>
 
                 {/* Cifra Principal */}
                 <div className="p-6 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
-                  <span className="font-mono text-white/55 text-[10px] uppercase tracking-widest block">
+                  <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-white/55 block">
                     Ganancia Acumulada (Renta + Plusvalía)
                   </span>
-                  <div className="font-display text-4xl sm:text-5xl font-semibold text-dorado tracking-tight">
+                  <div className="rd-condensed text-4xl sm:text-5xl text-dorado">
                     +USD <AnimNum value={retornoTotalEstimado} />
                   </div>
                   <p className="font-body text-white/60 text-xs pt-1">
@@ -335,19 +335,19 @@ export default function CalculadoraRentabilidad() {
 
                 {/* Desglose 2 columnas */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07]">
-                    <span className="font-mono text-white/50 text-[10px] uppercase tracking-wider block">
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
+                    <span className="rd-label !text-[9px] !tracking-[0.16em] text-white/50 block">
                       Flujo Anual Estimado
                     </span>
-                    <span className="font-display text-xl text-white font-semibold mt-1 block">
+                    <span className="rd-condensed text-xl text-white mt-1 block">
                       USD <AnimNum value={rentaAnualEstimada} /> / año
                     </span>
                   </div>
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07]">
-                    <span className="font-mono text-white/50 text-[10px] uppercase tracking-wider block">
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
+                    <span className="rd-label !text-[9px] !tracking-[0.16em] text-white/50 block">
                       Valorización Tierra/Activo
                     </span>
-                    <span className="font-display text-xl text-emerald-400 font-semibold mt-1 block">
+                    <span className="rd-condensed text-xl text-emerald-400 mt-1 block">
                       +USD <AnimNum value={plusvaliaTotalEstimada} />
                     </span>
                   </div>

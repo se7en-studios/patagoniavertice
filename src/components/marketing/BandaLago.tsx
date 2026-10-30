@@ -186,66 +186,72 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
 
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-navy-950/15 to-navy-950/20" />
 
-        {/* Badge superior izquierdo */}
-        <div className="absolute top-5 left-5 lg:top-8 lg:left-8 z-10 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-950/85 border border-white/15 text-white font-mono text-[10px] tracking-[0.16em] uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-dorado animate-pulse" />
-          <span>Bahía de las Playas · Lago Mari Menuco</span>
+        {/* Badge superior izquierdo estilo Telemetría se7endev */}
+        <div className="absolute top-5 left-5 lg:top-8 lg:left-8 z-10 hidden sm:flex items-center gap-3 px-4 py-2 rounded-full bg-[#070E1B]/85 backdrop-blur-md border border-white/15 text-white">
+          <span className="rd-ping" />
+          <span className="rd-label !text-[10px] !tracking-[0.2em] text-white/90">
+            Bahía de las Playas · Lago Mari Menuco
+          </span>
+          <span className="h-3 w-px bg-white/20" />
+          <span className="rd-label !text-[9.5px] !tracking-[0.18em] text-dorado">
+            38°36&apos;S 68°53&apos;W
+          </span>
         </div>
 
         <div className="relative h-full px-5 lg:px-12 flex items-end lg:items-center justify-center lg:justify-end pb-5 lg:pb-0">
-          <motion.div style={{ y: cardY }} className="w-full max-w-md will-change-transform">
+          <motion.div style={{ y: cardY }} className="w-full max-w-[440px] will-change-transform">
             <motion.div
-              className="w-full rounded-3xl border border-navy/10 bg-white/95 backdrop-blur-md shadow-2xl p-6 sm:p-7"
+              className="w-full rounded-[1.85rem] border border-navy/12 bg-white/96 backdrop-blur-xl shadow-[0_28px_64px_-24px_rgba(7,14,27,0.55)] p-6 sm:p-7"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <span className="inline-flex items-center rounded-full bg-[#FBF0CF] text-[#7A5A12] font-mono text-[10px] font-semibold tracking-[0.14em] uppercase px-3 py-1">
+              <div className="flex items-center justify-between gap-2 pb-3.5 mb-4 border-b border-navy/10">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#FBF0CF] text-[#7A5A12] rd-label !text-[9.5px] px-3 py-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#A47C1B]" />
                   {etiqueta}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-navy/65 font-semibold">
+                <span className="rd-label !text-[10px] !tracking-[0.16em] text-navy font-semibold">
                   {precioDesde}
                 </span>
               </div>
 
               <h2
-                className="font-display font-medium text-navy leading-[1.04] mb-3"
+                className="rd-display text-navy mb-3.5"
                 style={{
-                  fontSize: "clamp(2rem, 3.8vw, 2.9rem)",
-                  letterSpacing: "-0.03em",
+                  fontSize: "clamp(2.15rem, 3.8vw, 3.05rem)",
                 }}
               >
                 {titulo}{" "}
-                <em className="font-editorial italic text-[#A47C1B]">
+                <em className="rd-serif text-[#A47C1B]">
                   {tituloCursiva}
                 </em>
               </h2>
 
-              {/* Mini indicadores clave */}
-              <div className="grid grid-cols-3 gap-2 mb-4 py-2.5 border-y border-navy/[0.08] text-center">
-                <div>
-                  <span className="block font-display text-sm sm:text-base font-bold text-navy">
+              {/* Mini indicadores clave con tipografía condensada se7endev */}
+              <div className="grid grid-cols-3 mb-4 py-3 border-y border-navy/10 text-center">
+                <div className="px-1">
+                  <span className="block rd-condensed text-base sm:text-lg text-navy">
                     {superficieRef}
                   </span>
-                  <span className="block font-mono text-[9px] uppercase tracking-wider text-navy/50">
+                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
                     Superficie
                   </span>
                 </div>
-                <div className="border-x border-navy/[0.08]">
-                  <span className="block font-display text-sm sm:text-base font-bold text-navy">
+                <div className="border-x border-navy/10 px-1">
+                  <span className="block rd-condensed text-base sm:text-lg text-navy">
                     {distanciaRef}
                   </span>
-                  <span className="block font-mono text-[9px] uppercase tracking-wider text-navy/50">
+                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
                     De Neuquén
                   </span>
                 </div>
-                <div>
-                  <span className="block font-display text-sm sm:text-base font-bold text-[#8A6A1B]">
+                <div className="px-1">
+                  <span className="block rd-condensed text-base sm:text-lg text-[#8A6A1B]">
                     Agua + Luz
                   </span>
-                  <span className="block font-mono text-[9px] uppercase tracking-wider text-navy/50">
+                  <span className="block rd-label !text-[8.5px] !tracking-[0.16em] text-navy/50 mt-0.5">
                     WakePark &amp; Club
                   </span>
                 </div>
@@ -255,7 +261,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                 {PUNTOS.map((p) => (
                   <li
                     key={p}
-                    className="flex items-center gap-2.5 font-body text-navy/75 text-xs sm:text-[13px]"
+                    className="flex items-center gap-2.5 font-body text-navy/80 text-xs sm:text-[13px]"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
                     {p}
@@ -263,23 +269,27 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                 ))}
               </ul>
 
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <button
                   type="button"
                   onClick={() => {
                     setEnviadoOk(false);
                     setModalMasterplan(true);
                   }}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra font-body text-[11px] tracking-[0.14em] font-semibold uppercase px-5 py-3 transition-colors shadow-sm"
+                  className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 shadow-sm"
                 >
-                  <span>Masterplan &amp; Sectores</span>
-                  <span aria-hidden="true">→</span>
+                  <span className="rd-roll" data-text="Masterplan & Sectores">
+                    <span>Masterplan &amp; Sectores</span>
+                  </span>
+                  <span className="rd-btn__icon w-7 h-7 bg-dorado text-tierra">
+                    ↗
+                  </span>
                 </button>
                 <a
                   href="https://wa.me/5492996095742?text=Hola%20Estela%20(ALTUM%20SCI)%2C%20quisiera%20recibir%20informaci%C3%B3n%20sobre%20los%20lotes%20en%20Mari%20Menuco."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-navy/15 bg-white hover:border-navy px-4 py-3 font-body text-[11px] font-semibold uppercase tracking-wider text-navy transition-colors"
+                  className="inline-flex items-center justify-center rounded-full border border-navy/15 bg-white hover:border-navy px-4 py-2.5 rd-label !text-[10px] !tracking-[0.16em] text-navy transition-colors"
                 >
                   WhatsApp
                 </a>
@@ -289,13 +299,14 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
         </div>
       </div>
 
-      {/* Franja Interactiva de los 4 Sectores del Masterplan (Visible en Scroll) */}
-      <div className="max-w-7xl mx-auto mt-5">
-        <div className="rounded-3xl bg-white border border-navy/[0.08] p-5 sm:p-6 shadow-[0_14px_34px_-22px_rgba(14,26,51,0.16)]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3.5 border-b border-navy/[0.07]">
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-dorado" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A6A1B] font-semibold">
+      {/* Franja Interactiva de los 4 Sectores del Masterplan (Grilla Hairline Editorial) */}
+      <div className="max-w-7xl mx-auto mt-6">
+        <div className="rounded-[1.85rem] bg-white border border-navy/10 overflow-hidden shadow-[0_18px_40px_-26px_rgba(14,26,51,0.16)]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 bg-[#FBFBFD] border-b border-navy/10">
+            <div className="flex items-center gap-3">
+              <span className="rd-label !text-[10px] text-navy/40">[01]</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
+              <span className="rd-label !text-[10px] !tracking-[0.2em] text-[#8A6A1B]">
                 Masterplan Interactivo · 4 Sectores Disponibles en Bahía de las Playas
               </span>
             </div>
@@ -305,13 +316,13 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                 setEnviadoOk(false);
                 setModalMasterplan(true);
               }}
-              className="font-mono text-[10px] uppercase tracking-[0.16em] text-navy hover:text-[#8A6A1B] font-semibold transition-colors text-left sm:text-right"
+              className="rd-label !text-[10px] !tracking-[0.16em] text-navy hover:text-[#8A6A1B] transition-colors text-left sm:text-right"
             >
-              Solicitar plano catastral y disponibilidad →
+              Solicitar plano catastral y disponibilidad ↗
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-navy/10">
             {SECTORES_BAHIA.map((sec, idx) => {
               const isSelected = sec.id === sectorActivo.id;
               return (
@@ -327,56 +338,60 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                     setEnviadoOk(false);
                     setModalMasterplan(true);
                   }}
-                  className={`group text-left p-4 rounded-2xl border transition-all duration-300 ${
+                  className={`group text-left p-5 sm:p-6 transition-all duration-300 flex flex-col justify-between ${
                     isSelected
-                      ? "bg-[#0B1528] text-white border-[#0B1528] shadow-md"
-                      : "bg-[#F6F8FB]/75 hover:bg-white text-navy border-navy/[0.08] hover:border-dorado/60"
+                      ? "bg-[#0B1528] text-white"
+                      : "bg-white hover:bg-[#F6F8FB] text-navy"
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span
-                      className={`font-mono text-[10px] uppercase tracking-[0.16em] font-semibold ${
-                        isSelected ? "text-dorado" : "text-[#8A6A1B]"
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span
+                        className={`rd-label !text-[10px] !tracking-[0.18em] ${
+                          isSelected ? "text-dorado" : "text-[#8A6A1B]"
+                        }`}
+                      >
+                        [0{idx + 1}] · {sec.codigo}
+                      </span>
+                      <span
+                        className={`rd-label !text-[9px] !tracking-[0.14em] px-2.5 py-0.5 rounded-full ${
+                          isSelected
+                            ? "bg-white/10 text-white/90"
+                            : "bg-navy/[0.06] text-navy/70"
+                        }`}
+                      >
+                        {sec.lotesDisponibles} disp.
+                      </span>
+                    </div>
+
+                    <h3
+                      className={`font-display text-lg font-medium tracking-tight mb-1.5 ${
+                        isSelected ? "text-white" : "text-navy group-hover:text-[#8A6A1B]"
+                      } transition-colors`}
+                    >
+                      {sec.nombre}
+                    </h3>
+
+                    <p
+                      className={`font-body text-xs line-clamp-2 mb-4 leading-relaxed ${
+                        isSelected ? "text-white/65" : "text-navy/60"
                       }`}
                     >
-                      {sec.codigo}
-                    </span>
-                    <span
-                      className={`font-mono text-[9.5px] uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                        isSelected
-                          ? "bg-white/10 text-white/90"
-                          : "bg-navy/[0.06] text-navy/70"
-                      }`}
-                    >
-                      {sec.lotesDisponibles} lotes disp.
-                    </span>
+                      {sec.descripcion}
+                    </p>
                   </div>
 
-                  <h3
-                    className={`font-display text-base font-semibold mb-1 ${
-                      isSelected ? "text-white" : "text-navy"
-                    }`}
-                  >
-                    {sec.nombre}
-                  </h3>
-
-                  <p
-                    className={`font-body text-xs line-clamp-2 mb-3 leading-relaxed ${
-                      isSelected ? "text-white/65" : "text-navy/60"
-                    }`}
-                  >
-                    {sec.descripcion}
-                  </p>
-
                   <div
-                    className={`flex items-center justify-between pt-2.5 border-t font-mono text-[10px] ${
+                    className={`flex items-center justify-between pt-3 border-t rd-label !text-[10px] !tracking-[0.14em] ${
                       isSelected
-                        ? "border-white/10 text-dorado"
-                        : "border-navy/[0.07] text-navy/75"
+                        ? "border-white/12 text-dorado"
+                        : "border-navy/10 text-navy/80"
                     }`}
                   >
-                    <span className="font-semibold">{sec.precioRef}</span>
-                    <span>{sec.superficie} →</span>
+                    <span>{sec.precioRef}</span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+                      {sec.superficie} ↗
+                    </span>
                   </div>
                 </motion.button>
               );

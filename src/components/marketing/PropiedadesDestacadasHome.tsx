@@ -385,28 +385,28 @@ export default function PropiedadesDestacadasHome({
       id="propiedades-destacadas"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
+        {/* Header Editorial estilo se7endev */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10 pb-7 border-b border-navy/10">
           <div>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="h-px w-10 bg-dorado" />
-              <span className="eyebrow tracking-[0.25em] !text-[#8A6A1B]">
-                ALTUM SCI · Portfolio Seleccionado
+            <div className="flex items-center gap-3 mb-4">
+              <span className="rd-label !text-[10px] text-navy/40">[02]</span>
+              <div className="h-px w-8 bg-dorado" />
+              <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
+                ALTUM SCI · Portfolio Curado 2026
               </span>
             </div>
             <h2
-              className="font-display font-medium text-navy leading-[1.05]"
+              className="rd-display text-navy"
               style={{
-                fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
-                letterSpacing: "-0.02em",
+                fontSize: "clamp(2.35rem, 4.4vw, 3.85rem)",
               }}
             >
               Propiedades &amp; Terrenos de{" "}
-              <em className="font-editorial italic text-[#A47C1B] font-normal">
+              <em className="rd-serif text-[#A47C1B]">
                 primer nivel
               </em>
             </h2>
-            <p className="font-body text-navy/60 text-sm lg:text-base max-w-xl mt-4">
+            <p className="font-body text-navy/65 text-sm lg:text-base max-w-xl mt-3.5">
               Lotes exclusivos en Mari Menuco, residencias en Cipolletti y
               fracciones estratégicas con plusvalía real en el eje Neuquén – Río
               Negro.
@@ -418,18 +418,20 @@ export default function PropiedadesDestacadasHome({
               <button
                 type="button"
                 onClick={() => setModalComparador(true)}
-                className="inline-flex items-center gap-2 rounded-full bg-navy text-white px-5 py-2.5 font-body text-xs font-semibold tracking-[0.14em] uppercase shadow-md hover:bg-navy/90 transition-all"
+                className="inline-flex items-center gap-2 rounded-full bg-navy text-white px-5 py-2.5 rd-label !text-[10px] !tracking-[0.16em] shadow-md hover:bg-navy/90 transition-all"
               >
                 <span>Comparar ({compararIds.length})</span>
               </button>
             )}
             <Link
               href="/proyectos"
-              className="group inline-flex items-center gap-3 rounded-full border border-dorado/40 bg-white px-5 py-2.5 font-body text-[#8A6A1B] text-xs font-semibold tracking-[0.16em] uppercase hover:bg-dorado hover:text-tierra transition-all shadow-sm"
+              className="rd-btn border border-navy/15 bg-white hover:bg-[#0B1528] text-navy hover:text-white rd-label !text-[10px] !tracking-[0.16em] pl-5 pr-2 py-2 shadow-sm transition-all"
             >
-              <span>Ver Catálogo Completo</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
+              <span className="rd-roll" data-text="Ver Catálogo Completo">
+                <span>Ver Catálogo Completo</span>
+              </span>
+              <span className="rd-btn__icon w-7 h-7 bg-dorado text-tierra">
+                ↗
               </span>
             </Link>
           </div>
@@ -437,7 +439,7 @@ export default function PropiedadesDestacadasHome({
 
         {/* Filter Pills con Indicador Deslizante (Spring Layout) */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-          <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-navy/10 shadow-sm">
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-full bg-white border border-navy/10 shadow-sm">
             {CATEGORIAS_TAB.map((tab) => {
               const isTabActive = tabActiva === tab.id;
               return (
@@ -445,10 +447,10 @@ export default function PropiedadesDestacadasHome({
                   key={tab.id}
                   type="button"
                   onClick={() => setTabActiva(tab.id)}
-                  className={`relative font-body text-[11px] tracking-[0.15em] uppercase px-5 py-2.5 transition-colors rounded-full z-10 ${
+                  className={`relative rd-label !text-[10px] !tracking-[0.16em] px-5 py-2.5 transition-colors rounded-full z-10 ${
                     isTabActive
-                      ? "text-white font-semibold"
-                      : "text-navy/65 hover:text-navy"
+                      ? "text-white"
+                      : "text-navy/60 hover:text-navy"
                   }`}
                 >
                   {isTabActive && (
@@ -467,9 +469,8 @@ export default function PropiedadesDestacadasHome({
               );
             })}
           </div>
-          <span className="font-body text-xs text-navy/50 hidden md:inline-block">
-            💡 Tip: Pasá las fotos dentro de cada tarjeta o hacé clic en{" "}
-            <strong>Vista Rápida</strong>.
+          <span className="rd-label !text-[10px] !tracking-[0.16em] text-navy/45 hidden md:inline-block">
+            [0{listaFiltrada.length} ACTIVOS AUDITADOS · MAT. 35 RP]
           </span>
         </div>
 
@@ -577,13 +578,16 @@ export default function PropiedadesDestacadasHome({
                       className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/20 to-transparent pointer-events-none"
                     />
 
-                    {/* Badge Superior Izquierdo: Tipo */}
-                    <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
-                      <span className="font-body text-[9px] font-semibold tracking-[0.2em] uppercase rounded-full bg-dorado text-tierra px-3 py-1 shadow-sm">
+                    {/* Badge Superior Izquierdo: Índice + Tipo */}
+                    <div className="absolute top-3.5 left-3.5 flex flex-wrap items-center gap-1.5">
+                      <span className="rd-label !text-[9.5px] !tracking-[0.18em] rounded-full bg-[#070E1B]/85 backdrop-blur-md text-dorado border border-white/15 px-2.5 py-1">
+                        0{idx + 1}
+                      </span>
+                      <span className="rd-label !text-[9px] !tracking-[0.18em] rounded-full bg-dorado text-tierra px-3 py-1 shadow-sm">
                         {tipoLabel[p.tipo] ?? p.tipo}
                       </span>
                       {p.destacado_badge && (
-                        <span className="font-body text-[8.5px] font-medium tracking-[0.15em] uppercase rounded-full bg-navy-950/85 text-dorado border border-dorado/40 px-2.5 py-1">
+                        <span className="rd-label !text-[8.5px] !tracking-[0.15em] rounded-full bg-navy-950/85 text-dorado border border-dorado/40 px-2.5 py-1">
                           {p.destacado_badge}
                         </span>
                       )}
@@ -593,7 +597,7 @@ export default function PropiedadesDestacadasHome({
                     <button
                       type="button"
                       onClick={() => toggleComparar(p.id)}
-                      className={`absolute top-3.5 right-3.5 font-body text-[9.5px] tracking-[0.12em] uppercase rounded-full px-3 py-1 shadow-sm font-semibold transition-all ${
+                      className={`absolute top-3.5 right-3.5 rd-label !text-[9.5px] !tracking-[0.14em] rounded-full px-3 py-1 shadow-sm transition-all ${
                         isComparando
                           ? "bg-emerald-600 text-white border border-emerald-400"
                           : "bg-white/95 text-navy hover:bg-dorado hover:text-tierra"
@@ -602,19 +606,19 @@ export default function PropiedadesDestacadasHome({
                       {isComparando ? "✓ Comparando" : "+ Comparar"}
                     </button>
 
-                    {/* Precio flotante sobre la foto con alto contraste */}
-                    <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between gap-2 pointer-events-none">
+                    {/* Precio flotante sobre la foto con tipografía condensada se7endev */}
+                    <div className="absolute bottom-3.5 left-4 right-4 flex items-end justify-between gap-2 pointer-events-none">
                       <div>
-                        <p className="font-display text-white text-2xl font-bold tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+                        <p className="rd-condensed text-white text-[1.65rem] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
                           {precioLabel}
                         </p>
                         {valorM2 && (
-                          <span className="font-mono text-[10px] text-dorado/95 block">
+                          <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-dorado/95 block mt-1">
                             {valorM2}
                           </span>
                         )}
                       </div>
-                      <span className="font-body text-[10px] tracking-wider text-white bg-navy-950/75 border border-white/15 px-2.5 py-1 rounded-full uppercase font-medium">
+                      <span className="rd-label !text-[9.5px] !tracking-[0.16em] text-white bg-navy-950/80 border border-white/15 px-2.5 py-1 rounded-full">
                         {p.ciudad.split(",")[0]}
                       </span>
                     </div>
@@ -623,11 +627,11 @@ export default function PropiedadesDestacadasHome({
                   {/* Body Content */}
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <p className="font-body text-[#8A6A1B] text-[10px] font-semibold tracking-widest uppercase truncate">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <p className="rd-label !text-[10px] !tracking-[0.18em] text-[#8A6A1B] truncate">
                           {p.barrio ? `${p.barrio}` : p.ciudad}
                         </p>
-                        <span className="font-mono text-[9.5px] text-navy/45 uppercase shrink-0">
+                        <span className="rd-label !text-[9px] !tracking-[0.14em] text-navy/45 shrink-0">
                           {categoriaLabel[p.tipo] ?? p.tipo}
                         </span>
                       </div>
@@ -636,41 +640,46 @@ export default function PropiedadesDestacadasHome({
                         onClick={() => abrirQuickView(p)}
                         className="text-left w-full"
                       >
-                        <h3 className="font-display text-navy text-lg font-medium leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
+                        <h3 className="font-display text-navy text-lg font-medium tracking-tight leading-snug group-hover:text-[#8A6A1B] transition-colors duration-200 mb-4 line-clamp-2">
                           {p.titulo}
                         </h3>
                       </button>
 
-                      {/* Metadatos: Superficie & Seguridad */}
-                      <div className="grid grid-cols-2 gap-2 py-3 border-y border-navy/10 mb-5 font-body text-xs text-navy/65">
+                      {/* Metadatos: Superficie & Seguridad con Hairline */}
+                      <div className="grid grid-cols-2 gap-2 py-3 border-y border-navy/10 mb-5 rd-label !text-[10px] !tracking-[0.14em] text-navy/70">
                         <div className="flex items-center gap-2">
                           <SurfaceIcon />
-                          <span className="truncate font-medium">
+                          <span className="truncate">
                             {formatSuperficie(p.superficie_m2)}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 text-[#8A6A1B] justify-end">
-                          <span>✦</span>
-                          <span className="truncate text-[10px] uppercase tracking-wider font-semibold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
+                          <span className="truncate">
                             Mat. 35 RP 2026
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Action buttons */}
+                    {/* Action buttons con estilo se7endev */}
                     <div className="flex items-center gap-2 pt-1">
                       <button
                         type="button"
                         onClick={() => abrirQuickView(p)}
-                        className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-dorado text-tierra font-body text-[10px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-colors shadow-sm"
+                        className="rd-btn flex-1 justify-between bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rd-label !text-[9.5px] !tracking-[0.16em] pl-4 pr-1.5 py-1.5 shadow-sm"
                       >
-                        <span>Vista Rápida &amp; Visita</span>
+                        <span className="rd-roll" data-text="Vista Rápida & Visita">
+                          <span>Vista Rápida &amp; Visita</span>
+                        </span>
+                        <span className="rd-btn__icon w-6 h-6 bg-dorado text-tierra">
+                          ↗
+                        </span>
                       </button>
 
                       <Link
                         href={detailHref}
-                        className="inline-flex items-center justify-center px-3.5 py-3 rounded-full border border-navy/15 text-navy/75 hover:text-[#8A6A1B] hover:border-dorado font-body text-[10px] font-semibold uppercase tracking-wider transition-colors"
+                        className="inline-flex items-center justify-center px-3.5 py-2.5 rounded-full border border-navy/15 text-navy/80 hover:text-[#8A6A1B] hover:border-dorado rd-label !text-[9.5px] !tracking-[0.16em] transition-colors"
                       >
                         Ficha
                       </Link>

@@ -411,3 +411,4 @@ export const GUIAS_SEO: GuiaSeoArticle[] = [
 export function getGuiaBySlug(slug: string): GuiaSeoArticle | undefined {
   return GUIAS_SEO.find((g) => g.slug === slug);
 }
+

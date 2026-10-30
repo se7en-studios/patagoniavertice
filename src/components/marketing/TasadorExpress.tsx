@@ -143,27 +143,27 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: PropTech Trust & Methodology */}
+            {/* Left Column: PropTech Trust & Methodology (Estilo se7endev) */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F6F8FB] border border-navy/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
-                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
+              <div className="flex items-center gap-3">
+                <span className="rd-label !text-[10px] text-navy/40">[05]</span>
+                <div className="h-px w-8 bg-dorado" />
+                <span className="rd-label !text-[10px] !tracking-[0.24em] text-[#8A6A1B]">
                   Valuación Técnica Certificada
                 </span>
               </div>
 
               <h2
-                className="font-display font-medium leading-[1.04] text-navy"
+                className="rd-display text-navy"
                 style={{
-                  fontSize: "clamp(2.3rem, 4.2vw, 3.5rem)",
-                  letterSpacing: "-0.03em",
+                  fontSize: "clamp(2.35rem, 4.2vw, 3.6rem)",
                 }}
               >
                 Conocé el valor real de tu activo en{" "}
-                <em className="font-editorial italic text-[#A47C1B]">Patagonia.</em>
+                <em className="rd-serif text-[#A47C1B]">Patagonia.</em>
               </h2>
 
-              <p className="font-body text-navy/60 text-sm lg:text-base leading-relaxed">
+              <p className="font-body text-navy/65 text-sm lg:text-base leading-relaxed">
                 Combinamos inteligencia de precios de cierres efectivos en el
                 Alto Valle con dictamen técnico firmado por{" "}
                 <strong className="text-navy font-medium">
@@ -173,30 +173,30 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
               </p>
 
               {/* Live Market Benchmark Box */}
-              <div className="rounded-2xl bg-[#0B1528] text-white p-5 border border-navy/10 shadow-sm space-y-3">
+              <div className="rounded-2xl bg-[#070E1B] text-white p-5 border border-white/10 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-dorado">
-                    <Sparkles className="w-3.5 h-3.5" />
+                  <span className="inline-flex items-center gap-2 rd-label !text-[10px] !tracking-[0.18em] text-dorado">
+                    <span className="rd-ping" />
                     Benchmark en vivo · {localidad}
                   </span>
-                  <span className="font-mono text-[10px] text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                  <span className="rd-label !text-[9.5px] !tracking-[0.14em] text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
                     {benchmark.tendencia}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
+                <div className="grid grid-cols-2 gap-3 pt-2.5 border-t border-white/10">
                   <div>
-                    <span className="block font-mono text-[9.5px] uppercase text-white/50">
+                    <span className="block rd-label !text-[9px] !tracking-[0.16em] text-white/45">
                       Valor de Referencia
                     </span>
-                    <span className="font-display text-sm sm:text-base font-semibold text-white">
+                    <span className="rd-condensed text-base sm:text-lg text-white mt-0.5 block">
                       {benchmark.rangoM2}
                     </span>
                   </div>
                   <div>
-                    <span className="block font-mono text-[9.5px] uppercase text-white/50">
+                    <span className="block rd-label !text-[9px] !tracking-[0.16em] text-white/45">
                       Nivel de Liquidez
                     </span>
-                    <span className="font-body text-xs font-medium text-white/90">
+                    <span className="font-body text-xs font-medium text-white/90 mt-0.5 block">
                       {benchmark.demanda}
                     </span>
                   </div>

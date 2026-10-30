@@ -29,21 +29,23 @@ export default function FAQ({ faqsCustom }: { faqsCustom?: FaqLandingItem[] }) {
         }))
       : faqs;
 
-  const filtradas = baseFaqs.filter((faq) => {
-    const matchCat =
-      categoriaActiva === "Todas" || faq.categoria === categoriaActiva;
-    const matchText =
-      busqueda.trim() === "" ||
-      faq.pregunta.toLowerCase().includes(busqueda.toLowerCase()) ||
-      faq.respuesta.toLowerCase().includes(busqueda.toLowerCase());
-    return matchCat && matchText;
-  });
+  const filtradas = baseFaqs
+    .filter((faq) => {
+      const matchCat =
+        categoriaActiva === "Todas" || faq.categoria === categoriaActiva;
+      const matchText =
+        busqueda.trim() === "" ||
+        faq.pregunta.toLowerCase().includes(busqueda.toLowerCase()) ||
+        faq.respuesta.toLowerCase().includes(busqueda.toLowerCase());
+      return matchCat && matchText;
+    })
+    .slice(0, busqueda.trim() ? 8 : 4);
 
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
     <section
-      className="py-24 lg:py-36 bg-[#F6F8FB] relative overflow-hidden text-navy"
+      className="py-16 lg:py-22 bg-white border-t border-navy/[0.06] relative overflow-hidden text-navy"
       aria-labelledby="faq-heading"
       id="faq"
     >

@@ -138,7 +138,7 @@ Mi nombre es ${nombre.trim()}. ¿Cuándo podríamos coordinar el relevamiento?`;
   return (
     <MotionConfig reducedMotion="user">
       <section
-        className="py-24 lg:py-32 relative overflow-hidden text-navy bg-white border-y border-navy/[0.06]"
+        className="py-16 lg:py-22 relative overflow-hidden text-navy bg-white border-y border-navy/[0.06]"
         id="tasador-express"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/marketing/Hero";
-import Manifiesto from "@/components/marketing/Manifiesto";
 import BandaLago from "@/components/marketing/BandaLago";
-import CintaMarquee from "@/components/marketing/CintaMarquee";
-import Ubicacion from "@/components/marketing/Ubicacion";
 import SectionRail from "@/components/marketing/SectionRail";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { createClient } from "@/lib/supabase/server";
@@ -13,7 +10,6 @@ import { getSiteConfig } from "@/lib/site-config";
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://altumsci.com.ar";
 
-// ── Metadata específica de la home ──────────────────────────────────────────
 export const metadata: Metadata = {
   title:
     "ALTUM SCI · Servicios & Consultoría Inmobiliaria - Neuquén & Patagonia",
@@ -32,45 +28,14 @@ export const metadata: Metadata = {
   },
 };
 
-const CINTA_UBICACIONES = [
-  "Mari Menuco",
-  "Cipolletti",
-  "Catriel",
-  "General Roca",
-  "Vaca Muerta",
-];
-const CINTA_SERVICIOS = [
-  "Compra & Venta",
-  "Tasaciones",
-  "Loteos",
-  "Consultoría",
-  "Contratos",
-];
-
-// ── Lazy loading de secciones below-fold ────────────────────────────────────
-const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
-const Servicios = dynamic(() => import("@/components/marketing/Servicios"));
-const Proceso = dynamic(() => import("@/components/marketing/Proceso"));
 const PropiedadesDestacadasHome = dynamic(
   () => import("@/components/marketing/PropiedadesDestacadasHome"),
 );
 const TasadorExpress = dynamic(
   () => import("@/components/marketing/TasadorExpress"),
 );
-const ZonasInteractivas = dynamic(
-  () => import("@/components/marketing/ZonasInteractivas"),
-);
-const GuiaInversion = dynamic(
-  () => import("@/components/marketing/GuiaInversion"),
-);
-const CalculadoraRentabilidad = dynamic(
-  () => import("@/components/marketing/CalculadoraRentabilidad"),
-);
-const PorQueElegirnos = dynamic(
-  () => import("@/components/marketing/BentoDiferenciadores"),
-);
+const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
-const CTAFinal = dynamic(() => import("@/components/marketing/CTAFinal"));
 
 export default async function HomePage() {
   let propiedadesDestacadas: PropiedadDestacada[] = [];
@@ -101,9 +66,6 @@ export default async function HomePage() {
       <div id="sec-inicio">
         <Hero heroConfig={siteConfig.hero} />
       </div>
-      <Manifiesto statsCustom={siteConfig.statsManifiesto} />
-
-      <CintaMarquee items={CINTA_UBICACIONES} />
 
       <div id="sec-lago">
         <BandaLago config={siteConfig.bandaLago} />
@@ -113,8 +75,6 @@ export default async function HomePage() {
         <PropiedadesDestacadasHome propiedades={propiedadesDestacadas} />
       </div>
 
-      <Ubicacion />
-
       <div id="sec-tasador">
         <TasadorExpress />
       </div>
@@ -123,34 +83,10 @@ export default async function HomePage() {
         <Nosotros perfil={siteConfig.perfil} />
       </div>
 
-      <div id="sec-zonas">
-        <ZonasInteractivas zonasCustom={siteConfig.zonas} />
-      </div>
-
-      <GuiaInversion />
-
-      <div id="sec-calculadora">
-        <CalculadoraRentabilidad />
-      </div>
-
-      <CintaMarquee items={CINTA_SERVICIOS} direction={-1} />
-
-      <div id="sec-servicios">
-        <Servicios serviciosCustom={siteConfig.servicios} />
-      </div>
-
-      <div id="sec-proceso">
-        <Proceso />
-      </div>
-
-      <PorQueElegirnos />
-
       <div id="sec-faq">
         <FAQ faqsCustom={siteConfig.faqs} />
         <FaqJsonLd />
       </div>
-
-      <CTAFinal />
     </>
   );
 }

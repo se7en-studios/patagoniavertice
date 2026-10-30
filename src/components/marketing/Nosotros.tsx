@@ -3,17 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { SlideInLeft, SlideInRight } from "@/components/ui/AnimateOnScroll";
-import PatagoniaGallery from "@/components/marketing/PatagoniaGallery";
-
-const valores = [
-  "Transparencia",
-  "Compromiso",
-  "Calidad",
-  "Visión",
-  "Territorio",
-  "Seguridad Jurídica",
-];
+import { ShieldCheck, MapPin, Award, ArrowRight } from "lucide-react";
 
 export interface PerfilProps {
   nombre?: string;
@@ -42,187 +32,56 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
     perfil?.fraseConfianza || "Una operación clara empieza con información.";
   const subfraseConfianza =
     perfil?.subfraseConfianza ||
-    "Revisar la documentación, dejar los acuerdos por escrito y contar con asesoramiento profesional puede evitarte problemas después.";
+    "Revisar la documentación, dejar los acuerdos por escrito y contar con asesoramiento profesional colegiado en cada etapa.";
 
-  const credenciales = [
+  const pilares = [
     {
-      icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"
-          />
-        </svg>
-      ),
-      label: "Profesional Matriculada",
+      Icon: Award,
+      label: "Matrícula Oficial",
       value: matriculaEstela,
       sub: colegioEstela,
     },
     {
-      icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-      ),
-      label: "Zona de Cobertura",
+      Icon: MapPin,
+      label: "Cobertura Estratégica",
       value: coberturaEstela,
-      sub: "Alto Valle de Río Negro & Neuquén · Patagonia Argentina",
+      sub: "Alto Valle de Río Negro & Neuquén · Patagonia",
     },
     {
-      icon: (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-          />
-        </svg>
-      ),
-      label: "Seguridad Jurídica",
-      value: "Transparencia · Respaldo Notarial",
-      sub: "Profesionalismo garantizado en cada operación inmobiliaria",
+      Icon: ShieldCheck,
+      label: "Trato Directo & Legal",
+      value: "Compra-Venta · Tasaciones · Loteos · Contratos",
+      sub: "Sin intermediarios ni franquicias masivas",
     },
   ];
 
   return (
-    <section className="bg-[#F6F8FB] overflow-hidden">
-      {/* ── PARTE 1: Intro empresa ───────────────────────────────────── */}
-      <div className="py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-            {/* Left: text */}
-            <SlideInLeft>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="h-px w-10 bg-dorado" />
-                <span className="eyebrow !text-[#8A6A1B]">Quiénes somos</span>
-              </div>
-
-              <h2
-                className="font-display text-navy font-medium leading-[1.08] mb-6"
-                style={{
-                  fontSize: "clamp(2.4rem, 4.8vw, 3.8rem)",
-                  letterSpacing: "0.015em",
-                }}
-              >
-                Raíces patagónicas,{" "}
-                <em className="not-italic italic text-[#A47C1B]">
-                  visión de futuro
-                </em>
-              </h2>
-
-              <div className="space-y-4 font-body text-navy/65 text-[15px] leading-relaxed mb-9">
-                <p>
-                  En <strong>ALTUM SCI</strong> (Servicios &amp; Consultoría
-                  Inmobiliaria) lideramos operaciones estratégicas de alto nivel
-                  en Neuquén, Río Negro y la Patagonia. Conectamos inversores y
-                  familias con oportunidades de tierra y residencias con alto
-                  potencial de plusvalía.
-                </p>
-                <p>
-                  {perfil?.bio ||
-                    `Cada operación cuenta con el respaldo legal y matriculado de ${nombreEstela} (${matriculaEstela}), garantizando transparencia notarial absoluta, trato directo y confidencialidad sin intermediarios.`}
-                </p>
-              </div>
-
-              <Link
-                href="/nosotros"
-                className="inline-flex items-center gap-3 rounded-full font-body text-[11px] tracking-[0.15em] font-semibold uppercase bg-navy text-white px-8 py-4 hover:bg-[#8A6A1B] transition-colors duration-200 shadow-md"
-              >
-                Conocer más
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
-            </SlideInLeft>
-
-            {/* Right: gallery */}
-            <SlideInRight delay={0.1}>
-              <PatagoniaGallery />
-            </SlideInRight>
-          </div>
-        </div>
-      </div>
-
-      {/* ── DIVISOR GOLD ────────────────────────────────────────────── */}
+    <section className="py-16 lg:py-22 bg-[#F6F8FB] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="h-px gold-line" />
-      </div>
-
-      {/* ── PARTE 2: Estela Mari Rojas ───────────────────────────────── */}
-      <div className="py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          {/* Eyebrow */}
-          <div className="flex items-center gap-4 mb-14 lg:mb-18">
-            <div className="h-px w-10 bg-dorado" />
-            <span className="eyebrow !text-[#8A6A1B]">
-              La profesional detrás de Altum
-            </span>
-          </div>
-
-          <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Pieza Editorial / Foto Oficial de Estela */}
+        <div className="rounded-[2.25rem] bg-white border border-navy/[0.08] p-7 sm:p-10 lg:p-14 shadow-[0_20px_50px_-30px_rgba(14,26,51,0.14)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Columna Izquierda: Retrato Oficial de Estela */}
             <div className="lg:col-span-5 flex justify-center">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.55 }}
-                className="relative w-full max-w-[380px] sm:max-w-[420px]"
+                transition={{ duration: 0.45 }}
+                className="w-full max-w-[360px]"
               >
-                {/* Card marco editorial sin hueco blanco al scrollear */}
-                <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-white shadow-[0_28px_64px_-20px_rgba(14,26,51,0.35)] border border-dorado/35">
+                <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-navy/5 border border-navy/10 shadow-md">
                   <Image
                     src={fotoEstela}
                     alt={`${nombreEstela} - Martillera Colegiada ALTUM`}
                     fill
-                    sizes="(max-width: 768px) 380px, 420px"
+                    sizes="(max-width: 768px) 340px, 380px"
                     className="object-cover"
                     priority
                   />
                 </div>
 
-                {/* Badge flotante de matrícula */}
-                <div className="mt-3.5 flex items-center justify-between px-4 py-3 bg-white rounded-2xl border border-dorado/30 shadow-sm text-xs">
-                  <span className="font-body font-semibold text-navy tracking-wide flex items-center gap-2">
+                <div className="mt-3 flex items-center justify-between px-4 py-2.5 bg-[#F6F8FB] rounded-2xl border border-navy/[0.08] text-xs">
+                  <span className="font-body font-semibold text-navy flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     Martillera Matriculada
                   </span>
@@ -233,103 +92,87 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
               </motion.div>
             </div>
 
-            {/* Contenido Editorial & Respaldo */}
-            <div className="lg:col-span-7">
-              <SlideInRight delay={0.1}>
-                {/* Nombre + título */}
-                <div className="mb-6">
-                  <h2
-                    className="font-display text-navy font-medium leading-[1.05] mb-2"
-                    style={{
-                      fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
-                      letterSpacing: "-0.02em",
-                    }}
+            {/* Columna Derecha: Perfil Ejecutivo & Servicios Clave */}
+            <div className="lg:col-span-7 space-y-5">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F6F8FB] border border-navy/10 mb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-dorado" />
+                  <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8A6A1B] font-semibold">
+                    Dirección Profesional · ALTUM SCI
+                  </span>
+                </div>
+
+                <h2
+                  className="font-display text-navy font-medium leading-[1.04]"
+                  style={{
+                    fontSize: "clamp(2.1rem, 3.8vw, 3.1rem)",
+                    letterSpacing: "-0.025em",
+                  }}
+                >
+                  {nombreEstela.split(" ")[0]}{" "}
+                  {nombreEstela.split(" ")[1] || ""}{" "}
+                  <em className="not-italic italic text-[#A47C1B]">
+                    {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
+                  </em>
+                </h2>
+                <p className="font-mono text-navy/55 text-[11px] tracking-[0.16em] uppercase mt-1">
+                  {perfil?.titulo || "Martillera y Corredora Pública Colegiada"}
+                </p>
+              </div>
+
+              {/* Frase de respaldo */}
+              <div className="p-4 rounded-2xl bg-[#F6F8FB] border border-navy/[0.07]">
+                <p className="font-display text-navy text-base sm:text-lg font-medium leading-snug">
+                  &ldquo;{fraseConfianza}&rdquo;
+                </p>
+                <p className="font-body text-navy/65 text-xs sm:text-sm leading-relaxed mt-1">
+                  {subfraseConfianza}
+                </p>
+              </div>
+
+              {/* 3 Pilares */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {pilares.map(({ Icon, label, value, sub }) => (
+                  <div
+                    key={label}
+                    className="p-3.5 rounded-2xl bg-[#F6F8FB]/70 border border-navy/[0.07]"
                   >
-                    {nombreEstela.split(" ")[0]}{" "}
-                    {nombreEstela.split(" ")[1] || ""}{" "}
-                    <em className="not-italic italic text-[#A47C1B]">
-                      {nombreEstela.split(" ").slice(2).join(" ") || "Rojas"}
-                    </em>
-                  </h2>
-                  <p className="font-body text-navy/60 text-xs tracking-[0.2em] uppercase font-semibold">
-                    {perfil?.titulo ||
-                      "Martillera y Corredora Pública Colegiada"}{" "}
-                    · ALTUM SCI
-                  </p>
-                </div>
-
-                {/* Cita de confianza */}
-                <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-[#FBF0CF]/35 border border-dorado/30">
-                  <p className="font-display text-navy text-lg sm:text-xl font-medium leading-snug mb-1.5">
-                    &ldquo;{fraseConfianza}&rdquo;
-                  </p>
-                  <p className="font-body text-navy/70 text-xs sm:text-sm leading-relaxed">
-                    {subfraseConfianza}
-                  </p>
-                  <p className="mt-2 font-display italic text-[#8A6A1B] text-sm font-medium">
-                    Tu confianza también es parte del trato.
-                  </p>
-                </div>
-
-                {/* Credenciales */}
-                <div className="space-y-3.5 mb-8">
-                  {credenciales.map((c) => (
-                    <div
-                      key={c.label}
-                      className="flex gap-4 group p-3 rounded-2xl bg-white/75 border border-navy/5 transition-colors hover:border-dorado/35 hover:bg-white"
-                    >
-                      <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-[#FBF0CF]/60 border border-dorado/25 text-[#8A6A1B] group-hover:bg-dorado group-hover:text-tierra transition-colors duration-200">
-                        {c.icon}
-                      </div>
-                      <div className="pt-0.5">
-                        <p className="font-body text-[10px] tracking-[0.2em] uppercase text-navy/45 mb-0.5">
-                          {c.label}
-                        </p>
-                        <p className="font-body text-navy font-semibold text-[14px] mb-0.5">
-                          {c.value}
-                        </p>
-                        <p className="font-body text-navy/60 text-[12px] leading-snug">
-                          {c.sub}
-                        </p>
-                      </div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Icon className="w-4 h-4 text-[#8A6A1B]" />
+                      <span className="font-mono text-[9.5px] uppercase tracking-wider text-navy/45">
+                        {label}
+                      </span>
                     </div>
-                  ))}
-                </div>
+                    <p className="font-body text-xs font-semibold text-navy leading-snug">
+                      {value}
+                    </p>
+                    <p className="font-body text-[11px] text-navy/55 mt-0.5 leading-snug">
+                      {sub}
+                    </p>
+                  </div>
+                ))}
+              </div>
 
-                {/* Botón CTA directo con Estela */}
-                <div className="pt-1">
-                  <a
-                    href={`https://wa.me/${whatsappEstela.replace(/\D/g, "")}?text=Hola%20Estela%20Mari%20Rojas%20(ALTUM%20SCI)%2C%20quisiera%20solicitar%20asesoramiento%20personalizado.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 px-6 py-3.5 bg-navy hover:bg-[#8A6A1B] text-white rounded-full font-body font-semibold text-xs uppercase tracking-[0.15em] shadow-[0_12px_28px_-10px_rgba(14,26,51,0.5)] transition-all duration-200 group"
-                  >
-                    <span>Consultar directamente con Estela</span>
-                    <span className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </a>
-                </div>
-              </SlideInRight>
+              {/* Acciones */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <a
+                  href={`https://wa.me/${whatsappEstela.replace(/\D/g, "")}?text=Hola%20Estela%20Mari%20Rojas%20(ALTUM%20SCI)%2C%20quisiera%20solicitar%20asesoramiento%20personalizado.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#0B1528] hover:bg-dorado text-white hover:text-tierra rounded-full font-body font-semibold text-xs uppercase tracking-[0.15em] transition-all shadow-sm"
+                >
+                  <span>Hablar con Estela</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+                <Link
+                  href="/servicios"
+                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full border border-navy/15 text-navy hover:border-navy font-body text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
+                >
+                  <span>Ver Servicios</span>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* ── Valores strip (GPU CSS) ──────────────────────────────────── */}
-      <div className="border-t border-navy/10 overflow-hidden bg-white/50">
-        <div className="marquee-track-slow">
-          {[...valores, ...valores, ...valores, ...valores].map((v, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-6 px-8 py-4 whitespace-nowrap shrink-0"
-            >
-              <span className="font-display text-navy/45 font-medium italic text-xl">
-                {v}
-              </span>
-              <span className="text-dorado/60 text-sm">✦</span>
-            </span>
-          ))}
         </div>
       </div>
     </section>

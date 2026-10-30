@@ -222,26 +222,24 @@ export default function PropiedadesDestacadasHome({
   }, [propiedades]);
 
   const listaFiltrada = useMemo(() => {
-    if (tabActiva === "todas") return listaBase;
+    let result = listaBase;
     if (tabActiva === "mari-menuco") {
-      return listaBase.filter(
+      result = listaBase.filter(
         (p) =>
           p.ciudad.toLowerCase().includes("menuco") ||
           p.barrio?.toLowerCase().includes("playas"),
       );
-    }
-    if (tabActiva === "residencial") {
-      return listaBase.filter(
+    } else if (tabActiva === "residencial") {
+      result = listaBase.filter(
         (p) => p.tipo === "venta" || p.tipo === "alquiler",
       );
-    }
-    if (tabActiva === "inversion") {
-      return listaBase.filter(
+    } else if (tabActiva === "inversion") {
+      result = listaBase.filter(
         (p) =>
           p.tipo === "lote" || p.tipo === "desarrollo" || p.tipo === "chacra",
       );
     }
-    return listaBase;
+    return result.slice(0, 3);
   }, [listaBase, tabActiva]);
 
   const propiedadesComparadas = useMemo(
@@ -382,12 +380,8 @@ export default function PropiedadesDestacadasHome({
 
   return (
     <section
-      className="py-24 lg:py-32 relative overflow-hidden bg-[#F6F8FB]"
+      className="py-16 lg:py-22 relative overflow-hidden bg-[#F6F8FB]"
       id="propiedades-destacadas"
-      style={{
-        backgroundImage:
-          "radial-gradient(650px circle at 50% 20%, rgba(201,168,76,0.10), transparent 70%)",
-      }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         {/* Header */}
@@ -616,40 +610,6 @@ export default function PropiedadesDestacadasHome({
               );
             })}
           </AnimatePresence>
-        </div>
-
-        {/* Bottom Banner */}
-        <div className="mt-14 p-7 lg:p-10 rounded-[2rem] border border-dorado/25 bg-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_24px_60px_-30px_rgba(14,26,51,0.3)]">
-          <div className="space-y-1.5 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-[#8A6A1B] text-xs font-semibold uppercase tracking-widest">
-              <span>✦</span>
-              <span>Asesoría Directa por Martillera Colegiada</span>
-            </div>
-            <h4 className="font-display text-navy text-xl lg:text-2xl font-medium">
-              ¿Buscás una propiedad específica o querés tasar la tuya?
-            </h4>
-            <p className="font-body text-navy/60 text-xs lg:text-sm max-w-xl">
-              Análisis comparativo de mercado en 24 horas, tasaciones oficiales
-              con firma colegiada y gestión notarial transparente.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full md:w-auto">
-            <a
-              href="#tasador-express"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-dorado text-tierra font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-dorado-light transition-all shadow-md"
-            >
-              ✦ Tasar mi propiedad
-            </a>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola Altum SCI, busco asesoramiento para una inversión o venta.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-navy/20 text-navy font-body text-[11px] font-semibold tracking-[0.16em] uppercase hover:border-dorado hover:text-[#8A6A1B] transition-all"
-            >
-              <span>Consultar Asesor</span>
-              <span>→</span>
-            </a>
-          </div>
         </div>
       </div>
 

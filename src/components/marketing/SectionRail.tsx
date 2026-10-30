@@ -7,16 +7,10 @@ const STOPS = [
   { id: "sec-lago", label: "Mari Menuco" },
   { id: "sec-propiedades", label: "Propiedades" },
   { id: "sec-tasador", label: "Tasación" },
-  { id: "sec-nosotros", label: "Nosotros" },
-  { id: "sec-zonas", label: "Zonas" },
-  { id: "sec-calculadora", label: "Inversión" },
-  { id: "sec-servicios", label: "Servicios" },
-  { id: "sec-proceso", label: "Proceso" },
+  { id: "sec-nosotros", label: "Estela Rojas" },
   { id: "sec-faq", label: "Preguntas" },
 ];
 
-// Riel lateral (solo escritorio ancho): un punto dorado marca en qué parte de la página estás.
-// Solo se monta en la home, que va en tono claro.
 export default function SectionRail() {
   const [active, setActive] = useState(-1);
 

@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import type { BandaLagoConfig } from "@/lib/site-config-types";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { guardarLeadAltum } from "@/app/actions/leads-altum";
@@ -115,6 +120,15 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
   const [enviando, setEnviando] = useState(false);
   const [enviadoOk, setEnviadoOk] = useState(false);
 
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ["start end", "end start"],
+  });
+  const bgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.09, 1.03, 1]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [18, -14]);
+
   const handleAgendarVisitaLago = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nombreVisita.trim() || !telefonoVisita.trim()) return;
@@ -152,15 +166,23 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
 
   return (
     <section className="relative bg-[#F6F8FB] px-4 lg:px-8 py-8 lg:py-12">
-      {/* Banner Compacto & Minimalista de Mari Menuco */}
-      <div className="relative h-[64vh] min-h-[480px] max-h-[620px] max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-[0_24px_60px_-28px_rgba(14,26,51,0.38)] border border-navy/10">
-        <Image
-          src="/mari-menuco/bahia-playas-2.jpg"
-          alt="Costa del lago Mari Menuco con sombrilla de paja"
-          fill
-          sizes="(max-width: 1440px) 100vw, 1280px"
-          className="object-cover"
-        />
+      {/* Banner Compacto & Minimalista de Mari Menuco con Parallax GPU */}
+      <div
+        ref={bannerRef}
+        className="relative h-[64vh] min-h-[480px] max-h-[620px] max-w-7xl mx-auto overflow-hidden rounded-[2rem] shadow-[0_24px_60px_-28px_rgba(14,26,51,0.38)] border border-navy/10"
+      >
+        <motion.div
+          style={{ scale: bgScale, y: bgY }}
+          className="absolute inset-0 will-change-transform"
+        >
+          <Image
+            src="/mari-menuco/bahia-playas-2.jpg"
+            alt="Costa del lago Mari Menuco con sombrilla de paja"
+            fill
+            sizes="(max-width: 1440px) 100vw, 1280px"
+            className="object-cover"
+          />
+        </motion.div>
 
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-navy-950/15 to-navy-950/20" />
 
@@ -171,7 +193,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
         </div>
 
         <div className="relative h-full px-5 lg:px-12 flex items-end lg:items-center justify-center lg:justify-end pb-5 lg:pb-0">
-          <div className="w-full max-w-md">
+          <motion.div style={{ y: cardY }} className="w-full max-w-md will-change-transform">
             <motion.div
               className="w-full rounded-3xl border border-navy/10 bg-white/95 backdrop-blur-md shadow-2xl p-6 sm:p-7"
               initial={{ opacity: 0, y: 18 }}
@@ -263,7 +285,7 @@ export default function BandaLago({ config }: { config?: BandaLagoConfig }) {
                 </a>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </div>
 

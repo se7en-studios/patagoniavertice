@@ -121,24 +121,34 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
               </div>
 
               {/* Frase de respaldo */}
-              <div className="p-4 rounded-2xl bg-[#F6F8FB] border border-navy/[0.07]">
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.08 }}
+                className="p-4 rounded-2xl bg-[#F6F8FB] border border-navy/[0.07]"
+              >
                 <p className="font-display text-navy text-base sm:text-lg font-medium leading-snug">
                   &ldquo;{fraseConfianza}&rdquo;
                 </p>
                 <p className="font-body text-navy/65 text-xs sm:text-sm leading-relaxed mt-1">
                   {subfraseConfianza}
                 </p>
-              </div>
+              </motion.div>
 
-              {/* 3 Pilares */}
+              {/* 3 Pilares con Entrada Escalonada */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {pilares.map(({ Icon, label, value, sub }) => (
-                  <div
+                {pilares.map(({ Icon, label, value, sub }, idx) => (
+                  <motion.div
                     key={label}
-                    className="p-3.5 rounded-2xl bg-[#F6F8FB]/70 border border-navy/[0.07]"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.12 + idx * 0.07 }}
+                    className="group p-3.5 rounded-2xl bg-[#F6F8FB]/70 hover:bg-white border border-navy/[0.07] hover:border-dorado/50 transition-all duration-300"
                   >
                     <div className="flex items-center gap-2 mb-1.5">
-                      <Icon className="w-4 h-4 text-[#8A6A1B]" />
+                      <Icon className="w-4 h-4 text-[#8A6A1B] group-hover:scale-110 transition-transform" />
                       <span className="font-mono text-[9.5px] uppercase tracking-wider text-navy/45">
                         {label}
                       </span>
@@ -149,7 +159,7 @@ export default function Nosotros({ perfil }: { perfil?: PerfilProps }) {
                     <p className="font-body text-[11px] text-navy/55 mt-0.5 leading-snug">
                       {sub}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 

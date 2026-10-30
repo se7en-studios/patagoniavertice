@@ -353,21 +353,93 @@ export default function CalculadoraRentabilidad() {
                   </div>
                 </div>
 
-                {/* Barra de proporción Capital vs Ganancia */}
-                <div>
-                  <div className="relative h-2.5 rounded-full bg-dorado/85 overflow-hidden">
-                    <motion.div
-                      className="absolute inset-y-0 left-0 rounded-full bg-white/35 origin-left"
-                      initial={false}
-                      animate={{ scaleX: montoUSD / valorFinalPatrimonio }}
-                      transition={{ type: "spring", stiffness: 90, damping: 20 }}
-                    />
+                {/* Barra de proporción Capital vs Ganancia + Curva de Evolución 5 Años */}
+                <div className="space-y-4">
+                  <div>
+                    <div className="relative h-2.5 rounded-full bg-dorado/85 overflow-hidden">
+                      <motion.div
+                        className="absolute inset-y-0 left-0 rounded-full bg-white/35 origin-left"
+                        initial={false}
+                        animate={{ scaleX: montoUSD / valorFinalPatrimonio }}
+                        transition={{ type: "spring", stiffness: 90, damping: 20 }}
+                      />
+                    </div>
+                    <div className="flex justify-between mt-2 font-mono text-[10px] uppercase tracking-wider text-white/50">
+                      <span>Capital Base (USD {montoUSD.toLocaleString("es-AR")})</span>
+                      <span className="text-dorado">
+                        Retorno (+USD {Math.round(retornoTotalEstimado).toLocaleString("es-AR")})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between mt-2 font-mono text-[10px] uppercase tracking-wider text-white/50">
-                    <span>Capital Base (USD {montoUSD.toLocaleString("es-AR")})</span>
-                    <span className="text-dorado">
-                      Retorno (+USD {Math.round(retornoTotalEstimado).toLocaleString("es-AR")})
-                    </span>
+
+                  {/* Gráfico Interactivo de Evolución Anual (Año 1 a Año 5) */}
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07]">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/45">
+                        Curva de Capitalización (1 a 5 Años)
+                      </span>
+                      <span className="font-mono text-[9.5px] text-dorado">
+                        Horizonte activo: Año {horizonteAnios}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-2.5 items-end h-20 pt-2">
+                      {[1, 2, 3, 4, 5].map((yr) => {
+                        const maxGain5 =
+                          ((montoUSD * modeloSeleccionado.roiAnual) / 100) * 5 +
+                          montoUSD *
+                            (Math.pow(1 + modeloSeleccionado.plusvaliaAnual / 100, 5) -
+                              1);
+                        const yrGain =
+                          ((montoUSD * modeloSeleccionado.roiAnual) / 100) * yr +
+                          montoUSD *
+                            (Math.pow(1 + modeloSeleccionado.plusvaliaAnual / 100, yr) -
+                              1);
+                        const heightPct = Math.max(
+                          22,
+                          Math.min(100, Math.round(((montoUSD + yrGain) / (montoUSD + maxGain5)) * 100)),
+                        );
+                        const isSelectedYr = yr === horizonteAnios;
+
+                        return (
+                          <button
+                            key={yr}
+                            type="button"
+                            onClick={() => {
+                              if (yr !== 4) setHorizonteAnios(yr);
+                            }}
+                            className="group flex flex-col items-center justify-end h-full gap-1.5 focus:outline-none"
+                          >
+                            <div className="w-full h-14 flex items-end justify-center bg-white/[0.04] rounded-lg overflow-hidden p-0.5">
+                              <motion.div
+                                initial={false}
+                                animate={{ height: `${heightPct}%` }}
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 140,
+                                  damping: 22,
+                                }}
+                                className={`w-full rounded-md transition-colors ${
+                                  isSelectedYr
+                                    ? "bg-gradient-to-t from-[#8A6A1B] to-dorado shadow-[0_0_12px_rgba(201,168,76,0.45)]"
+                                    : yr < horizonteAnios
+                                      ? "bg-dorado/45"
+                                      : "bg-white/15 group-hover:bg-white/30"
+                                }`}
+                              />
+                            </div>
+                            <span
+                              className={`font-mono text-[9px] uppercase ${
+                                isSelectedYr
+                                  ? "text-dorado font-bold"
+                                  : "text-white/45"
+                              }`}
+                            >
+                              Año {yr}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>

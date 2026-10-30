@@ -4,6 +4,15 @@ import { motion } from "framer-motion";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import type { StatManifiesto } from "@/lib/site-config-types";
 
+const TICKER_ITEMS = [
+  "BAHÍA DE LAS PLAYAS · LOTES FRENTE AL LAGO DESDE USD 32.000",
+  "CIPOLLETTI RESIDENCIAL · CORREDOR ALTO VALLE USD 1.380/M²",
+  "CATRIEL & EJE VACA MUERTA · RENTA CORPORATIVA 12–14% USD",
+  "ESTELA MARI ROJAS · MARTILLERA COLEGIADA MAT. 35 RP 2026",
+  "OPERATORIA PRESENCIAL & 100% REMOTA CON FIRMA CERTIFICADA",
+  "TASACIÓN PERICIAL OFICIAL EN 24–48 HS HÁBILES",
+];
+
 const STATS = [
   {
     value: 4,
@@ -79,7 +88,22 @@ export default function Manifiesto({
         }));
 
   return (
-    <section className="relative bg-[#F6F8FB] py-16 lg:py-24 overflow-hidden">
+    <section className="relative bg-[#F6F8FB] pb-16 lg:pb-24 overflow-hidden">
+      {/* Cinta Continua PropTech de Indicadores de Mercado (GPU Marquee) */}
+      <div className="relative bg-[#0B1528] border-y border-dorado/25 py-3 overflow-hidden select-none mb-16 lg:mb-20">
+        <div className="marquee-track-slow">
+          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((text, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-6 px-6 font-mono text-[10.5px] tracking-[0.2em] uppercase text-white/85 whitespace-nowrap"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
+              <span>{text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         {/* Editorial Statement con Reveal Progresivo */}
         <div className="max-w-4xl mx-auto text-center">

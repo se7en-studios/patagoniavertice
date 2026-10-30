@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { notificarLead } from "@/lib/notify-lead";
+import { registrarWebLeadEnCRM } from "@/lib/crm-server-sync";
 import {
   emailSchema,
   esEnvioSospechoso,
@@ -87,35 +88,54 @@ export async function guardarLeadAltum(
   }
   const d = parsed.data;
 
-  const supabase = await createClient();
-  const { error } = await supabase.from("leads_altum").insert({
-    nombre: d.nombre,
-    email: d.email || null,
-    telefono: d.telefono,
-    tipo_consulta: d.tipo_consulta,
-    mensaje: d.mensaje,
-    origen: d.origen ?? null,
-    detalle: d.detalle ?? null,
-    estado: "nuevo",
-  });
-
-  if (error) {
-    console.error("[leads_altum] insert error:", error.message);
-    return {
-      success: false,
-      error:
-        "No pudimos enviar tu consulta. Intentá de nuevo o escribinos por WhatsApp.",
-    };
+  // 1. Sincronizar automáticamente en el CRM local/serverless (Clientes + Tareas + Calendario)
+  try {
+    registrarWebLeadEnCRM({
+      nombre: d.nombre,
+      email: d.email || undefined,
+      telefono: d.telefono || undefined,
+      tipo_consulta: d.tipo_consulta,
+      mensaje: d.mensaje,
+      origen: d.origen,
+      detalle: d.detalle,
+    });
+  } catch (crmErr) {
+    console.error("[leads_altum] CRM sync warning:", crmErr);
   }
 
-  await notificarLead(`Nuevo lead ALTUM SCI (${d.origen ?? d.tipo_consulta})`, {
-    Nombre: d.nombre,
-    Email: d.email,
-    Teléfono: d.telefono ?? undefined,
-    Origen: d.origen,
-    Tipo: d.tipo_consulta,
-    Mensaje: d.mensaje,
-  });
+  // 2. Intentar persistir también en Supabase si está configurado
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("leads_altum").insert({
+      nombre: d.nombre,
+      email: d.email || null,
+      telefono: d.telefono,
+      tipo_consulta: d.tipo_consulta,
+      mensaje: d.mensaje,
+      origen: d.origen ?? null,
+      detalle: d.detalle ?? null,
+      estado: "nuevo",
+    });
+
+    if (error) {
+      console.warn("[leads_altum] Supabase insert warning (respaldado en CRM):", error.message);
+    }
+  } catch (supaErr) {
+    console.warn("[leads_altum] Supabase no disponible, guardado en CRM local:", supaErr);
+  }
+
+  try {
+    await notificarLead(`Nuevo lead ALTUM SCI (${d.origen ?? d.tipo_consulta})`, {
+      Nombre: d.nombre,
+      Email: d.email,
+      Teléfono: d.telefono ?? undefined,
+      Origen: d.origen,
+      Tipo: d.tipo_consulta,
+      Mensaje: d.mensaje,
+    });
+  } catch {
+    /* ignore notification error */
+  }
 
   return { success: true };
 }

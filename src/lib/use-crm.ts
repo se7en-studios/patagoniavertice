@@ -39,10 +39,33 @@ export function useCRM() {
         const res = await fetch("/api/admin/crm");
         const json = await res.json();
         if (mounted && json.success && json.data) {
-          // Si no había datos locales personalizados, usamos los del servidor
+          const serverData = json.data as CRMStoreData;
           if (!localData) {
-            setStore(json.data);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(json.data));
+            setStore(serverData);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(serverData));
+          } else {
+            // Combinar nuevos registros creados desde formularios web en el servidor con localStorage
+            const localClienteIds = new Set(localData.clientes.map((c) => c.id));
+            const nuevosClientesServer = (serverData.clientes || []).filter(
+              (c) => !localClienteIds.has(c.id),
+            );
+            const localTareaIds = new Set(localData.tareas.map((t) => t.id));
+            const nuevasTareasServer = (serverData.tareas || []).filter(
+              (t) => !localTareaIds.has(t.id),
+            );
+            const localEventoIds = new Set(localData.eventos.map((e) => e.id));
+            const nuevosEventosServer = (serverData.eventos || []).filter(
+              (e) => !localEventoIds.has(e.id),
+            );
+
+            const merged: CRMStoreData = {
+              clientes: [...nuevosClientesServer, ...localData.clientes],
+              tareas: [...nuevasTareasServer, ...localData.tareas],
+              eventos: [...nuevosEventosServer, ...localData.eventos],
+              leadsMeta: { ...serverData.leadsMeta, ...localData.leadsMeta },
+            };
+            setStore(merged);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
           }
         }
       } catch {

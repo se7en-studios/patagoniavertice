@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { coverImage } from "@/lib/property-images";
-import { createClient } from "@/lib/supabase/server";
+import { listPublicadas } from "@/lib/db";
 import type { Propiedad } from "@/lib/supabase/types";
 
 function PropiedadCard({ propiedad }: { propiedad: Propiedad }) {
@@ -61,15 +61,11 @@ function PropiedadCard({ propiedad }: { propiedad: Propiedad }) {
 }
 
 export default async function PropiedadesDestacadas() {
-  const supabase = await createClient();
-  const { data: propiedades } = await supabase
-    .from("propiedades")
-    .select("*")
-    .eq("publicado", true)
-    .eq("destacado", true)
-    .limit(3);
+  const propiedades = await listPublicadas({ destacado: true, limit: 3 }).catch(
+    () => [],
+  );
 
-  if (!propiedades || propiedades.length === 0) return null;
+  if (propiedades.length === 0) return null;
 
   return (
     <section id="proyectos" className="py-32 bg-crema">

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { coverImage } from "@/lib/property-images";
-import { createClient } from "@/lib/supabase/server";
+import { listPublicadas } from "@/lib/db";
 import ProyectosSliderClient, {
   type ProyectoCard,
 } from "./ProyectosSliderClient";
@@ -42,15 +42,9 @@ export default async function ProyectosSlider() {
   let proyectos: ProyectoCard[] = [];
 
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select("id, titulo, ubicacion, descripcion, estado, imagenes")
-      .eq("publicado", true)
-      .order("created_at", { ascending: false })
-      .limit(6);
+    const data = await listPublicadas({ limit: 6 });
 
-    if (data && data.length > 0) {
+    if (data.length > 0) {
       proyectos = data.map((p) => ({
         id: p.id,
         titulo: p.titulo,

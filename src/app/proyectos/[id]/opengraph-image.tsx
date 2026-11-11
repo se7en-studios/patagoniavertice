@@ -1,13 +1,13 @@
 import { ImageResponse } from "next/og";
-import { createClient } from "@/lib/supabase/server";
+import { getPublicada } from "@/lib/db";
 import { coverImage } from "@/lib/property-images";
 import { siteName, siteUrl } from "@/lib/seo";
 
 export const alt = `Propiedad en ${siteName}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-// Edge: el runtime Node de next/og falla en Windows (fileURLToPath) y no necesitamos disco.
-export const runtime = "edge";
+// Node: firebase-admin no corre en edge. ponytail: next/og en Node falla en Windows local (fileURLToPath); en Vercel/Linux anda.
+export const runtime = "nodejs";
 
 const MAX_IMAGE_BYTES = 1_500_000;
 const PHOTO_MIMES = ["image/jpeg", "image/png"];
@@ -53,13 +53,7 @@ export default async function Image({
   let photo: string | null = null;
 
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select("titulo, ciudad, precio, moneda, imagenes")
-      .eq("id", id)
-      .eq("publicado", true)
-      .single();
+    const data = await getPublicada(id);
     if (data) {
       titulo = String(data.titulo).slice(0, 90);
       ciudad = data.ciudad ?? "";

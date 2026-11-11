@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { listPublicadas } from "@/lib/db";
 import { siteUrl } from "@/lib/seo";
 import { GUIAS_SEO } from "@/lib/guias-seo";
 
@@ -32,6 +32,9 @@ const SHOWCASE_PROPERTY_IDS = [
   "lote-segunda-linea-playas",
 ];
 
+// ISR: las propiedades del admin aparecen en ≤1 h
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const staticPages: MetadataRoute.Sitemap = STATIC.map(
@@ -61,12 +64,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let propertyPages: MetadataRoute.Sitemap = [];
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select("id, updated_at")
-      .eq("publicado", true);
-    propertyPages = (data ?? [])
+    const data = await listPublicadas();
+    propertyPages = data
       .filter((p) => !SHOWCASE_PROPERTY_IDS.includes(p.id))
       .map((p) => ({
         url: `${siteUrl}/proyectos/${p.id}`,

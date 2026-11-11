@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { listPublicadas } from "@/lib/db";
 import { Suspense } from "react";
 import CatalogoInteractivo, {
   ItemPropiedad,
@@ -108,22 +108,16 @@ const CATALOGO_FALLBACK: ItemPropiedad[] = [
   },
 ];
 
+// ISR: las propiedades cargadas en el admin aparecen en ≤60 s (la página ya no es dinámica por cookies)
+export const revalidate = 60;
+
 export default async function ProyectosPage() {
   let propiedades: ItemPropiedad[] = [];
 
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select("*")
-      .eq("publicado", true)
-      .order("destacado", { ascending: false });
-
-    if (data && data.length > 0) {
-      propiedades = data as unknown as ItemPropiedad[];
-    }
+    propiedades = (await listPublicadas()) as unknown as ItemPropiedad[];
   } catch {
-    /* Supabase no disponible */
+    /* Firestore no disponible */
   }
 
   if (propiedades.length === 0) {
@@ -149,9 +143,7 @@ export default async function ProyectosPage() {
             }}
           >
             Activos inmobiliarios en{" "}
-            <em className="rd-serif text-dorado">
-              Patagonia Norte.
-            </em>
+            <em className="rd-serif text-dorado">Patagonia Norte.</em>
           </h1>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-5 border-t border-white/10">

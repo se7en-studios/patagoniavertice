@@ -1,40 +1,23 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from "next/server";
+import { ADMIN_COOKIE, isValidAdminCookie } from "@/lib/admin-session";
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  const adminSession = request.cookies.get('altum_admin_session')?.value === 'authenticated'
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user && !adminSession && request.nextUrl.pathname.startsWith('/admin')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
-    return NextResponse.redirect(url)
+  if (await isValidAdminCookie(request.cookies.get(ADMIN_COOKIE)?.value)) {
+    return NextResponse.next();
   }
 
-  return supabaseResponse
+  if (request.nextUrl.pathname.startsWith("/api/")) {
+    return NextResponse.json(
+      { success: false, error: "No autorizado" },
+      { status: 401 },
+    );
+  }
+
+  const url = request.nextUrl.clone();
+  url.pathname = "/auth/login";
+  return NextResponse.redirect(url);
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
-}
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
+};

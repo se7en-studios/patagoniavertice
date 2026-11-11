@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { addLead } from "@/lib/db";
 import { notificarLead } from "@/lib/notify-lead";
 import { registrarWebLeadEnCRM } from "@/lib/crm-server-sync";
 import {
@@ -103,36 +103,36 @@ export async function guardarLeadAltum(
     console.error("[leads_altum] CRM sync warning:", crmErr);
   }
 
-  // 2. Intentar persistir también en Supabase si está configurado
+  // 2. Intentar persistir también en Firestore si está configurado
   try {
-    const supabase = await createClient();
-    const { error } = await supabase.from("leads_altum").insert({
+    await addLead("leads_altum", {
       nombre: d.nombre,
       email: d.email || null,
-      telefono: d.telefono,
+      telefono: d.telefono ?? null,
       tipo_consulta: d.tipo_consulta,
       mensaje: d.mensaje,
       origen: d.origen ?? null,
       detalle: d.detalle ?? null,
-      estado: "nuevo",
     });
-
-    if (error) {
-      console.warn("[leads_altum] Supabase insert warning (respaldado en CRM):", error.message);
-    }
-  } catch (supaErr) {
-    console.warn("[leads_altum] Supabase no disponible, guardado en CRM local:", supaErr);
+  } catch (dbErr) {
+    console.warn(
+      "[leads_altum] Firestore no disponible, guardado en CRM local:",
+      dbErr,
+    );
   }
 
   try {
-    await notificarLead(`Nuevo lead ALTUM SCI (${d.origen ?? d.tipo_consulta})`, {
-      Nombre: d.nombre,
-      Email: d.email,
-      Teléfono: d.telefono ?? undefined,
-      Origen: d.origen,
-      Tipo: d.tipo_consulta,
-      Mensaje: d.mensaje,
-    });
+    await notificarLead(
+      `Nuevo lead ALTUM SCI (${d.origen ?? d.tipo_consulta})`,
+      {
+        Nombre: d.nombre,
+        Email: d.email,
+        Teléfono: d.telefono ?? undefined,
+        Origen: d.origen,
+        Tipo: d.tipo_consulta,
+        Mensaje: d.mensaje,
+      },
+    );
   } catch {
     /* ignore notification error */
   }

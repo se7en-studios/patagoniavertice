@@ -2,7 +2,7 @@ import Link from "next/link";
 import { coverImage, galleryImages } from "@/lib/property-images";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getPublicada, listSimilares } from "@/lib/db";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import FavoriteButton from "@/components/catalogo/FavoriteButton";
 import ShareButton from "@/components/catalogo/ShareButton";
@@ -30,7 +30,6 @@ const PRINT_CSS = `
 `;
 
 // Evita que valores con comas/paréntesis rompan el filtro .or() de PostgREST.
-const sanitizeFilter = (v: string) => v.replace(/[,()"\\]/g, " ").trim();
 
 const tipoLabel: Record<string, string> = {
   venta: "Venta",
@@ -215,13 +214,7 @@ const FALLBACK_PROPIEDADES_DETALLE: Record<string, DemoPropiedad> = {
 
 async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select("*")
-      .eq("id", id)
-      .eq("publicado", true)
-      .single();
+    const data = await getPublicada(id);
     if (data) return data as unknown as DemoPropiedad;
   } catch {
     /* fallback below */
@@ -231,16 +224,7 @@ async function fetchPropiedad(id: string): Promise<DemoPropiedad | null> {
 
 async function fetchSimilares(p: DemoPropiedad): Promise<SimilarItem[]> {
   try {
-    const supabase = await createClient();
-    const conds = [`ciudad.eq.${sanitizeFilter(p.ciudad)}`];
-    if (p.tipo) conds.push(`tipo.eq.${sanitizeFilter(p.tipo)}`);
-    const { data } = await supabase
-      .from("propiedades")
-      .select("id,titulo,ciudad,barrio,tipo,imagenes,precio,moneda")
-      .eq("publicado", true)
-      .neq("id", p.id)
-      .or(conds.join(","))
-      .limit(24);
+    const data = await listSimilares(p as Parameters<typeof listSimilares>[0]);
     const score = (x: SimilarItem) =>
       (x.ciudad === p.ciudad ? 2 : 0) +
       (x.tipo === p.tipo ? 1 : 0) +
@@ -253,7 +237,11 @@ async function fetchSimilares(p: DemoPropiedad): Promise<SimilarItem[]> {
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const item = await fetchPropiedad(id);
   if (item) {
@@ -337,7 +325,12 @@ export default async function PropiedadDetailPage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Inicio", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Propiedades", item: `${siteUrl}/proyectos` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Propiedades",
+        item: `${siteUrl}/proyectos`,
+      },
       { "@type": "ListItem", position: 3, name: propiedad.titulo },
     ],
   };
@@ -374,18 +367,27 @@ export default async function PropiedadDetailPage({
             >
               <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <li>
-                  <Link href="/" className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado">
+                  <Link
+                    href="/"
+                    className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado"
+                  >
                     Inicio
                   </Link>
                 </li>
                 <li aria-hidden="true">/</li>
                 <li>
-                  <Link href="/proyectos" className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado">
+                  <Link
+                    href="/proyectos"
+                    className="hover:text-dorado focus-visible:outline focus-visible:outline-2 focus-visible:outline-dorado"
+                  >
                     Propiedades
                   </Link>
                 </li>
                 <li aria-hidden="true">/</li>
-                <li aria-current="page" className="text-dorado max-w-[40vw] truncate">
+                <li
+                  aria-current="page"
+                  className="text-dorado max-w-[40vw] truncate"
+                >
                   {propiedad.titulo}
                 </li>
               </ol>
@@ -604,7 +606,8 @@ export default async function PropiedadDetailPage({
       <PropiedadesSimilares items={similares} />
 
       <p className="print-only px-6 py-4 font-body text-xs text-tierra/70">
-        Ficha generada desde {siteUrl}/proyectos/{propiedad.id} · Altum Inmobiliaria · WhatsApp +{WHATSAPP_NUMBER}
+        Ficha generada desde {siteUrl}/proyectos/{propiedad.id} · Altum
+        Inmobiliaria · WhatsApp +{WHATSAPP_NUMBER}
       </p>
     </main>
   );

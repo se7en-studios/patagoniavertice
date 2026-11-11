@@ -5,7 +5,7 @@ import Manifiesto from "@/components/marketing/Manifiesto";
 import BandaLago from "@/components/marketing/BandaLago";
 import SectionRail from "@/components/marketing/SectionRail";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
-import { createClient } from "@/lib/supabase/server";
+import { listPublicadas } from "@/lib/db";
 import type { PropiedadDestacada } from "@/components/marketing/PropiedadesDestacadasHome";
 import { getSiteConfig } from "@/lib/site-config";
 
@@ -53,26 +53,19 @@ const CalculadoraRentabilidad = dynamic(
 const Nosotros = dynamic(() => import("@/components/marketing/Nosotros"));
 const FAQ = dynamic(() => import("@/components/marketing/FAQ"));
 
+// ISR: las propiedades destacadas del admin aparecen en ≤60 s (la home ya no es dinámica por cookies)
+export const revalidate = 60;
+
 export default async function HomePage() {
   let propiedadesDestacadas: PropiedadDestacada[] = [];
   const siteConfig = getSiteConfig();
 
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("propiedades")
-      .select(
-        "id, titulo, ciudad, barrio, precio, moneda, tipo, superficie_m2, imagenes",
-      )
-      .eq("publicado", true)
-      .order("destacado", { ascending: false })
-      .limit(6);
-
-    if (data) {
-      propiedadesDestacadas = data as unknown as PropiedadDestacada[];
-    }
+    propiedadesDestacadas = (await listPublicadas({
+      limit: 6,
+    })) as unknown as PropiedadDestacada[];
   } catch {
-    /* Supabase not configured yet */
+    /* Firestore not configured yet */
   }
 
   return (

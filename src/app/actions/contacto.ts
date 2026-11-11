@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { addLead } from "@/lib/db";
 import { notificarLead } from "@/lib/notify-lead";
 import {
   emailSchema,
@@ -77,17 +77,15 @@ export async function enviarConsulta(
     return { error: "El mensaje es demasiado largo." };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.from("leads").insert({
-    nombre,
-    email,
-    telefono,
-    mensaje: mensajeFinal,
-    propiedad_id: propiedad_id ?? null,
-    estado: "nuevo",
-  });
-
-  if (error) {
+  try {
+    await addLead("leads", {
+      nombre,
+      email,
+      telefono: telefono ?? null,
+      mensaje: mensajeFinal,
+      propiedad_id: propiedad_id ?? null,
+    });
+  } catch (error) {
     console.error("Error inserting lead:", error);
     return { error: "Hubo un error al enviar tu consulta. Intentá de nuevo." };
   }

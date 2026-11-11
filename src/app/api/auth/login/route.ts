@@ -1,53 +1,60 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+import {
+  ADMIN_COOKIE,
+  ADMIN_COOKIE_OPTIONS,
+  adminToken,
+} from "@/lib/admin-session";
+
+/** Email + contraseña contra Firebase Auth (Identity Toolkit REST). Requiere FIREBASE_API_KEY. */
+async function firebaseSignIn(
+  email: string,
+  password: string,
+): Promise<boolean> {
+  const apiKey = process.env.FIREBASE_API_KEY;
+  if (!apiKey) return false;
+  const res = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, returnSecureToken: false }),
+    },
+  );
+  return res.ok;
+}
 
 export async function POST(request: Request) {
   try {
     const { password, email } = await request.json();
-
     const MASTER_PIN = process.env.ADMIN_MASTER_PIN || "altum2026";
 
-    // 1. Verificación por Master PIN / Clave Maestra de Estela
-    if (password && password.trim() === MASTER_PIN) {
-      (await cookies()).set("altum_admin_session", "authenticated", {
-        path: "/",
-        httpOnly: true,
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 días de sesión
-      });
+    const ok =
+      (password && String(password).trim() === MASTER_PIN) ||
+      (email && password && (await firebaseSignIn(email, password)));
 
-      return NextResponse.json({ success: true, message: "Sesión iniciada con éxito" });
+    if (!ok) {
+      return NextResponse.json(
+        { success: false, error: "Contraseña o credenciales incorrectas" },
+        { status: 401 },
+      );
     }
 
-    // 2. Verificación por Supabase Auth si se ingresó email y contraseña
-    if (email && password) {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (!error && data?.user) {
-        (await cookies()).set("altum_admin_session", "authenticated", {
-          path: "/",
-          httpOnly: true,
-          sameSite: "lax",
-          maxAge: 60 * 60 * 24 * 7,
-        });
-        return NextResponse.json({ success: true, message: "Sesión iniciada con éxito" });
-      }
-    }
-
-    return NextResponse.json(
-      { success: false, error: "Contraseña o credenciales incorrectas" },
-      { status: 401 }
+    (await cookies()).set(
+      ADMIN_COOKIE,
+      await adminToken(),
+      ADMIN_COOKIE_OPTIONS,
     );
+    return NextResponse.json({
+      success: true,
+      message: "Sesión iniciada con éxito",
+    });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Error al procesar el ingreso";
+    const message =
+      err instanceof Error ? err.message : "Error al procesar el ingreso";
     return NextResponse.json(
       { success: false, error: message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

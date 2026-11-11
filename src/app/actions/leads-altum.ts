@@ -88,9 +88,9 @@ export async function guardarLeadAltum(
   }
   const d = parsed.data;
 
-  // 1. Sincronizar automáticamente en el CRM local/serverless (Clientes + Tareas + Calendario)
+  // 1. Sincronizar automáticamente en el CRM (Firestore: Clientes + Tareas + Calendario)
   try {
-    registrarWebLeadEnCRM({
+    await registrarWebLeadEnCRM({
       nombre: d.nombre,
       email: d.email || undefined,
       telefono: d.telefono || undefined,

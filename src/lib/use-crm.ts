@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ClienteCRM,
   CRMStoreData,
@@ -17,6 +17,8 @@ export function useCRM() {
   const [store, setStore] = useState<CRMStoreData>(DEFAULT_CRM_DATA);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  // Hora del servidor de la última sincronización: el servidor solo borra lo que el admin ya había visto
+  const sinceRef = useRef<string | undefined>(undefined);
 
   // Carga inicial combinando API y localStorage
   useEffect(() => {
@@ -40,12 +42,15 @@ export function useCRM() {
         const json = await res.json();
         if (mounted && json.success && json.data) {
           const serverData = json.data as CRMStoreData;
+          sinceRef.current = json.serverTime;
           if (!localData) {
             setStore(serverData);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(serverData));
           } else {
             // Combinar nuevos registros creados desde formularios web en el servidor con localStorage
-            const localClienteIds = new Set(localData.clientes.map((c) => c.id));
+            const localClienteIds = new Set(
+              localData.clientes.map((c) => c.id),
+            );
             const nuevosClientesServer = (serverData.clientes || []).filter(
               (c) => !localClienteIds.has(c.id),
             );
@@ -89,11 +94,33 @@ export function useCRM() {
     }
     setSaving(true);
     try {
-      await fetch("/api/admin/crm", {
+      const res = await fetch("/api/admin/crm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(next),
+        body: JSON.stringify({ ...next, since: sinceRef.current }),
       });
+      const json = await res.json();
+      if (json.success && json.data) {
+        sinceRef.current = json.serverTime;
+        // Si entró un lead web mientras el admin estaba abierto, se suma sin pisar los cambios locales
+        const server = json.data as CRMStoreData;
+        setStore((prev) => {
+          const nuevos = <T extends { id: string }>(srv: T[], loc: T[]) => {
+            const ids = new Set(loc.map((r) => r.id));
+            return srv.filter((r) => !ids.has(r.id));
+          };
+          const c = nuevos(server.clientes, prev.clientes);
+          const t = nuevos(server.tareas, prev.tareas);
+          const e = nuevos(server.eventos, prev.eventos);
+          if (!c.length && !t.length && !e.length) return prev;
+          return {
+            ...prev,
+            clientes: [...c, ...prev.clientes],
+            tareas: [...t, ...prev.tareas],
+            eventos: [...e, ...prev.eventos],
+          };
+        });
+      }
     } catch {
       // Silencioso: ya quedó guardado en localStorage
     } finally {
@@ -103,7 +130,11 @@ export function useCRM() {
 
   // ── Acciones de Clientes ──────────────────────────────────────────────────
   const guardarCliente = useCallback(
-    async (cliente: Omit<ClienteCRM, "id" | "created_at" | "updated_at"> & { id?: string }) => {
+    async (
+      cliente: Omit<ClienteCRM, "id" | "created_at" | "updated_at"> & {
+        id?: string;
+      },
+    ) => {
       const ahora = new Date().toISOString();
       let nuevosClientes: ClienteCRM[];
 

@@ -1,6 +1,5 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
+import type { WriteBatch } from "firebase-admin/firestore";
+import { getDb } from "@/lib/firebase";
 import {
   CRMStoreData,
   DEFAULT_CRM_DATA,
@@ -11,46 +10,155 @@ import {
   CategoriaTarea,
 } from "@/lib/crm-types";
 
-const PRIMARY_PATH = path.join(process.cwd(), "src", "data", "crm-data.json");
-const TMP_PATH = path.join(os.tmpdir(), "altum-crm-data.json");
+// Firestore: un documento por registro en crm_clientes / crm_tareas / crm_eventos,
+// y crm_meta/leads { items } para leadsMeta. Solo se escriben los documentos que cambiaron.
+const LIST_KEYS = ["clientes", "tareas", "eventos"] as const;
+type ListKey = (typeof LIST_KEYS)[number];
+const COLLECTION: Record<ListKey, string> = {
+  clientes: "crm_clientes",
+  tareas: "crm_tareas",
+  eventos: "crm_eventos",
+};
+const BATCH_LIMIT = 400;
 
-export function readCRMStore(): CRMStoreData {
-  try {
-    if (fs.existsSync(TMP_PATH)) {
-      const raw = fs.readFileSync(TMP_PATH, "utf-8");
-      return JSON.parse(raw) as CRMStoreData;
-    }
-    if (fs.existsSync(PRIMARY_PATH)) {
-      const raw = fs.readFileSync(PRIMARY_PATH, "utf-8");
-      return JSON.parse(raw) as CRMStoreData;
-    }
-  } catch (err) {
-    console.error("Error reading CRM store:", err);
-  }
-  return DEFAULT_CRM_DATA;
+type Rec = { id: string; created_at?: string };
+type Existing = Map<string, { json: string; created_at: string; rec: Rec }>;
+interface Snapshot {
+  store: CRMStoreData;
+  existing: Record<ListKey, Existing>;
+  metaJson: string | null;
+  empty: boolean;
 }
 
-export function writeCRMStore(data: CRMStoreData): boolean {
-  let saved = false;
-  try {
-    const dir = path.dirname(PRIMARY_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+const clean = <T>(v: T): T => JSON.parse(JSON.stringify(v));
+const newestFirst = (a: Rec, b: Rec) =>
+  (b.created_at ?? "").localeCompare(a.created_at ?? "");
+
+/** JSON con claves ordenadas: Firestore devuelve los campos en otro orden que el guardado. */
+function stable(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(stable).join(",")}]`;
+  if (v && typeof v === "object") {
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o)
+      .sort()
+      .map((k) => `${JSON.stringify(k)}:${stable(o[k])}`)
+      .join(",")}}`;
+  }
+  return JSON.stringify(v) ?? "null";
+}
+
+async function loadSnapshot(): Promise<Snapshot> {
+  const db = getDb();
+  const [clientes, tareas, eventos, meta] = await Promise.all([
+    db.collection(COLLECTION.clientes).get(),
+    db.collection(COLLECTION.tareas).get(),
+    db.collection(COLLECTION.eventos).get(),
+    db.collection("crm_meta").doc("leads").get(),
+  ]);
+
+  const existing = {} as Record<ListKey, Existing>;
+  const lists = {} as Record<ListKey, Rec[]>;
+  [clientes, tareas, eventos].forEach((snap, i) => {
+    const k = LIST_KEYS[i];
+    existing[k] = new Map();
+    lists[k] = snap.docs
+      .map((d) => ({ ...d.data(), id: d.id }) as Rec)
+      .sort(newestFirst);
+    for (const rec of lists[k]) {
+      existing[k].set(rec.id, {
+        json: stable(rec),
+        created_at: rec.created_at ?? "",
+        rec,
+      });
     }
-    fs.writeFileSync(PRIMARY_PATH, JSON.stringify(data, null, 2), "utf-8");
-    saved = true;
-  } catch {
-    // En entornos serverless (Vercel) el directorio de código es read-only; guardamos en tmpdir
+  });
+
+  const items = (meta.data()?.items ?? {}) as CRMStoreData["leadsMeta"];
+  const empty = LIST_KEYS.every((k) => lists[k].length === 0) && !meta.exists;
+  // Sin datos todavía: se muestra (y se siembra al primer guardado) el contenido de ejemplo, como antes.
+  const store: CRMStoreData = empty
+    ? clean(DEFAULT_CRM_DATA)
+    : ({
+        clientes: lists.clientes,
+        tareas: lists.tareas,
+        eventos: lists.eventos,
+        leadsMeta: items,
+      } as CRMStoreData);
+
+  return {
+    store,
+    existing,
+    metaJson: meta.exists ? stable(items) : null,
+    empty,
+  };
+}
+
+/**
+ * Persiste `store` contra lo que hay en Firestore. Escribe solo lo que cambió.
+ * Con `deleteSince`, borra los registros que ya no vienen en `store` y que existían antes de esa
+ * fecha (el admin los vio y los eliminó); los más nuevos (leads web) se conservan y se devuelven.
+ */
+async function syncStore(
+  store: CRMStoreData,
+  snap: Snapshot,
+  deleteSince?: string,
+): Promise<CRMStoreData> {
+  const db = getDb();
+  const ops: Array<(b: WriteBatch) => void> = [];
+  const merged: CRMStoreData = { ...store };
+
+  for (const k of LIST_KEYS) {
+    const incoming = store[k] as Rec[];
+    const col = db.collection(COLLECTION[k]);
+    const ids = new Set(incoming.map((r) => r.id));
+
+    for (const rec of incoming) {
+      if (snap.existing[k].get(rec.id)?.json !== stable(rec)) {
+        ops.push((b) => b.set(col.doc(rec.id), clean(rec)));
+      }
+    }
+
+    const survivors: Rec[] = [];
+    for (const [id, prev] of snap.existing[k]) {
+      if (ids.has(id)) continue;
+      const seenByAdmin =
+        deleteSince !== undefined &&
+        (!prev.created_at || prev.created_at <= deleteSince);
+      if (seenByAdmin) ops.push((b) => b.delete(col.doc(id)));
+      else survivors.push(prev.rec);
+    }
+    (merged as unknown as Record<ListKey, Rec[]>)[k] = [
+      ...survivors,
+      ...incoming,
+    ].sort(newestFirst);
   }
 
-  try {
-    fs.writeFileSync(TMP_PATH, JSON.stringify(data, null, 2), "utf-8");
-    saved = true;
-  } catch (err) {
-    console.error("Error writing CRM store to tmp:", err);
+  if (snap.metaJson !== stable(store.leadsMeta ?? {})) {
+    ops.push((b) =>
+      b.set(db.collection("crm_meta").doc("leads"), {
+        items: clean(store.leadsMeta ?? {}),
+      }),
+    );
   }
 
-  return saved;
+  for (let i = 0; i < ops.length; i += BATCH_LIMIT) {
+    const batch = db.batch();
+    ops.slice(i, i + BATCH_LIMIT).forEach((op) => op(batch));
+    await batch.commit();
+  }
+  return merged;
+}
+
+export async function readCRMStore(): Promise<CRMStoreData> {
+  return (await loadSnapshot()).store;
+}
+
+/** Guardado desde el admin. `since` = momento (hora del servidor) en que el admin cargó el CRM por última vez. */
+export async function writeCRMStore(
+  data: CRMStoreData,
+  since?: string,
+): Promise<CRMStoreData> {
+  return syncStore(data, await loadSnapshot(), since);
 }
 
 export interface WebLeadCRMInput {
@@ -63,8 +171,11 @@ export interface WebLeadCRMInput {
   detalle?: Record<string, string | number>;
 }
 
-export function registrarWebLeadEnCRM(input: WebLeadCRMInput): CRMStoreData {
-  const store = readCRMStore();
+export async function registrarWebLeadEnCRM(
+  input: WebLeadCRMInput,
+): Promise<CRMStoreData> {
+  const snap = await loadSnapshot();
+  const store = snap.store;
   const nowIso = new Date().toISOString();
   const todayStr = nowIso.split("T")[0];
 
@@ -78,7 +189,10 @@ export function registrarWebLeadEnCRM(input: WebLeadCRMInput): CRMStoreData {
   if (input.tipo_consulta === "tasacion") {
     tipoCliente = "propietario";
     catTarea = "tasacion";
-  } else if (input.tipo_consulta === "inversion" || input.origen === "calculadora") {
+  } else if (
+    input.tipo_consulta === "inversion" ||
+    input.origen === "calculadora"
+  ) {
     tipoCliente = "inversor";
     catTarea = "comercial";
   } else if (input.tipo_consulta === "alquiler") {
@@ -102,11 +216,17 @@ export function registrarWebLeadEnCRM(input: WebLeadCRMInput): CRMStoreData {
     undefined;
 
   const fechaVisita = input.detalle?.fecha_visita as string | undefined;
-  const horaVisita = (input.detalle?.hora_visita as string | undefined) || "11:00";
+  const horaVisita =
+    (input.detalle?.hora_visita as string | undefined) || "11:00";
 
   // 1. Buscar si el cliente ya existe por teléfono o email
   const existingIdx = store.clientes.findIndex((c) => {
-    if (telClean && c.telefono.replace(/\D/g, "").slice(-8) === telClean.replace(/\D/g, "").slice(-8) && telClean.replace(/\D/g, "").length >= 7) {
+    if (
+      telClean &&
+      c.telefono.replace(/\D/g, "").slice(-8) ===
+        telClean.replace(/\D/g, "").slice(-8) &&
+      telClean.replace(/\D/g, "").length >= 7
+    ) {
       return true;
     }
     if (emailClean && c.email && c.email.toLowerCase() === emailClean) {
@@ -230,7 +350,7 @@ export function registrarWebLeadEnCRM(input: WebLeadCRMInput): CRMStoreData {
     store.eventos = [nuevoEvento, ...store.eventos];
   }
 
-  writeCRMStore(store);
-  return store;
+  // Sin deleteSince: solo agrega/actualiza, nunca borra lo que el admin tenga.
+  // ponytail: lectura-modificación-escritura sin transacción; la ventana de carrera es de milisegundos.
+  return syncStore(store, snap);
 }
-

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   actualizarPropiedad,
   crearPropiedad,
@@ -14,6 +15,9 @@ const fail = (err: unknown, fallback: string) =>
   );
 
 const num = (v: unknown) => (v ? Number(v) : null);
+
+// Toda escritura del admin regenera la landing al instante (home, catálogo, fichas, sitemap)
+const refreshLanding = () => revalidatePath("/", "layout");
 
 // GET: List all properties (both active and inactive)
 export async function GET() {
@@ -51,6 +55,7 @@ export async function POST(request: Request) {
       updated_at: now,
     });
 
+    refreshLanding();
     return NextResponse.json({ success: true, data });
   } catch (err) {
     return fail(err, "Error al crear la propiedad");
@@ -91,6 +96,7 @@ export async function PUT(request: Request) {
         { status: 404 },
       );
     }
+    refreshLanding();
     return NextResponse.json({ success: true, data });
   } catch (err) {
     return fail(err, "Error al actualizar la propiedad");
@@ -109,6 +115,7 @@ export async function DELETE(request: Request) {
     }
 
     await eliminarPropiedad(id);
+    refreshLanding();
     return NextResponse.json({
       success: true,
       message: "Propiedad eliminada correctamente",

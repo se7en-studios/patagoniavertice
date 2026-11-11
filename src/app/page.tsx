@@ -58,7 +58,7 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   let propiedadesDestacadas: PropiedadDestacada[] = [];
-  const siteConfig = getSiteConfig();
+  const siteConfig = await getSiteConfig();
 
   try {
     propiedadesDestacadas = (await listPublicadas({

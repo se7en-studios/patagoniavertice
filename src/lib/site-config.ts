@@ -1,6 +1,6 @@
 import fs from "fs";
-import os from "os";
 import path from "path";
+import { getDb } from "@/lib/firebase";
 import {
   SiteConfig,
   DEFAULT_SITE_CONFIG,
@@ -25,45 +25,43 @@ export type {
 };
 export { DEFAULT_SITE_CONFIG };
 
+// Fuente de verdad: Firestore config/site (lo escribe el admin). Fallback: el JSON versionado en el repo.
 const CONFIG_PATH = path.join(process.cwd(), "src", "data", "site-config.json");
-const TMP_CONFIG_PATH = path.join(os.tmpdir(), "altum-site-config.json");
+const configDoc = () => getDb().collection("config").doc("site");
 
-export function getSiteConfig(): SiteConfig {
+export async function getSiteConfig(): Promise<SiteConfig> {
   try {
-    if (fs.existsSync(TMP_CONFIG_PATH)) {
-      const raw = fs.readFileSync(TMP_CONFIG_PATH, "utf-8");
-      return { ...DEFAULT_SITE_CONFIG, ...(JSON.parse(raw) as SiteConfig) };
-    }
+    const snap = await configDoc().get();
+    if (snap.exists)
+      return { ...DEFAULT_SITE_CONFIG, ...(snap.data() as SiteConfig) };
+  } catch (err) {
+    console.error(
+      "Error reading site config from Firestore, using repo fallback",
+      err,
+    );
+  }
+
+  try {
     if (fs.existsSync(CONFIG_PATH)) {
-      const data = fs.readFileSync(CONFIG_PATH, "utf-8");
-      return { ...DEFAULT_SITE_CONFIG, ...(JSON.parse(data) as SiteConfig) };
+      return {
+        ...DEFAULT_SITE_CONFIG,
+        ...(JSON.parse(fs.readFileSync(CONFIG_PATH, "utf-8")) as SiteConfig),
+      };
     }
   } catch (err) {
-    console.error("Error reading site config, using fallback", err);
+    console.error("Error reading site config file, using defaults", err);
   }
 
   return DEFAULT_SITE_CONFIG;
 }
 
-export function saveSiteConfig(newConfig: SiteConfig): boolean {
-  let saved = false;
+export async function saveSiteConfig(newConfig: SiteConfig): Promise<boolean> {
   try {
-    const dir = path.dirname(CONFIG_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(CONFIG_PATH, JSON.stringify(newConfig, null, 2), "utf-8");
-    saved = true;
-  } catch {
-    // En producción serverless el FS de código es de solo lectura
-  }
-
-  try {
-    fs.writeFileSync(TMP_CONFIG_PATH, JSON.stringify(newConfig, null, 2), "utf-8");
-    saved = true;
+    // JSON round-trip: Firestore rechaza `undefined`
+    await configDoc().set(JSON.parse(JSON.stringify(newConfig)));
+    return true;
   } catch (err) {
-    console.error("Error saving site config to tmp", err);
+    console.error("Error saving site config to Firestore", err);
+    return false;
   }
-
-  return saved;
 }
